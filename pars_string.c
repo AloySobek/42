@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_string.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 20:54:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 23:20:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		length_modifier_collector(const char **str, size_t *flags)
 	return (1);
 }
 
-int		flags_collector(const char **str, va_list *list, size_t *flags, int *wid, int *pre)
+void	flags_collector(const char **str, va_list *list, size_t *flags, int *wid, int *pre)
 {
 	while (!CONV(**str))
 	{
@@ -111,12 +111,11 @@ int		flags_collector(const char **str, va_list *list, size_t *flags, int *wid, i
 			continue;
 		else if (length_modifier_collector(str, flags))
 			;
-		else if (**str != 'h' && **str != 'l')
+		else if (**str != 'h' && **str != 'l' && ((g_count + 1) == BUFF_SIZE) ? eject() : 1)
 			g_buff[g_count++] = **str;
 		(*str)++;
 	}
 	if ((*flags & BIA || *flags & POI) && bias(flags, 8, 0))
 		*flags |= 32;
 	*flags |= (**str) << 16;
-	return (0);
 }

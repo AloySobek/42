@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_sig_dig.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 21:09:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 23:13:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		negative_handler(intmax_t nbr, size_t *flags, int *wid)
 	(*flags & PLU) ? (*flags ^= PLU) : 0;
 }
 
-int			print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
+void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 {
 	char	tra[20];
 	int		j;
@@ -43,5 +43,4 @@ int			print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 		g_buff[g_count++] = tra[j];
 	while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = (*flags << 56) >> 56;
-	return (1);
 }
