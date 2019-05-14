@@ -6,11 +6,22 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 15:02:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 21:04:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+char *g_buff;
+int g_count;
+int g_bytes;
+
+int				eject(void)
+{
+	g_bytes += write(1, g_buff, g_count);
+	g_count = 0;
+	return (1);
+}
 
 int				everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
@@ -43,16 +54,16 @@ int				everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 
 int				ft_printf(const char *format, ...)
 {
-	/*va_list		listv;
+	va_list		listv;
 	size_t 		flags;
-	size_t		bytes;
 	int			pre;
 	int			wid;
 
 	va_start(listv, format);
-	bytes = 0;
 	pre   = 0;
 	wid   = 0;
+	g_buff = malloc(BUFF_SIZE);
+	g_count = 0;
 	while (*format)
 	{
 		if (*format == '%')
@@ -60,13 +71,14 @@ int				ft_printf(const char *format, ...)
 			format++;
 			flags  = 0;
 			flags |= 32;
-			bytes += flags_collector(&format, &listv, &flags, &wid, &pre);
+			flags_collector(&format, &listv, &flags, &wid, &pre);
 			if (*format && format++)
-				bytes += everything_handler(&listv, &flags, &wid, &pre);
+				everything_handler(&listv, &flags, &wid, &pre);
 		}
 		else
-			bytes += write(1, format++, 1);
+			g_buff[g_count++] = *format++;
 	}
-	va_end(listv);*/
-	return (write(1, "33333", 5));
+	va_end(listv);
+	eject();
+	return (g_bytes);
 }

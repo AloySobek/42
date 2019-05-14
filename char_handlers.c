@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 19:00:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 16:45:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,30 @@ int		string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	return (print_any_string(va_arg(*list, wchar_t *), flags, wid, pre));
 }
 
-void	uni(wchar_t c, char **code, int *i)
+void	uni(wchar_t c)
 {
-	if (c <= 0x7FF && (*i += 2))
+	if (c <= 0x7FF && (g_count += 2))
 	{
-		(*code)[*i - 1] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 2] = 0xC0 | (c & 0x1F);
+		g_buff[g_count - 2] = 0xC0 | (c & 0x1F);
 	}
-	else if (c <= 0xFFFF && (*i += 3))
+	else if (c <= 0xFFFF && (g_count += 3))
 	{
-		(*code)[*i - 1] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 2] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 2] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 3] = 0xE0 | (c & 0xF);
+		g_buff[g_count - 3] = 0xE0 | (c & 0xF);
 	}
-	else if (c <= 0x10FFFF && (*i += 4))
+	else if (c <= 0x10FFFF && (g_count += 4))
 	{
-		(*code)[*i - 1] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 2] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 2] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 3] = 0x80 | (c & 0x3F);
+		g_buff[g_count - 3] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		(*code)[*i - 4] = 0xF0 | (c & 0x7);
+		g_buff[g_count - 4] = 0xF0 | (c & 0x7);
 	}
 }

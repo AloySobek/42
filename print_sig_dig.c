@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 14:53:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 21:09:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,23 @@ void		negative_handler(intmax_t nbr, size_t *flags, int *wid)
 int			print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 {
 	char	tra[20];
-	char	*res;
 	int		j;
-	int		i;
 
-	i = 0;
 	nbr < 0 ? negative_handler(nbr, flags, wid) : 0;
-	nbr == 0 ? zero_handler(&res, flags, pre, &i) : 0;
-	j = i;
+	nbr == 0 ? zero_handler(flags, pre) : 0;
+	j = 0;
 	while (nbr != 0)
 	{
 		tra[j++] = nbr % 10 * ((*flags & NEG) > 0 ? -1 : 1) + '0';
 		nbr /= 10;
 	}
 	adjustment_wid_pre(flags, wid, pre, j);
-	res = (char *)malloc(sizeof(char) * (i + (*wid > 0 ? *wid : 0) + (*pre > 0 ? *pre : 0)));
-	fill_width(&res, flags, wid, &i);
-	while ((*pre)-- > 0)
-		res[i++] = '0';
-	while (--j >= 0)
-		res[i++] = tra[j];
-	while ((*wid)-- > 0)
-		res[i++] = (*flags << 56) >> 56;
-	write(1, res, i);
-	free(res);
-	return (i);
+	fill_width(flags, wid);
+	while ((*pre)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		g_buff[g_count++] = '0';
+	while (--j >= 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		g_buff[g_count++] = tra[j];
+	while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		g_buff[g_count++] = (*flags << 56) >> 56;
+	return (1);
 }

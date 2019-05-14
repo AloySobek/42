@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 15:28:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 20:55:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@
 # define Z			4611686018427387904
 # define T			9223372036854775808U
 
+# define BUFF_SIZE	4096
+
+extern char *g_buff;
+extern int g_count;
+extern int g_bytes;
+
 int					ft_printf(const char *format, ...);
 int					char_handler(va_list *list, size_t *flags, int *wid);
 int					string_handler(va_list *list, size_t *flags, int *wid, int *pre);
@@ -67,10 +73,11 @@ int					print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
 int					print_double(long double nbr, size_t *flags, int *wid, int *pre);
 int					print_expo_double(long double nbr, size_t *flags, int *wid, int *pre);
 int                 putfloat(long double nbr, size_t *flags, int *wid, int *pre);
-void				uni(wchar_t c, char **code, int *i);
-void				constructor(char ** str, size_t *flags, int *j);
+void				uni(wchar_t c);
+int					eject(void);
+void				constructor(size_t *flags);
 void                adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
-void				zero_handler(char **res, size_t *flags, int *pre, int *i);
-void 				fill_width(char **res, size_t * flags, int *wid, int *i);
+void				zero_handler(size_t *flags, int *pre);
+void 				fill_width(size_t * flags, int *wid);
 
 #endif

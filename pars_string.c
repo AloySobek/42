@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 14:54:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 20:54:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int		flags_collector(const char **str, va_list *list, size_t *flags, int *wid, i
 		else if (length_modifier_collector(str, flags))
 			;
 		else if (**str != 'h' && **str != 'l')
-			return (print_any_char(**str, flags, wid));
+			g_buff[g_count++] = **str;
 		(*str)++;
 	}
 	if ((*flags & BIA || *flags & POI) && bias(flags, 8, 0))

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 19:00:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 20:58:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 	int		i;
 
 	i = 0;
-	nbr == 0 ? zero_handler(&res, flags, pre, &i) : 0;
+	nbr == 0 ? zero_handler(flags, pre) : 0;
 	j = i;
 	while (nbr != 0)
 	{
@@ -28,8 +28,7 @@ int			print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 		nbr /= ((*flags << 48) >> 56);
 	}
 	adjustment_wid_pre(flags, wid, pre, j);
-	res = (char *)malloc(sizeof(char) * (j + (*wid > 0 ? *pre : 0) + (*pre > 0 ? *pre : 0)) + 1);
-	fill_width(&res, flags, wid, &i);
+	fill_width(flags, wid);
 	while ((*pre)-- > 0)
 		res[i++] = '0';
 	while (--j >= 0)
@@ -37,6 +36,5 @@ int			print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 	while ((*wid)-- > 0)
 		res[i++] = (*flags << 56) >> 56;
 	write(1, res, i);
-	free(res);
 	return (i);
 }

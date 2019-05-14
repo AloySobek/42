@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 17:33:25 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 16:03:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 21:05:22 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,16 @@
 
 int			print_any_char(wchar_t c, size_t *flags, int *wid)
 {
-	char	*str;
-	int		i;
+	int size;
 
-	str = (char *)malloc(*wid > 0 ? *wid : 1 + 5);
-	i = 0;
+	size = 0;
 	(*wid)--;
 	if (!(*flags & BIA))
-		while ((*wid)-- > 0)
-			str[i++] = (*flags << 56) >> 56;
-	*flags & UNI && c > 127 ? uni(c, &str, &i) : (str[i++] = c);
-	while ((*wid)-- > 0)
-		str[i++] = (*flags << 56) >> 56;
-	write(1, str, i);
-	free(str);
-	return (i);
+		while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = (*flags << 56) >> 56;
+	(g_count + 1) == BUFF_SIZE ? eject() : 0;
+	*flags & UNI && c > 127 ? uni(c) : (g_buff[g_count++] = c);
+	while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		g_buff[g_count++] = (*flags << 56) >> 56;
+	return (size);
 }

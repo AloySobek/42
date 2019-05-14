@@ -6,37 +6,37 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 15:30:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 21:09:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	constructor(char **str, size_t *flags, int *j)
+void	constructor(size_t *flags)
 {
-		if (*flags & NEG)
-			(*str)[(*j)++] = '-';
-		if (*flags & HAS && (*flags << 48) >> 56 == 8)
-			(*str)[(*j)++] = '0';
-		if ((*flags & HAS && (*flags << 48) >> 56 == 16 && !(*flags & BIG)) || *flags & PTR)
+		if (*flags & NEG && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = '-';
+		if (*flags & HAS && (*flags << 48) >> 56 == 8 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = '0';
+		if (((*flags & HAS && (*flags << 48) >> 56 == 16 && !(*flags & BIG)) || *flags & PTR) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
 		{
-			(*str)[(*j)++] = '0';
-			(*str)[(*j)++] = 'x';
+			g_buff[g_count++] = '0';
+			g_buff[g_count++] = 'x';
 		}
-		else if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR))
+		else if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
 		{
-			(*str)[(*j)++] = '0';
-			(*str)[(*j)++] = 'X';
+			g_buff[g_count++] = '0';
+			g_buff[g_count++] = 'X';
 		}
-		else if (*flags & HAS && (*flags << 48) >> 56 == 2)
+		else if (*flags & HAS && (*flags << 48) >> 56 == 2 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
 		{
-			(*str)[(*j)++] = '0';
-			(*str)[(*j)++] = 'b';
+			g_buff[g_count++] = '0';
+			g_buff[g_count++] = 'b';
 		}
-		if (!(*flags & NEG) && *flags & PLU && (*flags << 48) >> 56 == 10)
-			(*str)[(*j)++] = '+';
-		if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (*flags << 48) >> 56 == 10)
-			(*str)[(*j)++] = ' ';
+		if (!(*flags & NEG) && *flags & PLU && (*flags << 48) >> 56 == 10 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = '+';
+		if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (*flags << 48) >> 56 == 10 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = ' ';
 }
 
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
@@ -56,36 +56,39 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= (*flags & HAS) ? (((*flags << 48) >> 56 == 8) ? 1 : 2) : 0;
 }
 
-void		zero_handler(char **res, size_t *flags, int *pre, int *i) 
+void		zero_handler(size_t *flags, int *pre) 
 {
 	if (*pre == 0 && *flags & POI)
 	{
-		if ((*flags << 48) >> 56 == 8 && (*flags & HAS))
-			(*res)[(*i)++] = '0';
+		if ((*flags << 48) >> 56 == 8 && (*flags & HAS) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			g_buff[g_count++] = '0';
 	}
 	else
-		(*res)[(*i)++] = '0';
+	{
+		(g_count + 1) == BUFF_SIZE ? eject() : 1;
+		g_buff[g_count++] = '0';
+	}
 	if (*flags & HAS && !(*flags & PTR) && (*flags << 48) >> 56 != 10)
 		*flags ^= HAS;
 }
 
-void		fill_width(char **res, size_t *flags, int *wid, int *i)
+void		fill_width(size_t *flags, int *wid)
 {
 	if (!(*flags & BIA))
 	{
 		if (((*flags << 56) >> 56) == 32)
 		{
-			while ((*wid)-- > 0)
-				(*res)[(*i)++] = (*flags << 56) >> 56;
-			constructor(res, flags, i);
+			while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+				g_buff[g_count++] = (*flags << 56) >> 56;
+			constructor(flags);
 		}
 		else
 		{
-			constructor(res, flags, i);
-			while ((*wid)-- > 0)
-				(*res)[(*i)++] = (*flags << 56) >> 56;
+			constructor(flags);
+			while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+				g_buff[g_count++] = (*flags << 56) >> 56;
 		}
 	}
 	else
-		constructor(res, flags, i);
+		constructor(flags);
 }
