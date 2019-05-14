@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 19:00:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 14:54:01 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int		width_collector(const char **str, va_list *list, size_t *flags, int *wid)
 int		precision_collector(const char **str, va_list *list, size_t *flags, int *pre)
 {
 	*flags |= POI;
-	while (((**str >= 0 && **str < 48) || **str > 57) && **str != '*' && !CONV(**str))
-		(*str)++;
+	(*str)++;
 	if (**str == '*')
 	{
 		*pre = va_arg(*list, int);

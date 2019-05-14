@@ -4,6 +4,7 @@
 #include "ft_printf.h"
 #include <limits.h>
 
+int g_hello = 0;
 
 int main(void)
 {
@@ -25,12 +26,11 @@ int main(void)
 	//printf("\n");
 	//ft_putcharbase(he, &wid, &pre);
 	//wchar_t *hello;
-	//hello = L"привет как дела";
+	//hello = L"Я программирую на си";
 	int test = 0;
-	test = ft_printf(">>>|%30.20Lf|<<<", e);
+	test = ft_printf(">>>|%d|<<<", 50);
 	printf("   bytes = %d\n", test);
-	test = printf(">>>|%30.20Lf|<<<", e);
+	test = printf(">>>|%d|<<<", 50);
 	printf("   bytes = %d\n", test);
-	//printf("\n%.10f\n", e);
 	return (0);
 }

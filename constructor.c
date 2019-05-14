@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 10:58:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 15:30:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@ void	constructor(char **str, size_t *flags, int *j)
 			(*str)[(*j)++] = '0';
 		if ((*flags & HAS && (*flags << 48) >> 56 == 16 && !(*flags & BIG)) || *flags & PTR)
 		{
+			(*str)[(*j)++] = '0';
 			(*str)[(*j)++] = 'x';
-			(*str)[(*j)++] = '0';
 		}
-		if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR))
+		else if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR))
 		{
-			(*str)[(*j)++] = 'X';
 			(*str)[(*j)++] = '0';
+			(*str)[(*j)++] = 'X';
+		}
+		else if (*flags & HAS && (*flags << 48) >> 56 == 2)
+		{
+			(*str)[(*j)++] = '0';
+			(*str)[(*j)++] = 'b';
 		}
 		if (!(*flags & NEG) && *flags & PLU && (*flags << 48) >> 56 == 10)
 			(*str)[(*j)++] = '+';

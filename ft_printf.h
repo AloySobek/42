@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 19:59:22 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 15:28:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 
 # include "libft/libft.h"
 
+#define test(x)
+
 # define A(x)		(x == 'c' || x == 'C' || x == 's' || x == 'S' || x == 'd')
 # define B(x)		(x == 'D' || x == 'i' || x == 'u' || x == 'U' || x == 'f')
 # define C(x)		(x == 'F' || x == 'e' || x == 'E' || x == 'g' || x == 'G')
 # define D(x)		(x == 'a' || x == 'A' || x == 'x' || x == 'X' || x == 'o')
 # define E(x)       (x == 'O' || x == 'p' || x == '%' || x ==  0  || x == 'n')
-# define F(x)		(x == 'b')
+# define F(x)		(x == 'b' || x == 'B')
 # define CONV(x)	(A(x) || B(x) || C(x) || D(x) || E(x) || F(x))
 
 # define BIA		1099511627776
@@ -51,6 +53,7 @@ int					string_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					pointer_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					hexadecimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
+int 				binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					unsigned_decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					octal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					double_handler(va_list *list, size_t *flags, int *wid, int *pre);

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 20:23:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 15:02:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ int				everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	else if ((*flags << 40) >> 56 == 'a' || (*flags << 40) >> 56 == 'A')
 		;//return (hexafloat_handler(list, flags, wid, pre));
 	else if ((*flags << 40) >> 56 == 'x' || (*flags << 40) >> 56 == 'X')
-		;//return (hexadecimal_handler(list, flags, wid, pre));
+		return (hexadecimal_handler(list, flags, wid, pre));
 	else if ((*flags << 40) >> 56 == 'o' || (*flags << 40) >> 56 == 'O')
 		return (octal_handler(list, flags, wid, pre));
-	else if ((*flags << 40) >> 56 == 'b')
+	else if ((*flags << 40) >> 56 == 'b' || (*flags << 40) >> 56 == 'B')
 		return (binary_handler(list, flags, wid, pre));
 	else if ((*flags << 40) >> 56 == 'p')
 		return (pointer_handler(list, flags, wid, pre));
@@ -43,7 +43,7 @@ int				everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 
 int				ft_printf(const char *format, ...)
 {
-	va_list		listv;
+	/*va_list		listv;
 	size_t 		flags;
 	size_t		bytes;
 	int			pre;
@@ -67,6 +67,6 @@ int				ft_printf(const char *format, ...)
 		else
 			bytes += write(1, format++, 1);
 	}
-	va_end(listv);
-	return (bytes);
+	va_end(listv);*/
+	return (write(1, "33333", 5));
 }

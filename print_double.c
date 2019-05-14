@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 21:19:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/14 13:33:55 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 int			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 {
 	long double	roundd;
-	ssize_t	interm;
-	char	*result; 
-	int		i;
+	ssize_t		interm;
+	char		*result; 
+	int			i;
 
-	    (nbr < 0)   ? (nbr *= -1) && (*flags |= NEG) : 0;
-	!(*flags & POI) ?          *pre = 6              : 0;
+	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) : 0;
+	!(*flags & POI) ? *pre = 6 : 0;
 	result   = (char *)malloc(1000);
 	interm   = (ssize_t)nbr;
 	roundd   = 1;
