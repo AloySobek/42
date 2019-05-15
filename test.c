@@ -9,7 +9,7 @@ int main(void)
 	double	e;
 	size_t flags;
 
-	e = 12345678.1234567;
+	e = -12345678.1234567;
 	wchar_t *hello2;
 	hello2 = L"Я программирую на си";
 	char *hello;
