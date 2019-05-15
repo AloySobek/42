@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 23:20:21 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/15 17:32:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@
 # define UNI        562949953421312
 # define DOL		1125899906842624
 # define APO		2251799813685248
-# define SOON		4503599627370496
+# define ZER		4503599627370496
+# define UND		9007199254740992
 # define HH			72057594037927936
 # define LL			144115188075855872
 # define BL			288230376151711744
@@ -47,20 +48,23 @@
 # define Z			4611686018427387904
 # define T			9223372036854775808U
 
-# define BUFF_SIZE	4096
+# define SPEC		(*flags << 40) >> 56
+# define BUFF_SIZE	256
 
-extern char *g_buff;
+
+extern char g_buff[BUFF_SIZE];
 extern int g_count;
 extern int g_bytes;
 
 int					ft_printf(const char *format, ...);
-int 				binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
-int					double_handler(va_list *list, size_t *flags, int *wid, int *pre);
-int					expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int					expt_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void				flags_collector(const char **str, va_list *list, size_t *flags, int *wid, int *pre);
 int                 putfloat(long double nbr, size_t *flags, int *wid, int *pre);
 int					eject(void);
+int					zero_handler(size_t *flags, int *pre);
+void				expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void				double_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void				binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void				flags_collector(const char **str, va_list *list, size_t *flags, int *wid, int *pre);
 void				hexadecimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				unsigned_decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
@@ -69,7 +73,8 @@ void				pointer_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre);
 void				char_handler(va_list *list, size_t *flags, int *wid);
 void				string_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void				print_any_string(wchar_t *s, size_t *flags, int *wid, int *pre);
+void				print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre);
+void				print_usual_string(char *s, size_t *flags, int *wid, int *pre);
 void				print_any_char(wchar_t c, size_t *flags, int *wid);
 void				print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
 void				print_double(long double nbr, size_t *flags, int *wid, int *pre);
@@ -77,7 +82,6 @@ void				print_expo_double(long double nbr, size_t *flags, int *wid, int *pre);
 void				uni(wchar_t c);
 void				constructor(size_t *flags);
 void                adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
-void				zero_handler(size_t *flags, int *pre);
 void 				fill_width(size_t * flags, int *wid);
 
 #endif

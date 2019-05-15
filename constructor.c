@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 21:09:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/15 20:27:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,26 @@ void	constructor(size_t *flags)
 {
 		if (*flags & NEG && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = '-';
-		if (*flags & HAS && (*flags << 48) >> 56 == 8 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		if (*flags & HAS && (*flags << 48) >> 56 == 8 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = '0';
-		if (((*flags & HAS && (*flags << 48) >> 56 == 16 && !(*flags & BIG)) || *flags & PTR) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		if (((*flags & HAS && (*flags << 48) >> 56 == 16 && !(*flags & BIG)) || *flags & PTR) && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		{
 			g_buff[g_count++] = '0';
 			g_buff[g_count++] = 'x';
 		}
-		else if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		else if (*flags & HAS && (*flags << 48) >> 56 == 16 && *flags & BIG && !(*flags & PTR) && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		{
 			g_buff[g_count++] = '0';
 			g_buff[g_count++] = 'X';
 		}
-		else if (*flags & HAS && (*flags << 48) >> 56 == 2 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		else if (*flags & HAS && (*flags << 48) >> 56 == 2 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		{
 			g_buff[g_count++] = '0';
 			g_buff[g_count++] = 'b';
 		}
-		if (!(*flags & NEG) && *flags & PLU && (*flags << 48) >> 56 == 10 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		if (!(*flags & NEG) && *flags & PLU && (*flags << 48) >> 56 == 10 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = '+';
-		if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (*flags << 48) >> 56 == 10 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (*flags << 48) >> 56 == 10 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = ' ';
 }
 
@@ -56,20 +56,22 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= (*flags & HAS) ? (((*flags << 48) >> 56 == 8) ? 1 : 2) : 0;
 }
 
-void		zero_handler(size_t *flags, int *pre) 
+int		zero_handler(size_t *flags, int *pre) 
 {
 	if (*pre == 0 && *flags & POI)
 	{
-		if ((*flags << 48) >> 56 == 8 && (*flags & HAS) && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+		if ((*flags << 48) >> 56 == 8 && (*flags & HAS) && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = '0';
 	}
 	else
 	{
-		(g_count + 1) == BUFF_SIZE ? eject() : 1;
-		g_buff[g_count++] = '0';
+		(g_count + 1) >= BUFF_SIZE ? eject() : 1;
+		(*flags << 48) >> 56 == 10 ? constructor(flags) : 0;
+		*pre < 1 ? g_buff[g_count++] = '0' : 0;
 	}
 	if (*flags & HAS && !(*flags & PTR) && (*flags << 48) >> 56 != 10)
 		*flags ^= HAS;
+	return (1);
 }
 
 void		fill_width(size_t *flags, int *wid)
@@ -78,17 +80,17 @@ void		fill_width(size_t *flags, int *wid)
 	{
 		if (((*flags << 56) >> 56) == 32)
 		{
-			while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 				g_buff[g_count++] = (*flags << 56) >> 56;
-			constructor(flags);
+			!(*flags & ZER) ? constructor(flags) : 0;
 		}
 		else
 		{
-			constructor(flags);
-			while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+			!(*flags & ZER) ? constructor(flags) : 0;
+			while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 				g_buff[g_count++] = (*flags << 56) >> 56;
 		}
 	}
 	else
-		constructor(flags);
+		!(*flags & ZER) ? constructor(flags) : 0;
 }

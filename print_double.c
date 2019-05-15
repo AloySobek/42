@@ -6,44 +6,46 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 13:33:55 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/15 20:44:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			print_double(long double nbr, size_t *flags, int *wid, int *pre)
+void			adjustment_double(size_t *flags, int *wid, int *pre, int len)
+{
+	*wid -= *pre;
+	*wid -= len;
+	*wid -= 2;
+}
+
+void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 {
 	long double	roundd;
-	ssize_t		interm;
-	char		*result; 
-	int			i;
+	size_t		interm;
+	long double	i;
 
 	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
-	result   = (char *)malloc(1000);
-	interm   = (ssize_t)nbr;
-	roundd   = 1;
-	i        = 1;
-	while ((interm /= 10) && i++ >= 0)
-		roundd *= 10;
-	interm = (ssize_t)nbr;
-	*wid -= *pre > 0 ? *pre + 1 : 0;
-	*wid -= i;
-	i = 0;
-	if (*wid && !(*flags & BIA))
+	interm   = 0;
+	i        = 1.0;
+	roundd = nbr;
+	while ((roundd /= 10) >= 1 && ++interm > 0)
+		i *= 10;
+	adjustment_double(flags, wid, pre, interm);
 	while ((*wid)-- > 0)
-		result[i++] = (*flags << 56) >> 56;
-	if (interm == 0)
-		result[i++] = '0';
-	while (interm)
+		g_buff[g_count++] = (*flags << 56) >> 56;
+	if (interm == 1)
+		g_buff[g_count++] = '0';
+	while (nbr >= 1 && i >= 1)
 	{
-		result[i++] = (ssize_t)(interm / (ssize_t)roundd) + '0';
-		interm %= (ssize_t)roundd;
-		roundd /= 10;
+		((g_count + 1) >= BUFF_SIZE ? eject() : 1);
+		g_buff[g_count++] = (int)(nbr / i) + '0';
+		nbr -= (i * (int)(nbr / i));
+		i /= 10;
 	}
 	if (*pre)
-		result[i++] = '.';
+		g_buff[g_count++] = '.';
 	roundd = 0.5;
 	interm = *pre;
 	while (interm-- > 0)
@@ -52,13 +54,18 @@ int			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	nbr   += roundd;
 	while ((nbr *= 10) > 0 && (*pre)--)
 	{
-		result[i++] = (long long)nbr + 48;
-		roundd *= 10;
-		nbr -= (long long)nbr;
+		((g_count + 1) >= BUFF_SIZE ? eject() : 1);
+		g_buff[g_count++] = (short)nbr + 48;
+		nbr -= (short)nbr;
 	}
 	while ((*pre)-- > 0)
-		result[i++] = '0';
+	{
+		((g_count + 1) >= BUFF_SIZE ? eject() : 1);
+		g_buff[g_count++] = '0';
+	}
 	while ((*wid)-- > 0)
-		result[i++] = (*flags << 56) >> 56;
-	return (write(1, result, i));
+	{	
+		((g_count + 1) >= BUFF_SIZE ? eject() : 1);
+		g_buff[g_count++] = (*flags << 56) >> 56;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_uns_dig.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 23:13:01 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/15 14:11:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 	}
 	adjustment_wid_pre(flags, wid, pre, j);
 	fill_width(flags, wid);
-	while ((*pre)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while ((*pre)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = '0';
-	while (--j >= 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while (--j >= 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = tra[j];
-	while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = (*flags << 56) >> 56;
 }

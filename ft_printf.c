@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 23:11:47 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/15 17:27:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char *g_buff;
-int g_count;
-int g_bytes;
+char g_buff[BUFF_SIZE];
+int g_count = 0;
+int g_bytes = 0;
 
 int			eject(void)
 {
@@ -25,56 +25,54 @@ int			eject(void)
 
 void		everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
-	if ((*flags << 40) >> 56 == 'c' || (*flags << 40) >> 56 == 'C' || (*flags << 40) >> 56 == '%')
+	if (SPEC == 'c' || SPEC == 'C' || SPEC == '%')
 		char_handler(list, flags, wid);
-	else if ((*flags << 40) >> 56 == 's' || (*flags << 40) >> 56 == 'S')
+	else if (SPEC == 's' || SPEC == 'S')
 		string_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'd' || (*flags << 40) >> 56 == 'D' || (*flags << 40) >> 56 == 'i')
+	else if (SPEC == 'd' || SPEC == 'D' || SPEC == 'i')
 		decimal_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'u' || (*flags << 40) >> 56 == 'U')
+	else if (SPEC == 'u' || SPEC == 'U')
 		unsigned_decimal_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'f' || (*flags << 40) >> 56 == 'F')
+	else if (SPEC == 'f' || SPEC == 'F')
 		double_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'e' || (*flags << 40) >> 56 == 'E')
+	else if (SPEC == 'e' || SPEC == 'E')
 		expo_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'g' || (*flags << 40) >> 56 == 'G')
+	else if (SPEC == 'g' || SPEC == 'G')
 		;//return (double_or_expo_handler(list, flags, wid, pre));
-	else if ((*flags << 40) >> 56 == 'a' || (*flags << 40) >> 56 == 'A')
+	else if (SPEC == 'a' || SPEC == 'A')
 		;//return (hexafloat_handler(list, flags, wid, pre));
-	else if ((*flags << 40) >> 56 == 'x' || (*flags << 40) >> 56 == 'X')
+	else if (SPEC == 'x' || SPEC == 'X')
 		hexadecimal_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'o' || (*flags << 40) >> 56 == 'O')
+	else if (SPEC == 'o' || SPEC == 'O')
 		octal_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'b' || (*flags << 40) >> 56 == 'B')
+	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
-	else if ((*flags << 40) >> 56 == 'p')
+	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }
 
 int			ft_printf(const char *format, ...)
 {
 	va_list	listv;
-	size_t 	flags;
+	size_t	flags;
 	int		pre;
 	int		wid;
 
 	va_start(listv, format);
-	pre   = 0;
-	wid   = 0;
-	g_buff = malloc(BUFF_SIZE);
-	g_count = 0;
+	pre = 0;
+	wid = 0;
 	while (*format)
 	{
-		if (*format == '%')
+		if (*format == '%' && !(flags = 0) && format++)
 		{
-			format++;
-			flags  = 0;
 			flags |= 32;
 			flags_collector(&format, &listv, &flags, &wid, &pre);
+			if ((flags & UND))
+				continue;
 			if (*format && format++)
 				everything_handler(&listv, &flags, &wid, &pre);
 		}
-		else
+		else if (((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 			g_buff[g_count++] = *format++;
 	}
 	va_end(listv);

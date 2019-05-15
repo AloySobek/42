@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_sig_dig.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/14 23:13:31 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/15 16:26:08 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 	int		j;
 
 	nbr < 0 ? negative_handler(nbr, flags, wid) : 0;
-	nbr == 0 ? zero_handler(flags, pre) : 0;
+	nbr == 0 ? (*flags |= ZER) && zero_handler(flags, pre) : 0;
 	j = 0;
 	while (nbr != 0)
 	{
@@ -37,10 +37,10 @@ void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 	}
 	adjustment_wid_pre(flags, wid, pre, j);
 	fill_width(flags, wid);
-	while ((*pre)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while ((*pre)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = '0';
-	while (--j >= 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while (--j >= 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = tra[j];
-	while ((*wid)-- > 0 && ((g_count + 1) == BUFF_SIZE ? eject() : 1))
+	while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 		g_buff[g_count++] = (*flags << 56) >> 56;
 }
