@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/15 21:12:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/16 16:07:54 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	long double	dis;
 	size_t		cou;
 
-	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) : 0;
+	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) && (*wid)-- : (*flags & PLU) ? (*wid)-- : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
 	cou = 0;
 	dis = 1.0;
@@ -33,8 +33,23 @@ void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	while ((rou /= 10) >= 1 && ++cou > 0)
 		dis *= 10;
 	adjustment_double(flags, wid, pre, cou);
-	while ((*wid)-- > 0)
-		g_buff[g_count++] = (*flags << 56) >> 56;
+	if (!(*flags & BIA))
+	{
+		if ((*flags << 56) >> 56 == 32)
+		{
+			while ((*wid)-- > 0)
+				g_buff[g_count++] = (*flags << 56) >> 56;
+			(*flags & NEG) ? g_buff[g_count++] = '-' : (*flags & PLU) ? g_buff[g_count++] = '+' : 0;
+		} 
+		else
+		{
+			(*flags & NEG) ? g_buff[g_count++] = '-' : (*flags & PLU) ? g_buff[g_count++] = '+' : 0;
+			while ((*wid)-- > 0)
+				g_buff[g_count++] = (*flags << 56) >> 56;
+		}
+	}
+	else
+		(*flags & NEG) ? g_buff[g_count++] = '-' : (*flags & PLU) ? g_buff[g_count++] = '+' : 0;
 	cou == 0 ? g_buff[g_count++] = '0' : 0;
 	while (nbr >= 1 && dis >= 1 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 	{

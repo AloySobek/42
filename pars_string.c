@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/15 20:20:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/16 16:32:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	flags_collector(const char **str, va_list *list, size_t *flags, int *wid, i
 			*flags |= SPA;
 		else if (**str == '#')
 			*flags |= HAS;
-		else if (**str == '0' && ((*(*str - 1) >= 0 && *(*str - 1) < 48) || *(*str - 1) > 57))
+		else if (**str == '0' && ((*(*str - 1) >= 0 && *(*str - 1) < 48) || *(*str - 1) > 57) && (*flags |= FLO))
 			*flags |= 48;
 		else if (**str == '$')
 			*flags |= DOL;
@@ -115,7 +115,7 @@ void	flags_collector(const char **str, va_list *list, size_t *flags, int *wid, i
 			print_any_char(**str, flags, wid);
 		(*str)++;
 	}
-	if ((*flags & BIA || *flags & POI) && bias(flags, 8, 0))
+	if ((*flags & BIA || *flags & POI) && *pre >= 0 && bias(flags, 8, 0))
 		*flags |= 32;
 	*flags |= (**str) << 16;
 }

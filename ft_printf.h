@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/15 17:32:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/16 16:55:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define APO		2251799813685248
 # define ZER		4503599627370496
 # define UND		9007199254740992
+# define FLO		18014398509481984
 # define HH			72057594037927936
 # define LL			144115188075855872
 # define BL			288230376151711744
@@ -61,6 +62,7 @@ int					expt_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int                 putfloat(long double nbr, size_t *flags, int *wid, int *pre);
 int					eject(void);
 int					zero_handler(size_t *flags, int *pre);
+void				g_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				double_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
