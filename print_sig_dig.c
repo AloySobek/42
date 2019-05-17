@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 17:08:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/17 20:42:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 
 	j = 0;
 	nbr < 0 ? negative_handler(nbr, flags, wid) : 0;
-	nbr == 0 ? (*flags |= ZER) && zero_handler(flags, pre) : 0;
+	nbr == 0 ? (*flags |= ZER) && zero_handler(flags, wid, pre) : 0;
 	while (nbr != 0)
 	{
 		tra[j++] = nbr % 10 * ((*flags & NEG) > 0 ? -1 : 1) + '0';

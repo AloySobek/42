@@ -17,16 +17,16 @@ int main(void)
 	hello = "hello from that";
 	int test = 0;
 	//while (test++ < 100400)
-	test = ft_printf("%f", e);
+	test = ft_printf("%#030.15p", 0);
 	printf("    bytes = %d\n", test);
-	test = printf("%f", e);
+	test = printf("%#030.15p", 0);
 	printf("    bytes = %d\n", test);
 	/*while (test++ < 100000)
 		//ft_printf(">>>|%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s|<<<", hello, hello, hello, hello, hello, hello, hello, hello, hello, hello,
-		 //hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello);
+		//hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello);
 	//printf("   bytes = %d\n", test);
-		printf(">>>|%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s|<<<", hello, hello, hello, hello, hello, hello, hello, hello, hello, hello,
-		 hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello);
+		//printf(">>>|%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s|<<<", hello, hello, hello, hello, hello, hello, hello, hello, hello, hello,
+		//hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello, hello);
 	//printf("   bytes = %d\n", test);*/
 	return (0);
 }

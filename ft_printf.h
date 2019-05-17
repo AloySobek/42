@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 16:55:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/17 20:50:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define C(x)		(x == 'F' || x == 'e' || x == 'E' || x == 'g' || x == 'G')
 # define D(x)		(x == 'a' || x == 'A' || x == 'x' || x == 'X' || x == 'o')
 # define E(x)       (x == 'O' || x == 'p' || x == '%' || x ==  0  || x == 'n')
-# define F(x)		(x == 'b' || x == 'B')
+# define F(x)		(x == 'b' || x == 'B' || x == 'r' || x == 'k')
 # define CONV(x)	(A(x) || B(x) || C(x) || D(x) || E(x) || F(x))
 
 # define BIA		1099511627776
@@ -40,6 +40,7 @@
 # define ZER		4503599627370496
 # define UND		9007199254740992
 # define FLO		18014398509481984
+# define ZNU		36028797018963968
 # define HH			72057594037927936
 # define LL			144115188075855872
 # define BL			288230376151711744
@@ -61,7 +62,7 @@ int					ft_printf(const char *format, ...);
 int					expt_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int                 putfloat(long double nbr, size_t *flags, int *wid, int *pre);
 int					eject(void);
-int					zero_handler(size_t *flags, int *pre);
+int					zero_handler(size_t *flags, int *wid, int *pre);
 void				g_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				double_handler(va_list *list, size_t *flags, int *wid, int *pre);

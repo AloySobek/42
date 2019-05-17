@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/15 20:27:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/17 20:50:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= (*flags & HAS) ? (((*flags << 48) >> 56 == 8) ? 1 : 2) : 0;
 }
 
-int		zero_handler(size_t *flags, int *pre) 
+int		zero_handler(size_t *flags, int *wid, int *pre) 
 {
 	if (*pre == 0 && *flags & POI)
 	{
@@ -66,8 +66,8 @@ int		zero_handler(size_t *flags, int *pre)
 	else
 	{
 		(g_count + 1) >= BUFF_SIZE ? eject() : 1;
-		(*flags << 48) >> 56 == 10 ? constructor(flags) : 0;
-		*pre < 1 ? g_buff[g_count++] = '0' : 0;
+		(*flags << 48) >> 56 == 10 || *flags & PTR ? constructor(flags) : 0;
+		*pre < 1 && *wid < 1 ? g_buff[g_count++] = '0' : 0;
 	}
 	if (*flags & HAS && !(*flags & PTR) && (*flags << 48) >> 56 != 10)
 		*flags ^= HAS;
@@ -82,15 +82,15 @@ void		fill_width(size_t *flags, int *wid)
 		{
 			while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 				g_buff[g_count++] = (*flags << 56) >> 56;
-			!(*flags & ZER) ? constructor(flags) : 0;
+			!(*flags & ZER) && !(*flags & PTR) ? constructor(flags) : 0;
 		}
 		else
 		{
-			!(*flags & ZER) ? constructor(flags) : 0;
+			!(*flags & ZER) && !(*flags & PTR) ? constructor(flags) : 0;
 			while ((*wid)-- > 0 && ((g_count + 1) >= BUFF_SIZE ? eject() : 1))
 				g_buff[g_count++] = (*flags << 56) >> 56;
 		}
 	}
 	else
-		!(*flags & ZER) ? constructor(flags) : 0;
+		!(*flags & ZER) && !(*flags & PTR) ? constructor(flags) : 0;
 }
