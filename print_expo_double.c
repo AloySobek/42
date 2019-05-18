@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 15:25:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 20:16:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void			print_expo_double(long double nbr, size_t *flags, int *wid, int *pre)
 	int			expo;
 
 	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) && (*wid)-- : (*flags * PLU) ? (*wid)-- : 0;
-	!(*flags & POI) ? *pre = 6 : 0;
 	cou = 0;
 	dis = 1.0;
 	expo   = 0;

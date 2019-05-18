@@ -7,19 +7,19 @@
 
 int main(void)
 {
-	double	e;
+	long double	e;
 	size_t flags;
 
-	e = 2341324534523453245.234187744567;
+	e = 22323432.2000000;
 	wchar_t *hello2;
 	hello2 = L"Я программирую на си";
 	char *hello;
 	hello = "hello from that";
 	int test = 0;
 	//while (test++ < 100400)
-	test = ft_printf("%#030.15p", 0);
+	test = ft_printf("%30.15g", e);
 	printf("    bytes = %d\n", test);
-	test = printf("%#030.15p", 0);
+	test = printf("%#30.15Lg", e);
 	printf("    bytes = %d\n", test);
 	/*while (test++ < 100000)
 		//ft_printf(">>>|%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s|<<<", hello, hello, hello, hello, hello, hello, hello, hello, hello, hello,

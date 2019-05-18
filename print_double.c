@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 16:07:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 20:17:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	size_t		cou;
 
 	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) && (*wid)-- : (*flags & PLU) ? (*wid)-- : 0;
-	!(*flags & POI) ? *pre = 6 : 0;
 	cou = 0;
 	dis = 1.0;
 	rou = nbr;

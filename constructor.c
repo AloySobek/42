@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/17 20:50:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 19:47:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,3 +94,4 @@ void		fill_width(size_t *flags, int *wid)
 	else
 		!(*flags & ZER) && !(*flags & PTR) ? constructor(flags) : 0;
 }
+

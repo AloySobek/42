@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 16:32:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 19:49:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	flags_collector(const char **str, va_list *list, size_t *flags, int *wid, i
 			*flags |= HAS;
 		else if (**str == '0' && ((*(*str - 1) >= 0 && *(*str - 1) < 48) || *(*str - 1) > 57) && (*flags |= FLO))
 			*flags |= 48;
-		else if (**str == '$')
+		else if (**str == '$') //&& find_position(str))
 			*flags |= DOL;
 		else if (**str == '\'')
 			*flags |= APO;

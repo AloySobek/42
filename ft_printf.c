@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 16:55:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 19:43:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,16 @@ void		everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		expo_handler(list, flags, wid, pre);
 	else if (SPEC == 'g' || SPEC == 'G')
 		g_handler(list, flags, wid, pre);
-	else if (SPEC == 'a' || SPEC == 'A')
-		;//return (hexafloat_handler(list, flags, wid, pre));
 	else if (SPEC == 'x' || SPEC == 'X')
 		hexadecimal_handler(list, flags, wid, pre);
 	else if (SPEC == 'o' || SPEC == 'O')
 		octal_handler(list, flags, wid, pre);
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
+	//else if (SPEC == 'r')
+	//	non_printable_handler(list, flags, wid, pre);
+	//else if (SPEC == 'k')
+	//	date_handler(list, flags, wid, pre);
 	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }

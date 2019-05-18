@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/17 20:50:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/18 20:14:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define ZER		4503599627370496
 # define UND		9007199254740992
 # define FLO		18014398509481984
-# define ZNU		36028797018963968
+# define GOF		36028797018963968
 # define HH			72057594037927936
 # define LL			144115188075855872
 # define BL			288230376151711744
@@ -63,6 +63,8 @@ int					expt_handler(va_list *list, size_t *flags, int *wid, int *pre);
 int                 putfloat(long double nbr, size_t *flags, int *wid, int *pre);
 int					eject(void);
 int					zero_handler(size_t *flags, int *wid, int *pre);
+void				non_printable_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void				date_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				g_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void				double_handler(va_list *list, size_t *flags, int *wid, int *pre);
@@ -82,6 +84,7 @@ void				print_any_char(wchar_t c, size_t *flags, int *wid);
 void				print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
 void				print_double(long double nbr, size_t *flags, int *wid, int *pre);
 void				print_expo_double(long double nbr, size_t *flags, int *wid, int *pre);
+void				print_double_g_f(long double nbr, size_t *flags, int *wid, int *pre);
 void				uni(wchar_t c);
 void				constructor(size_t *flags);
 void                adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
