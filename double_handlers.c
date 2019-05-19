@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/18 20:17:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/19 17:06:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	double_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
-	(SPEC) == 'F' ? *flags |= BIG : 0; 
+	(SPEC) == 'F' ? *flags |= BIG : 0;
 	!(*flags & BIA) && (*flags & FLO) ? (*flags |= 48) : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
+	*flags |= END;
 	if (*flags & BL)
 		print_double(va_arg(*list, long double), flags, wid, pre);
 	else
@@ -28,6 +29,7 @@ void	expo_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	(SPEC) == 'E' ? *flags |= BIG : 0;
 	!(*flags & BIA) && (*flags & FLO) ? (*flags |= 48) : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
+	*flags |= END;
 	if (*flags & BL)
 		print_expo_double(va_arg(*list, long double), flags, wid, pre);
 	else
@@ -35,7 +37,7 @@ void	expo_handler(va_list *list, size_t *flags, int *wid, int *pre)
 }
 
 void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
-{	
+{
 	long double src;
 	long double cop;
 	int			expo;
@@ -66,7 +68,7 @@ void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		*pre = 1;
 	if (expo < *pre && expo >= -4)
 	{
-		*pre = (expo + 1);
+		*pre -= (expo + 1);
 		print_double(src, flags, wid, pre);
 	}
 	else

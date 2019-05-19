@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/16 15:52:27 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/19 16:47:00 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 
 void	uni(wchar_t c)
 {
-	if (c <= 0x7FF && ((g_count + 3) >= BUFF_SIZE ? eject() : 1) && (g_count += 2))
+	if (c <= 0x7FF && EJECT(3) && (g_count += 2))
 	{
 		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
 		g_buff[g_count - 2] = 0xC0 | (c & 0x1F);
 	}
-	else if (c <= 0xFFFF && ((g_count + 4) >= BUFF_SIZE ? eject() : 1) && (g_count += 3))
+	else if (c <= 0xFFFF && EJECT(4) && (g_count += 3))
 	{
 		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
@@ -49,7 +49,7 @@ void	uni(wchar_t c)
 		c = (c >> 6);
 		g_buff[g_count - 3] = 0xE0 | (c & 0xF);
 	}
-	else if (c <= 0x10FFFF && ((g_count + 5) >= BUFF_SIZE ? eject() : 1) && (g_count += 4))
+	else if (c <= 0x10FFFF && EJECT(5) && (g_count += 4))
 	{
 		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
