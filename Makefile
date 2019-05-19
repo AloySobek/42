@@ -6,29 +6,40 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/06 18:23:00 by vrichese          #+#    #+#              #
-#    Updated: 2019/05/16 19:44:00 by vrichese         ###   ########.fr        #
+#    Updated: 2019/05/19 18:09:19 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SRC = ./libft/ft_atoi.c ./ft_printf.c ./print_uns_dig.c ./print_sig_dig.c ./print_any_char.c ./print_any_string.c ./libft/ft_isspace.c ./char_handlers.c ./decimal_handlers.c ./double_handlers.c ./print_double.c ./print_expo_double.c ./pars_string.c ./decimal_handlers_addit.c ./constructor.c ./libft/ft_strlen.c 
+SRCDIR = srcs
+
+SRC =     $(addprefix $(SRCDIR)/, ft_printf.c char_handlers.c constructor.c\
+		decimal_handlers_addit.c decimal_handlers.c double_handlers.c \
+		non_print_and_date_handler.c pars_string.c print_any_char.c print_any_string.c \
+		print_double_g_f.c print_double.c print_expo_double.c print_sig_dig.c print_uns_dig.c\
+        ft_atoi.c ft_isspace.c ft_strlen.c\
+        ft_memset.c ft_bzero.c)
 
 OBJ = ${SRC:.c=.o}
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
 
-%.o: srcs/%.c
+%.o: $(SRCDIR)%.c
+    
 	@gcc -c $<
 
 clean:
+    
 	@rm -f $(OBJ)
 
 fclean: clean
+    
 	@rm -f $(NAME)
 
 re: fclean all
