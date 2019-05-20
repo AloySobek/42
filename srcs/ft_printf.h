@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 15:24:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 21:00:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define NEG	281474976710656
 # define UNI	562949953421312
 # define DOL	1125899906842624
-# define FREE	2251799813685248
+# define INF	2251799813685248
 # define ZER	4503599627370496
 # define UND	9007199254740992
 # define FLO	18014398509481984
@@ -83,6 +83,7 @@ void		date_and_non_print(va_list *list, size_t *flags, int *wid, int *pre);
 void		calculation_expo(long double *nbr, int *expo);
 void		print_usual_string(char *s, size_t *flags, int *wid, int *pre);
 void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
+void		inf_handler(long double *nbr, size_t *flags, int *wid, int *pre);
 void		flags_collector(const char **str, va_list *list, size_t *flags,
 			int *wid, int *pre);
 void		hexadecimal_handler(va_list *list, size_t *flags, int *wid,

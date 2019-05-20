@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 14:58:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 16:37:56 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,17 @@ void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	long double src;
 	long double cop;
+	double		sec;
 	int			expo;
 
 	(SPEC) == 'G' ? *flags |= BIG : 0;
 	!(*flags & BIA) && (*flags & FLO) ? (*flags |= 48) : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
 	*flags |= END;
-	src = va_arg(*list, long double);
+	if (*flags & BL)
+		src = va_arg(*list, long double);
+	else 
+		sec = va_arg(*list, double);
 	expo = 0;
 	cop = src;
 	calculation_expo(&cop, &expo);
@@ -54,11 +58,11 @@ void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	if (expo < *pre && expo >= -4)
 	{
 		*pre -= (expo + 1);
-		print_double(src, flags, wid, pre);
+		print_double(*flags & BL ? src : sec, flags, wid, pre);
 	}
 	else
 	{
 		*pre -= 1;
-		print_expo_double(src, flags, wid, pre);
+		print_expo_double(*flags & BL ? src : sec, flags, wid, pre);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 15:04:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 21:04:47 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= 1;
 	if ((*flags << 56) >> 56 == 32)
 	{
-		*wid -= (*flags & HAS && BASE == 8) ? 1 : 0;
-		*wid -= (*flags & HAS && BASE == 16) ? 2 : 0;
+		*wid -= (*flags & HAS && BASE == 8 && !(*flags & END)) ? 1 : 0;
+		*wid -= (*flags & HAS && BASE == 16 && !(*flags & END)) ? 2 : 0;
 	}
 	else
 	{
-		if (*flags & HAS)
+		if (*flags & HAS && !(*flags & END))
 			*wid -= ((BASE == 8) ? 1 : 2);
 	}
 }
@@ -99,4 +99,9 @@ void	fill_width(size_t *flags, int *wid, int *pre)
 	}
 	else
 		!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
+}
+
+void	pass_arg(int how)
+{
+	
 }

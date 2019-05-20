@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 15:14:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 21:10:33 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,41 @@ long double		roundd(int pre)
 	while (pre-- > 0)
 		rou /= 10;
 	return (rou);
+}
+
+void			inf_handler(long double *nbr, size_t *flags, int *wid, int *pre)
+{
+	if (*nbr != *nbr)
+	{
+		if (!(*flags & BIG))
+		{
+			g_buff[g_count++] = 'n';
+			g_buff[g_count++] = 'a';
+			g_buff[g_count++] = 'n';
+		}
+		else
+		{
+			g_buff[g_count++] = 'N';
+			g_buff[g_count++] = 'A';
+			g_buff[g_count++] = 'N';
+		}
+	}	
+	else if (*nbr && *nbr == *nbr * 10)
+	{
+		if (!(*flags & BIG))
+		{
+			g_buff[g_count++] = 'i';
+			g_buff[g_count++] = 'n';
+			g_buff[g_count++] = 'f';
+		}
+		else
+		{
+			g_buff[g_count++] = 'I';
+			g_buff[g_count++] = 'N';
+			g_buff[g_count++] = 'F';
+		}
+	}
+	*pre = 0;
 }
 
 void			putfloat(long double *nbr, long double *dis, size_t *flags,
@@ -43,10 +78,7 @@ void			putfloat(long double *nbr, long double *dis, size_t *flags,
 	{
 		g_count--;
 		while (g_buff[g_count] == '0')
-		{
 			g_count--;
-			++(*wid);
-		}
 		g_buff[g_count] == '.' ? g_count-- : 0;
 		g_count++;
 	}
@@ -62,11 +94,18 @@ void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	cou = 0;
 	dis = 1.0;
 	rou = nbr;
-	while ((rou /= 10) >= 1 && ++cou > 0)
+	if (nbr != nbr)
+	{
+		*flags & PLU ? *flags ^= PLU : 0;
+		*flags & SPA ? *flags ^= SPA : 0;
+		*flags |= INF;
+	}
+	rou && rou == rou * 10 ? *flags |= INF : 0;
+	while ((rou /= 10) >= 1 && ++cou > 0 && !(*flags & INF))
 		dis *= 10;
 	adjustment_wid_pre(flags, wid, pre, cou);
 	fill_width(flags, wid, pre);
-	putfloat(&nbr, &dis, flags, wid, pre);
+	!(*flags & INF) ? putfloat(&nbr, &dis, flags, wid, pre) : inf_handler(&nbr, flags, wid, pre);
 	while ((*pre)-- > 0 && EJECT(1))
 		g_buff[g_count++] = '0';
 	while ((*wid)-- > 0 && EJECT(1))
