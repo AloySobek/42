@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/15 13:50:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:26:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ void	binary_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		print_uns_dig(va_arg(*list, uintmax_t), flags, wid, pre);
 	else if (*flags & Z)
 		print_uns_dig(va_arg(*list, size_t), flags, wid, pre);
-	else 
-		print_uns_dig(va_arg(*list, unsigned int), flags, wid, pre);	
+	else
+		print_uns_dig(va_arg(*list, unsigned int), flags, wid, pre);
+}
+
+void	date_and_non_print(va_list *list, size_t *flags, int *wid, int *pre)
+{
+	
 }

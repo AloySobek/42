@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 20:59:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 14:50:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	char_handler(va_list *list, size_t *flags, int *wid)
 void	string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	(*flags & BIA) ? (*flags >>= 8) && (*flags <<= 8) && (*flags |= 32) : 0;
-	*flags & FLO && SIGN == 32 ? *flags |= 48 : 0; 
+	*flags & FLO && SIGN == 32 && !(*flags & BIA) ? *flags |= 48 : 0;
 	if (SPEC == 'S' || *flags & L)
 	{
 		*flags |= UNI;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 20:31:30 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:14:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ long double		roundd(int pre)
 	return (rou);
 }
 
-void			putfloat(long double *nbr, long double *dis, int *pre)
+void			putfloat(long double *nbr, long double *dis, size_t *flags,
+				int *wid, int *pre)
 {
 	while (*nbr >= 0 && *dis >= 1 && EJECT(1))
 	{
@@ -37,6 +38,17 @@ void			putfloat(long double *nbr, long double *dis, int *pre)
 	{
 		g_buff[g_count++] = (int)*nbr + 48;
 		*nbr -= (int)*nbr;
+	}
+	if (((SPEC) == 'g' || (SPEC) == 'G') && !(*flags & HAS))
+	{
+		g_count--;
+		while (g_buff[g_count] == '0')
+		{
+			g_count--;
+			++(*wid);
+		}
+		g_buff[g_count] == '.' ? g_count-- : 0;
+		g_count++;
 	}
 }
 
@@ -54,7 +66,7 @@ void			print_double(long double nbr, size_t *flags, int *wid, int *pre)
 		dis *= 10;
 	adjustment_wid_pre(flags, wid, pre, cou);
 	fill_width(flags, wid, pre);
-	putfloat(&nbr, &dis, pre);
+	putfloat(&nbr, &dis, flags, wid, pre);
 	while ((*pre)-- > 0 && EJECT(1))
 		g_buff[g_count++] = '0';
 	while ((*wid)-- > 0 && EJECT(1))

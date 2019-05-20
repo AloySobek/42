@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 18:33:02 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:24:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			eject(void)
 	return (1);
 }
 
-void		everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
+void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	if (SPEC == 'c' || SPEC == 'C' || SPEC == '%')
 		char_handler(list, flags, wid);
@@ -45,8 +45,8 @@ void		everything_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		octal_handler(list, flags, wid, pre);
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
-	else if (SPEC == 'r')
-		;//non_printable_handler(list, flags, wid, pre);
+	else if (SPEC == 'r' || SPEC == 'k')
+		date_and_non_print(list, flags, wid, pre);
 	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }
@@ -59,20 +59,18 @@ int			ft_printf(const char *format, ...)
 	int		wid;
 
 	va_start(listv, format);
-	pre = 0;
-	wid = 0;
 	g_count = 0;
 	g_bytes = 0;
+	pre = 0;
+	wid = 0;
 	while (*format)
 	{
-		if (*format == '%' && !(flags = 0) && format++)
+		if (*format == '%' && !(flags = 0) && format++ && (flags |= 32))
 		{
-			flags |= 32;
 			flags_collector(&format, &listv, &flags, &wid, &pre);
-			if ((flags & UND))
+			if (flags & UND)
 				continue;
-			if (*format && format++)
-				everything_handler(&listv, &flags, &wid, &pre);
+			*format && format++ ? ever_handler(&listv, &flags, &wid, &pre) : 0;
 		}
 		else if (EJECT(1))
 			g_buff[g_count++] = *format++;

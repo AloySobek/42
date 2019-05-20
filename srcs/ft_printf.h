@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 20:30:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:24:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define ZER	4503599627370496
 # define UND	9007199254740992
 # define FLO	18014398509481984
-# define GOF	36028797018963968
+# define FREE2	36028797018963968
 # define HH		72057594037927936
 # define LL		144115188075855872
 # define BL		288230376151711744
@@ -58,27 +58,31 @@ extern char g_buff[BUFF_SIZE];
 extern int g_count;
 extern int g_bytes;
 
-int			ft_printf(const char *format, ...);
+void		uni(wchar_t c);
 int			eject(void);
-int			zero_handler(size_t *flags, int *wid, int *pre);
-void		date_handler(va_list *list, size_t *flags, int *wid, int *pre);
+int			ft_printf(const char *format, ...);
 void		g_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void		fill_width(size_t *flags, int *wid, int *pre);
+void		constructor(size_t *flags, int *pre);
+int			zero_handler(size_t *flags, int *wid, int *pre);
+void		char_handler(va_list *list, size_t *flags, int *wid);
+void		date_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void		print_double(long double nbr, size_t *flags, int *wid, int *pre);
 void		expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre);
+void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
+void		octal_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void		string_handler(va_list *list, size_t *flags, int *wid, int *pre);
+void		print_any_char(wchar_t c, size_t *flags, int *wid);
 void		double_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		octal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		pointer_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre);
-void		char_handler(va_list *list, size_t *flags, int *wid);
-void		string_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre);
+void		date_and_non_print(va_list *list, size_t *flags, int *wid, int *pre);
+void		calculation_expo(long double *nbr, int *expo);
 void		print_usual_string(char *s, size_t *flags, int *wid, int *pre);
-void		print_any_char(wchar_t c, size_t *flags, int *wid);
-void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
-void		print_double(long double nbr, size_t *flags, int *wid, int *pre);
-void		non_printable_handler(va_list *list, size_t *flags, int *wid,
-			int *pre);
+void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
 void		flags_collector(const char **str, va_list *list, size_t *flags,
 			int *wid, int *pre);
 void		hexadecimal_handler(va_list *list, size_t *flags, int *wid,
@@ -89,11 +93,8 @@ void		print_expo_double(long double nbr, size_t *flags, int *wid,
 			int *pre);
 void		print_double_g_f(long double nbr, size_t *flags, int *wid,
 			int *pre);
-void		uni(wchar_t c);
-void		constructor(size_t *flags, int *pre);
-void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
-void		fill_width(size_t *flags, int *wid, int *pre);
-void		putfloat(long double *nbr, long double *dis, int *pre);
+void		putfloat(long double *nbr, long double *dis, size_t *flags,
+			int *wid, int *pre);
 long double roundd(int pre);
 
 #endif

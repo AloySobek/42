@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 20:52:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/20 15:04:06 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,29 @@
 
 void	constructor(size_t *flags, int *pre)
 {
-		if (*flags & NEG && EJECT(1))
-			g_buff[g_count++] = '-';
-		if (*flags & HAS && BASE == 8 && EJECT(1))
-			g_buff[g_count++] = '0';
-		if (((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) && EJECT(2))
-		{
-			g_buff[g_count++] = '0';
-			g_buff[g_count++] = 'x';
-		}
-		else if (*flags & HAS && BASE == 16 && *flags & BIG && !(*flags & PTR) && EJECT(2))
-		{
-			g_buff[g_count++] = '0';
-			g_buff[g_count++] = 'X';
-		}
-		else if (*flags & HAS && BASE == 2 && EJECT(2))
-		{
-			g_buff[g_count++] = '0';
-			g_buff[g_count++] = 'b';
-		}
-		if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & END) && EJECT(1))
-			g_buff[g_count++] = '+';
-		if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10 || *flags & END) && EJECT(1))
-			g_buff[g_count++] = ' ';
+	if (*flags & NEG && EJECT(1))
+		g_buff[g_count++] = '-';
+	if (*flags & HAS && BASE == 8 && EJECT(1))
+		g_buff[g_count++] = '0';
+	if (((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
+		EJECT(2))
+	{
+		g_buff[g_count++] = '0';
+		g_buff[g_count++] = 'x';
+	}
+	else if (*flags & HAS && BASE == 16 && !(*flags & PTR) && EJECT(2))
+	{
+		g_buff[g_count++] = '0';
+		g_buff[g_count++] = 'X';
+	}
+	else if (*flags & HAS && BASE == 2 && EJECT(2) && (g_buff[g_count++] = '0'))
+		g_buff[g_count++] = 'b';
+	if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & END) &&
+		EJECT(1))
+		g_buff[g_count++] = '+';
+	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
+		|| *flags & END) && EJECT(1))
+		g_buff[g_count++] = ' ';
 }
 
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
@@ -52,14 +52,17 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= 1;
 	if ((*flags << 56) >> 56 == 32)
 	{
-		*wid -= (*flags & HAS && BASE == 8) ? 1 : 0; 
+		*wid -= (*flags & HAS && BASE == 8) ? 1 : 0;
 		*wid -= (*flags & HAS && BASE == 16) ? 2 : 0;
 	}
 	else
-		*wid -= (*flags & HAS) ? ((BASE == 8) ? 1 : 2) : 0;
+	{
+		if (*flags & HAS)
+			*wid -= ((BASE == 8) ? 1 : 2);
+	}
 }
 
-int		zero_handler(size_t *flags, int *wid, int *pre) 
+int		zero_handler(size_t *flags, int *wid, int *pre)
 {
 	if (*pre == 0 && *flags & POI)
 	{
@@ -96,13 +99,4 @@ void	fill_width(size_t *flags, int *wid, int *pre)
 	}
 	else
 		!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
-}
-
-void 	erase_zero(size_t *flags)
-{
-	int a;
-
-	a = *flags;
-	if (a == 6)
-		return ;
 }
