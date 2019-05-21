@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 17:50:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 15:33:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		;//date_and_non_print(list, flags, wid, pre);
+		;
 	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }

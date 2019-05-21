@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 21:01:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 17:25:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,32 +57,25 @@ void			add_expo(size_t *flags, int *expo)
 void			print_expo_double(long double nbr, size_t *flags, int *wid,
 				int *pre)
 {
-	long double	rou;
-	long double	dis;
-	size_t		cou;
+	char		tra[256];
 	int			expo;
+	int			j;
+	int			i;
 
+	j = 0;
+	i = 0;
 	(nbr < 0) ? (nbr *= -1) && (*flags |= NEG) : 0;
-	cou = 0;
-	dis = 1.0;
-	rou = nbr;
-	if (nbr != nbr)
-	{
-		*flags & PLU ? *flags ^= PLU : 0;
-		*flags & SPA ? *flags ^= SPA : 0;
-		*flags |= INF;
-	} 
-	rou && rou == rou * 10 ? *flags |= INF : 0;
-	!(*flags & INF) ? calculation_expo(&nbr, &expo) : 0;
-	while ((rou /= 10) >= 1 && ++cou > 0 && !(*flags & INF))
-		dis *= 10;
-	*wid -= (*pre > 0 ? *pre + 1 : 0);
-	*wid -= 5;
+	nbr != nbr ? (*flags |= NAN) && (*pre = 0) : 0;
+	nbr && nbr == nbr * 10 ? (*flags |= INF) && (*pre = 0) : 0;
+	!(*flags & (INF | NAN)) ? calculation_expo(&nbr, &expo) : 0;
+	!(*flags & (INF | NAN)) ? (j = putfloat(&tra[0], &nbr, flags, pre)) :
+	inf_handler(&nbr, flags, wid, pre);
+	adjustment_wid_pre(flags, wid, pre, j);
+	*wid -= 4;
 	fill_width(flags, wid, pre);
-	!(*flags & INF) ? putfloat(&nbr, &dis, flags, wid, pre) : inf_handler(&nbr, flags, wid, pre);
-	while ((*pre)-- > 0 && EJECT(1))
-		g_buff[g_count++] = '0';
-	add_expo(flags, &expo);
+	while (i < j && EJECT(1))
+		g_buff[g_count++] = tra[i++];
+	!(*flags & (INF | NAN)) ? add_expo(flags, &expo) : 0;
 	while ((*wid)-- > 0 && EJECT(1))
 		g_buff[g_count++] = (*flags << 56) >> 56;
 }

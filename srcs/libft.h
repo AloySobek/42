@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/14 14:59:57 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 15:42:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 14:19:55 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,6 @@ typedef struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
-
-typedef struct		s_flags
-{
-	int				pre;
-	int				bia;
-	int				spa;
-	int				big;
-	int				has;
-	int				plu;
-	int				zer;
-	int				ptr;
-	int				poi;
-	int				wid;
-	int				tes;
-	int				che;
-	int				hh;
-	int				ll;
-	int				h;
-	int				l;
-}					t_flags;
 
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
@@ -118,4 +98,5 @@ int					ft_isupper(int c);
 int					ft_islower(int c);
 int					ft_isspace(int c);
 int					ft_nbrlen(int n);
+
 #endif

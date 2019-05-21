@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 21:04:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 17:16:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,32 @@ void	constructor(size_t *flags, int *pre)
 		g_buff[g_count++] = 'X';
 	}
 	else if (*flags & HAS && BASE == 2 && EJECT(2) && (g_buff[g_count++] = '0'))
-		g_buff[g_count++] = 'b';
+		g_buff[g_count++] = *flags & BIG ? 'B' : 'b';
 	if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & END) &&
-		EJECT(1))
+		!(*flags & NAN) && EJECT(1))
 		g_buff[g_count++] = '+';
 	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
-		|| *flags & END) && EJECT(1))
+		|| *flags & END) && !(*flags & NAN) && EJECT(1))
 		g_buff[g_count++] = ' ';
 }
 
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 {
-	!(*flags & END) ? *pre -= len : (*wid -= 2);
+	!(*flags & END) || *flags & INF || *flags & NAN ? *pre -= len : 0;
+	(*flags & END) && *pre == 0 && !(*flags & (INF | NAN)) ? (*wid)++ : 0;
 	*flags & NEG ? (*wid)-- : 0;
+	*flags & INF || *flags & NAN ? (*wid) -= 3 : 0;
 	BASE == 8 && *flags & HAS ? (*pre)-- : 0;
 	*wid -= len;
 	*wid -= *pre > 0 ? *pre : 0;
-	if (*flags & SPA && !(*flags & BIA) && !(*flags & NEG))
+	if (*flags & SPA && !(*flags & BIA) && !(*flags & NEG) && !(*flags & NAN))
 		*wid -= 1;
-	if (*flags & PLU && !(*flags & NEG) && (BASE == 10 || *flags & END))
+	if (*flags & PLU && !(*flags & (NEG | NAN)) && (BASE == 10 || *flags & END))
 		*wid -= 1;
-	if ((*flags << 56) >> 56 == 32)
+	if (SIGN == 32)
 	{
 		*wid -= (*flags & HAS && BASE == 8 && !(*flags & END)) ? 1 : 0;
-		*wid -= (*flags & HAS && BASE == 16 && !(*flags & END)) ? 2 : 0;
+		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & END)) ? 2 : 0;
 	}
 	else
 	{
@@ -82,26 +84,27 @@ int		zero_handler(size_t *flags, int *wid, int *pre)
 
 void	fill_width(size_t *flags, int *wid, int *pre)
 {
+	if (*flags & INF || *flags & NAN)
+	{
+		*flags >>= 8;
+		*flags <<= 8;
+		*flags |= 32;
+	}
 	if (!(*flags & BIA))
 	{
-		if (((*flags << 56) >> 56) == 32)
+		if (SIGN == 32)
 		{
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff[g_count++] = (*flags << 56) >> 56;
+				g_buff[g_count++] = SIGN;
 			!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
 		}
 		else
 		{
 			!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff[g_count++] = (*flags << 56) >> 56;
+				g_buff[g_count++] = SIGN;
 		}
 	}
 	else
 		!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
-}
-
-void	pass_arg(int how)
-{
-	
 }

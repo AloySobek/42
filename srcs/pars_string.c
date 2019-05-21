@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 21:09:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 21:12:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,12 @@ int		length_modifier_collector(const char **str, size_t *flags)
 	return (1);
 }
 
+void	color_chooser(char **str, size_t *flags)
+{
+	*str += 2;
+		
+}
+
 void	flags_collector(const char **str, va_list *list, size_t *flags,
 		int *wid, int *pre)
 {
@@ -111,6 +117,8 @@ void	flags_collector(const char **str, va_list *list, size_t *flags,
 		else if (**str == '0' && ((*(*str - 1) >= 0 && *(*str - 1) < 48) ||
 				*(*str - 1) > 57) && (*flags |= FLO))
 			*flags |= 48;
+		else if (**str == '@' && *(*str + 1) == '{')
+			;//color_chooser(str, flags);
 		else if (**str == '.' && precision_collector(str, list, flags, pre))
 			continue;
 		else if (((**str >= 48 && **str <= 57) || **str == '*') &&

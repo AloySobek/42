@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 15:13:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 21:28:54 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 {
-	char	tra[20];
+	char	tra[64];
 	int		j;
 
 	j = 0;

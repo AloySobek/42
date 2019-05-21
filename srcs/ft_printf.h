@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/20 21:00:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/21 17:24:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define ZER	4503599627370496
 # define UND	9007199254740992
 # define FLO	18014398509481984
-# define FREE2	36028797018963968
+# define NAN	36028797018963968
 # define HH		72057594037927936
 # define LL		144115188075855872
 # define BL		288230376151711744
@@ -48,7 +48,7 @@
 # define Z		4611686018427387904
 # define T		9223372036854775808U
 
-# define BUFF_SIZE	128
+# define BUFF_SIZE	256
 # define SPEC		(*flags << 40) >> 56
 # define BASE		((*flags << 48) >> 56)
 # define SIGN		(*flags << 56) >> 56
@@ -60,6 +60,7 @@ extern int g_bytes;
 
 void		uni(wchar_t c);
 int			eject(void);
+int			putfloat(char *tra, long double *nbr, size_t *flags, int *pre);
 int			ft_printf(const char *format, ...);
 void		g_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		fill_width(size_t *flags, int *wid, int *pre);
@@ -79,7 +80,6 @@ void		binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		pointer_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre);
-void		date_and_non_print(va_list *list, size_t *flags, int *wid, int *pre);
 void		calculation_expo(long double *nbr, int *expo);
 void		print_usual_string(char *s, size_t *flags, int *wid, int *pre);
 void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
@@ -94,8 +94,6 @@ void		print_expo_double(long double nbr, size_t *flags, int *wid,
 			int *pre);
 void		print_double_g_f(long double nbr, size_t *flags, int *wid,
 			int *pre);
-void		putfloat(long double *nbr, long double *dis, size_t *flags,
-			int *wid, int *pre);
 long double roundd(int pre);
 
 #endif
