@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/21 17:24:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/23 20:11:00 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,22 @@
 # define SIGN		(*flags << 56) >> 56
 # define EJECT(x)	((g_count + x) >= BUFF_SIZE ? eject() : 1)
 
-extern char g_buff[BUFF_SIZE];
-extern int g_count;
-extern int g_bytes;
+typedef struct			s_bits
+{
+	unsigned long long	mant: 64;
+	long long			expo: 15;
+	long long			sign: 1;
+}						t_bits;
+
+typedef union	u_nbr
+{
+	long double nbr;
+	short		array[5];
+}				t_nbr;
+
+extern char	g_buff[BUFF_SIZE];
+extern int	g_count;
+extern int	g_bytes;
 
 void		uni(wchar_t c);
 int			eject(void);
