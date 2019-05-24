@@ -100,22 +100,19 @@ void add_power_neg(char *summ, int pwr)
     comb(summ);
 }*/
 
-void	add_power_neg(char *summ, int pwr)
+/*void	add_power_neg(char *summ, int pwr)
 {
 	char power[5002] = {0};
 	int n;
 	int m;
 
 	pwr *= -1;
-	pwr != 0 ? power[pwr - 1] = 1 : 0;
-	m = pwr++;
-	while (--pwr && (n = m))
+	pwr != 0 ? (power[pwr - 1] = 1) : 0;
+	m = pwr;
+	while (pwr-- && (n = m))
 	{
-		while (n)
-		{
+		while (n--)
 			power[n] *= 5;
-			n--;
-		}
 		n = m;
 		while (n--)
 			while (power[n] > 9)
@@ -124,9 +121,9 @@ void	add_power_neg(char *summ, int pwr)
 				++power[n - 1];
 			}
 	}
-	n = -1;
-	while (++n <= m)
-	   summ[n] = power[n];
+	n = m;
+	while (n--)
+	   summ[n] += power[n];
 	n = m;
 	while (n--)
 		while (summ[n] > 9)
@@ -165,51 +162,19 @@ void		add_power(char *summ, int pwr)
             summ[n] -= 10;
             ++summ[n - 1];
         }
-}
+}*/
 
 int main(void)
 {
-    long double    e;
-    size_t flags;
-    t_nbr new;
-    t_bits bits;
-    int n;
-    int m;
-    int n2;
-    int m2;
+	long double e;
+	int test;
 
-    new.nbr = 13455464.2345342345234552345234523452345234563456L;
-    bits.expo = new.array[4] - 16383;
-    bits.mant = *(long long *)&new.nbr;
-
-    long long bl = 64;
-    char summ[5002] = {0};
-    char summ2[5002] = {0};
-
-    while (bl-- > 0)
-    {
-        if (bits.mant & (1L << bl))
-            bits.expo >= 0 ? add_power(&summ[0], bits.expo) : add_power_neg(&summ2[0], bits.expo);
-        bits.expo--;
-    }
-	n = 0;
-    while (!summ[n] && n < 5000)
-        ++n;
-    m = n;
-    while (n <= 5000)
-	{
-       summ[n] += '0';
-       ++n;
-    }
-    int prec = 100;
-    n2 = 0;
-    while (n2 < prec)
-	{
-       summ2[n2] += '0';
-       ++n2;
-    }
-    printf("\n%s.%s\n%.100Lf\n", &summ[m], &summ2[0], new.nbr);
-
+	test = 0;
+	e = 12123456.30000000;
+	test = ft_printf("%-0100Lg", e);
+	printf("   bytes = %d\n", test);
+	test = printf("%-0100Lg", e);
+	printf("   bytes = %d\n", test);
 	return (0);
 }
 /*

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   print_double.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/23 21:23:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/24 09:07:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/*void		add_power(char *summ, int pwr)
+void		add_power(char *summ, int pwr)
 {
     char	power[5002] = {0};
     int		n;
@@ -49,12 +49,12 @@ void	add_power_neg(char *summ, int pwr)
 	int n;
 	int m;
 
-	pwr != 0 ? power[-pwr - 1] = 1 : 0;
 	pwr *= -1;
-	m = pwr++;
-	while (--pwr && (n = -1))
+	pwr != 0 ? power[pwr - 1] = 1 : 0;
+	m = pwr;
+	while (pwr-- && (n = m))
 	{
-		while (++n <= m)
+		while (n--)
 			power[n] *= 5;
 		n = m;
 		while (n--)
@@ -64,9 +64,9 @@ void	add_power_neg(char *summ, int pwr)
 				++power[n - 1];
 			}
 	}
-	n = -1;
-	while (++n <= m)
-	   summ[n] = power[n];
+	n = m;
+	while (n--)
+	   summ[n] += power[n];
 	n = m;
 	while (n--)
 		while (summ[n] > 9)
@@ -74,17 +74,22 @@ void	add_power_neg(char *summ, int pwr)
 			summ[n] -= 10;
 			++summ[n - 1];
 		}
-}*/
+}
 
-long double		roundd(int pre)
+void		roundd(char *str, int pre)
 {
-	long double	rou;
-	size_t		cou;
+	int count;
 
-	rou = 0.5;
-	while (pre-- > 0)
-		rou /= 10;
-	return (rou);
+	count = 0;
+	while (pre--)
+		count++;
+	while(count--)
+	{
+		if (str[count + 1] + 5 > '9')
+		{
+			str[cou;
+		if (str[count] >)
+	}
 }
 
 void			inf_handler(long double *nbr, size_t *flags, int *wid, int *pre)
@@ -136,17 +141,17 @@ int				putfloat(char *tra, long double *nbr, size_t *flags, int *pre)
 	while (bl-- > 0)
 	{
 		if (bits.mant & (1L << bl))
-			;//bits.expo >= 0 ? add_power(&summ[0], bits.expo) : add_power_neg(&summ2[0], bits.expo);
+			bits.expo >= 0 ? add_power(&summ[0], bits.expo) : add_power_neg(&summ2[0], bits.expo);
 		bits.expo--;
 	}
-	n = 50;
+	n = 0;
     while (!summ[n] && n < 5000)
         n++;
-	printf("%d\n", n);
+	//printf("%d\n", n);
     while (n <= 5000)
 	{
 		tra[cou++] = summ[n] + '0';
-    	++n;
+    	n++;
     }
 	tra[cou++] = '.';
     n2 = 0;
@@ -156,13 +161,13 @@ int				putfloat(char *tra, long double *nbr, size_t *flags, int *pre)
        ++n2;
     }
 	bits.sign ? *flags |= NEG : 0;
-	/*if (((SPEC) == 'g' || (SPEC) == 'G') && !(*flags & HAS) && tra[(cou - 1)] == '0')
+	if (((SPEC) == 'g' || (SPEC) == 'G') && !(*flags & HAS) && tra[(cou - 1)] == '0')
 	{
 		cou--;
 		while (tra[cou] == '0')
 			cou--;
 		cou++;
-	}*/
+	}
 	return (cou);
 }
 
