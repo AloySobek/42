@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 16:05:35 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/25 20:05:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,13 @@ void			print_expo_double(long double nbr, size_t *flags, int *wid,
 	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
 	j = 0;
+	i = 1;
 	!(*flags & (INF | NAN)) ? j = putfloat(&med, &tally, flags, pre) : 0;
 	adjustment_wid_pre(flags, wid, pre, j);
 	*wid -= 4;
 	fill_width(flags, wid, pre);
 	(*flags & (INF | NAN)) ? inf_handler(flags, wid, pre) : 0;
-	!(*flags & (INF | NAN)) && med[0] != 0 ? i = 0 : (i = 1);
+	!(*flags & (INF | NAN)) && med[0] != 0 ? i = 0 : 0;
 	while (i <= j && EJECT(1) && !(*flags & (INF | NAN)))
 		g_buff[g_count++] = med[i++];
 	!(*flags & (INF | NAN)) ? add_expo(flags, &expo) : 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/23 23:22:30 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/25 20:14:00 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	if (SIGN == 32)
 	{
 		*wid -= (*flags & HAS && BASE == 8 && !(*flags & END)) ? 1 : 0;
-		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & END)) ? 2 : 0;
+		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) &&
+		!(*flags & END)) ? 2 : 0;
 	}
 	else
 	{

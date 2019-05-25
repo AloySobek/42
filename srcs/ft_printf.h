@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 15:16:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/25 20:11:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@
 # define Z		4611686018427387904
 # define T		9223372036854775808U
 
-# define BUFF_SIZE	256
-# define SPEC		(*flags << 40) >> 56
-# define BASE		((*flags << 48) >> 56)
-# define SIGN		(*flags << 56) >> 56
-# define EJECT(x)	((g_count + x) >= BUFF_SIZE ? eject() : 1)
+# define BUFF_SIZE		256
+# define SPEC			(*flags << 40) >> 56
+# define BASE			((*flags << 48) >> 56)
+# define SIGN			(*flags << 56) >> 56
+# define EJECT(x)		((g_count + x) >= BUFF_SIZE ? eject() : 1)
 
-typedef union	u_nbr
+typedef union			u_nbr
 {
-	long double nbr;
-	short		array[5];
-}				t_nbr;
+	long double			nbr;
+	short				array[5];
+}						t_nbr;
 
 typedef struct			s_bits
 {
@@ -69,48 +69,67 @@ typedef struct			s_bits
 	t_nbr				nbr;
 }						t_bits;
 
-extern char	g_buff[BUFF_SIZE];
-extern int	g_count;
-extern int	g_bytes;
-extern int	g_fd;
+extern char				g_buff[BUFF_SIZE];
+extern int				g_count;
+extern int				g_bytes;
+extern int				g_fd;
 
-void		uni(wchar_t c);
-int			eject(void);
-int			putfloat(char **tra, t_bits *tally, size_t *flags, int *pre);
-int			ft_printf(const char *format, ...);
-void		g_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		fill_width(size_t *flags, int *wid, int *pre);
-void		constructor(size_t *flags, int *pre);
-int			zero_handler(size_t *flags, int *wid, int *pre);
-void		char_handler(va_list *list, size_t *flags, int *wid);
-void		date_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		print_double(long double nbr, size_t *flags, int *wid, int *pre);
-void		expo_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre);
-void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre);
-void		octal_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		string_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		print_any_char(wchar_t c, size_t *flags, int *wid);
-void		double_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		binary_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		decimal_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		pointer_handler(va_list *list, size_t *flags, int *wid, int *pre);
-void		print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre);
-void		calculation_expo(long double *nbr, int *expo);
-void		print_usual_string(char *s, size_t *flags, int *wid, int *pre);
-void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
-void		inf_handler(size_t *flags, int *wid, int *pre);
-void		flags_collector(const char **str, va_list *list, size_t *flags,
-			int *wid, int *pre);
-void		hexadecimal_handler(va_list *list, size_t *flags, int *wid,
-			int *pre);
-void		unsigned_decimal_handler(va_list *list, size_t *flags, int *wid,
-			int *pre);
-void		print_expo_double(long double nbr, size_t *flags, int *wid,
-			int *pre);
-void		print_double_g_f(long double nbr, size_t *flags, int *wid,
-			int *pre);
-void		roundd(char **str, int n, int *pre);
-void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre);
+void					uni(wchar_t c);
+int						eject(void);
+int						putfloat(char **tra, t_bits *tally, size_t *flags,
+						int *pre);
+int						ft_printf(const char *format, ...);
+void					g_handler(va_list *list, size_t *flags, int *wid,
+						int *pre);
+void					fill_width(size_t *flags, int *wid, int *pre);
+void					constructor(size_t *flags, int *pre);
+int						zero_handler(size_t *flags, int *wid, int *pre);
+void					char_handler(va_list *list, size_t *flags,
+						int *wid);
+void					print_double(long double nbr, size_t *flags,
+						int *wid, int *pre);
+void					expo_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					print_sig_dig(intmax_t nbr, size_t *flags,
+						int *wid, int *pre);
+void					print_uns_dig(uintmax_t nbr, size_t *flags,
+						int *wid, int *pre);
+void					octal_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					string_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					print_any_char(wchar_t c, size_t *flags,
+						int *wid);
+void					double_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					binary_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					decimal_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					pointer_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					print_uni_string(wchar_t *s, size_t *flags,
+						int *wid, int *pre);
+void					calculation_expo(long double *nbr, int *expo);
+void					print_usual_string(char *s, size_t *flags,
+						int *wid, int *pre);
+void					adjustment_wid_pre(size_t *flags, int *wid,
+						int *pre, int i);
+void					inf_handler(size_t *flags, int *wid, int *pre);
+void					roundd(char **str, int n, int *pre);
+void					get_bits(t_bits *tally, long double *nbr,
+						size_t *flags, int *pre);
+void					flags_collector(const char **str, va_list *list,
+						size_t *flags, int *wid, int *pre);
+void					hexadecimal_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					unsigned_decimal_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					print_expo_double(long double nbr, size_t *flags,
+						int *wid, int *pre);
+void					print_double_g_f(long double nbr, size_t *flags,
+						int *wid, int *pre);
+void					date_non_printable_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/24 16:03:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/25 19:57:59 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		date_handler(list, flags, wid, pre);
+		date_non_printable_handler(list, flags, wid, pre);
 	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }
@@ -66,7 +66,6 @@ int			ft_printf(const char *format, ...)
 	pre = 0;
 	wid = 0;
 	while (*format)
-	{
 		if (*format == '%' && !(flags = 0) && format++ && (flags |= 32))
 		{
 			flags_collector(&format, &listv, &flags, &wid, &pre);
@@ -76,7 +75,6 @@ int			ft_printf(const char *format, ...)
 		}
 		else if (EJECT(1))
 			g_buff[g_count++] = *format++;
-	}
 	va_end(listv);
 	eject();
 	return (g_bytes);

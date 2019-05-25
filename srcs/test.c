@@ -8,14 +8,14 @@
 
 int main(void)
 {
-	long double e;
+	double e;
 	int test;
 
 	test = 0;
-	e = 99.8999999;
-	test = ft_printf("%@{cyan}030Lf\n%S", e, L"Повар павел повар петр");
+	e = 0.0;
+	test = ft_printf("%030f", e);
 	printf("   bytes = %d\n", test);
-	test = printf("%030Lf", e);
+	test = printf("%030f", e);
 	printf("   bytes = %d\n", test);
 	return (0);
 }
