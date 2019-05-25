@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/21 15:35:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/24 16:07:06 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,24 @@ void	binary_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		print_uns_dig(va_arg(*list, size_t), flags, wid, pre);
 	else
 		print_uns_dig(va_arg(*list, unsigned int), flags, wid, pre);
+}
+
+void	date_handler(va_list *list, size_t *flags, int *wid, int *pre)
+{
+	int year;
+	int month;
+	int date;
+	int hour;
+	int minut;
+	int second;
+	int milisecond;
+
+	year = va_arg(*list, int);
+	month = va_arg(*list, int);
+	date = va_arg(*list, int);
+	hour = va_arg(*list, int);
+	minut = va_arg(*list, int);
+	second = va_arg(*list, int);
+	milisecond = va_arg(*list, int);
+	
 }

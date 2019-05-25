@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/23 20:11:00 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/25 15:16:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,29 @@
 # define SIGN		(*flags << 56) >> 56
 # define EJECT(x)	((g_count + x) >= BUFF_SIZE ? eject() : 1)
 
-typedef struct			s_bits
-{
-	unsigned long long	mant: 64;
-	long long			expo: 15;
-	long long			sign: 1;
-}						t_bits;
-
 typedef union	u_nbr
 {
 	long double nbr;
 	short		array[5];
 }				t_nbr;
 
+typedef struct			s_bits
+{
+	unsigned long long	mant: 64;
+	long long			expo: 15;
+	long long			sign: 1;
+	int					size;
+	t_nbr				nbr;
+}						t_bits;
+
 extern char	g_buff[BUFF_SIZE];
 extern int	g_count;
 extern int	g_bytes;
+extern int	g_fd;
 
 void		uni(wchar_t c);
 int			eject(void);
-int			putfloat(char *tra, long double *nbr, size_t *flags, int *pre);
+int			putfloat(char **tra, t_bits *tally, size_t *flags, int *pre);
 int			ft_printf(const char *format, ...);
 void		g_handler(va_list *list, size_t *flags, int *wid, int *pre);
 void		fill_width(size_t *flags, int *wid, int *pre);
@@ -96,7 +99,7 @@ void		print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre);
 void		calculation_expo(long double *nbr, int *expo);
 void		print_usual_string(char *s, size_t *flags, int *wid, int *pre);
 void		adjustment_wid_pre(size_t *flags, int *wid, int *pre, int i);
-void		inf_handler(long double *nbr, size_t *flags, int *wid, int *pre);
+void		inf_handler(size_t *flags, int *wid, int *pre);
 void		flags_collector(const char **str, va_list *list, size_t *flags,
 			int *wid, int *pre);
 void		hexadecimal_handler(va_list *list, size_t *flags, int *wid,
@@ -107,6 +110,7 @@ void		print_expo_double(long double nbr, size_t *flags, int *wid,
 			int *pre);
 void		print_double_g_f(long double nbr, size_t *flags, int *wid,
 			int *pre);
-long double roundd(int pre);
+void		roundd(char **str, int n, int *pre);
+void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre);
 
 #endif

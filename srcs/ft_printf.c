@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/21 15:33:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/24 16:03:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 char g_buff[BUFF_SIZE];
 int g_count;
 int g_bytes;
+int	g_fd;
 
 int			eject(void)
 {
-	g_bytes += write(1, g_buff, g_count);
+	g_bytes += write(g_fd, g_buff, g_count);
 	g_count = 0;
 	return (1);
 }
@@ -46,7 +47,7 @@ void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		;
+		date_handler(list, flags, wid, pre);
 	else if (SPEC == 'p')
 		pointer_handler(list, flags, wid, pre);
 }
@@ -61,6 +62,7 @@ int			ft_printf(const char *format, ...)
 	va_start(listv, format);
 	g_count = 0;
 	g_bytes = 0;
+	g_fd = 1;
 	pre = 0;
 	wid = 0;
 	while (*format)

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/21 21:12:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/24 13:59:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,50 @@ int		length_modifier_collector(const char **str, size_t *flags)
 	return (1);
 }
 
-void	color_chooser(char **str, size_t *flags)
+void	file_descriptor(const char **str, va_list *list, size_t *flags)
 {
+	*str += 3;
+	**str == '*' ? (g_fd = va_arg(*list, int)) : (g_fd = ft_atoi(*str));
+	while (**str && **str != '}')
+		(*str)++;
+}
+void	color_chooser(const char **str, size_t *flags)
+{
+	char *str2;
+	int count;
+
 	*str += 2;
-		
+	str2 = (char *)malloc(20);
+	count = 0;
+	while (**str && **str != '}' && count >= 0)
+		str2[count++] = *(*str)++;
+	str2[count] = '\0';
+	if (ft_strcmp(str2, "red") == 0)
+		g_bytes += write(1, "\033[0;31m", 7);
+	else if (ft_strcmp(str2, "bold red") == 0)
+		g_bytes += write(1, "\033[1;31m", 7);
+	else if (ft_strcmp(str2, "green") == 0)
+		g_bytes += write(1, "\033[0;32m", 7);
+	else if (ft_strcmp(str2, "bold green") == 0)
+		g_bytes += write(1, "\033[1;32m", 7);
+	else if (ft_strcmp(str2, "yellow") == 0)
+		g_bytes += write(1, "\033[0;33m", 7);
+	else if (ft_strcmp(str2, "bold yellow") == 0)
+		g_bytes += write(1, "\033[1;33m", 7);
+	else if (ft_strcmp(str2, "blue") == 0)
+		g_bytes += write(1, "\033[0;34m", 7);
+	else if (ft_strcmp(str2, "bold blue") == 0)
+		g_bytes += write(1, "\033[1;34m", 7);
+	else if (ft_strcmp(str2, "magenta") == 0)
+		g_bytes += write(1, "\033[0;35m", 7);
+	else if (ft_strcmp(str2, "bold magenta") == 0)
+		g_bytes += write(1, "\033[1;35m", 7);
+	else if (ft_strcmp(str2, "cyan") == 0)
+		g_bytes += write(1, "\033[0;36m", 7);
+	else if (ft_strcmp(str2, "bold cyan") == 0)
+		g_bytes += write(1, "\033[1;36m", 7);
+	else if (ft_strcmp(str2, "reset") == 0)
+		g_bytes += write(1, "\033[0m", 4);
 }
 
 void	flags_collector(const char **str, va_list *list, size_t *flags,
@@ -118,7 +158,9 @@ void	flags_collector(const char **str, va_list *list, size_t *flags,
 				*(*str - 1) > 57) && (*flags |= FLO))
 			*flags |= 48;
 		else if (**str == '@' && *(*str + 1) == '{')
-			;//color_chooser(str, flags);
+			color_chooser(str, flags);
+		else if (**str == '>' && *(*str + 1) == '>' && *(*str + 2) == '{')
+			file_descriptor(str, list, flags);
 		else if (**str == '.' && precision_collector(str, list, flags, pre))
 			continue;
 		else if (((**str >= 48 && **str <= 57) || **str == '*') &&
