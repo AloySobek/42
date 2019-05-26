@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 16:50:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 01:39:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	constructor(size_t *flags, int *pre)
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 {
 	!(*flags & END) || *flags & INF || *flags & NAN ? *pre -= len : 0;
-	(*flags & END) && *pre == 0 && !(*flags & (INF | NAN)) ? (*wid)++ : 0;
 	*flags & NEG ? (*wid)-- : 0;
 	*flags & INF || *flags & NAN ? (*wid) -= 3 : 0;
 	*flags & EXP ? *wid -= 4 : 0;

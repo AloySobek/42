@@ -65,10 +65,10 @@ int main(void)
 	int test;
 
 	test = 0;
-	e = 2.5454;
-	test = ft_printf(">%.2Le<\n", e);
+	e = 2.4445;
+	test = ft_printf(">%.100Lf<\n", e);
 	printf("   bytes = %d\n", test);
-	test = printf(">%.2Le<\n", e);
+	test = printf(">%.100Lf<\n", e);
 	printf("   bytes = %d\n", test);
 	return (0);
 }

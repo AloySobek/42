@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_expo_double.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 21:03:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 02:02:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,37 @@ int			add_expo(char **str, int cou, size_t *flags, int *expo)
 	return (1);
 }
 
-void		calc_expo(char **med, int i, int why, int *expo, int *pre)
+void		calc_expo(char **med, int *pre, int end)
 {
 	int swim;
+	int expo;
+	int real;
+	int i;
 
-	*expo = 0;
-	if ((*med)[i] != '0'){
-		while ((*med)[*expo] != '.' && *expo < why)
-			(*expo)++;
-		swim = *expo;
-		while (swim > 2){
-			(*med)[swim] = (*med)[swim - 1];
-			swim--;
-		}
+	expo = 0;
+	(*med)[0] > '0' ? i = 0 : (i = 1);
+	if ((*med)[i] != '0')
+	{
+		real = end;
+		while ((*med)[expo] != '.' && expo <= real)
+			(expo)++;
+		swim = expo;
+		while (swim > 2)
+			(*med)[swim] = (*med)[swim-- - 1];
 		*pre > 0 ? (*med)[swim] = '.' : 0;
-		*expo -= 2;
+		expo -= 2;
+		*pre -= expo;
 	}
-	else{
-		while ((*med)[*expo] <= '0' && *expo < why)
-			(*expo)++;
-		((*med)[i] = (*med)[*expo]);
+	else
+	{
+		real = end + *pre;
+		while ((*med)[expo] <= '0' && expo <= real)
+			expo++;
+		((*med)[i] = (*med)[expo]);
 		*pre > 0 ? ((*med)[i + 1] = '.') : 0;
 		i += 2;
-		swim = *expo + 1;
-		while (swim < why)
+		swim = expo + 1;
+		while (swim <= real)
 			(*med)[i++] = (*med)[swim++];
 		while (i < why)
 			(*med)[i++] = '0';

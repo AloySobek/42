@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   long_arithmetic.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 21:13:58 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 01:41:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,28 +83,21 @@ void		add_power_neg(char **med, int pwr, int cou)
 		}
 }
 
-void		roundd(char **str, int *pre, int zer, int che)
+void		roundd(char **str, int *pre, int sta, int end)
 {
 	int flag;
 	int n;
 
-	n = che + *pre;
+	n = sta + *pre - 1;
 	flag = 0;
-	*pre == 0 ? n-- : 0;
 	if ((*str)[n + 1] >= '5')
 	{
 		if ((*str)[n + 1] == '5')
-		{
-			while (zer >= n + 1)
-				if ((*str)[zer--] != '0')
-				{
-					printf("hello");
-					flag = 1;
+			while (end > n + 1)
+				if ((*str)[end--] > '0' && (flag = 1))
 					break ;
-				}
-		}
-		if (!((*str)[n] % 2 == 0 && flag == 0))
-			(*str)[n] == '.' ? 0 : ((*str)[n] += 1);
+		if ((!((*str)[n] % 2 == 0) || flag) && (*str)[n] != '.')
+			(*str)[n] += 1;
 	}
 	while ((*str)[n] > '9' && (*str)[n] != '.')
 	{
