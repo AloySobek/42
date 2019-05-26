@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:38:24 by vrichese          #+#    #+#             */
-/*   Updated: 2019/04/15 17:02:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 12:59:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "stdlib.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

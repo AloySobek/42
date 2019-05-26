@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 20:13:27 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 17:22:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,25 @@ void	expo_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	!(*flags & BIA) && (*flags & FLO) ? (*flags |= 48) : 0;
 	!(*flags & POI) ? *pre = 6 : 0;
 	*flags |= END;
+	*flags |= EXP;
 	if (*flags & BL)
 		print_expo_double(va_arg(*list, long double), flags, wid, pre);
 	else
 		print_expo_double(va_arg(*list, double), flags, wid, pre);
+}
+
+void	hexadouble_handler(va_list *list, size_t *flags, int *wid, int *pre)
+{
+	(SPEC) == 'A' ? *flags |= BIG : 0;
+	!(*flags & BIA) && (*flags & FLO) ? (*flags |= 48) : 0;
+	!(*flags & POI) ? *pre = 6 : 0;
+	*flags |= END;
+	*flags |= HAS;
+	*flags |= (16 << 8);
+	if (*flags & BL)
+		print_hexadouble(va_arg(*list, long double), flags, wid, pre);
+	else
+		print_hexadouble(va_arg(*list, double), flags, wid, pre);
 }
 
 void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
@@ -49,9 +64,7 @@ void	g_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	*flags |= END;
 	*flags & BL ? src = va_arg(*list, long double) : 0;
 	!(*flags & BL) ? sec = va_arg(*list, double) : 0;
-	expo = 0;
 	cop = src;
-	calculation_expo(&cop, &expo);
 	*flags & POI && *pre == 0 ? *pre = 0 : 0;
 	if (expo < *pre && expo >= -4)
 	{

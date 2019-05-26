@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/14 16:47:08 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/13 15:41:58 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 12:59:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
 size_t		ft_strlen(const char *s)
 {

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 18:05:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 12:46:06 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,28 @@ void	string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 
 void	uni(wchar_t c)
 {
-	if (c <= 0x7FF && EJECT(3) && (g_count += 2))
+	if (c <= 0x7FF && EJECT(3) && (g_buff__.g_count += 2))
 	{
-		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 2] = 0xC0 | (c & 0x1F);
+		g_buff__.g_buff[g_buff__.g_count - 2] = 0xC0 | (c & 0x1F);
 	}
-	else if (c <= 0xFFFF && EJECT(4) && (g_count += 3))
+	else if (c <= 0xFFFF && EJECT(4) && (g_buff__.g_count += 3))
 	{
-		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 2] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 2] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 3] = 0xE0 | (c & 0xF);
+		g_buff__.g_buff[g_buff__.g_count - 3] = 0xE0 | (c & 0xF);
 	}
-	else if (c <= 0x10FFFF && EJECT(5) && (g_count += 4))
+	else if (c <= 0x10FFFF && EJECT(5) && (g_buff__.g_count += 4))
 	{
-		g_buff[g_count - 1] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 1] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 2] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 2] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 3] = 0x80 | (c & 0x3F);
+		g_buff__.g_buff[g_buff__.g_count - 3] = 0x80 | (c & 0x3F);
 		c = (c >> 6);
-		g_buff[g_count - 4] = 0xF0 | (c & 0x7);
+		g_buff__.g_buff[g_buff__.g_count - 4] = 0xF0 | (c & 0x7);
 	}
 }

@@ -6,14 +6,18 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 20:11:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 21:03:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "libft.h"
+# include <wchar.h>
+# include <stdarg.h>
+# include <stdint.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 # define A(x)	(x == 'c' || x == 'C' || x == 's' || x == 'S' || x == 'd')
 # define B(x)	(x == 'D' || x == 'i' || x == 'u' || x == 'U' || x == 'f')
@@ -33,7 +37,7 @@
 # define END	140737488355328
 # define NEG	281474976710656
 # define UNI	562949953421312
-# define DOL	1125899906842624
+# define EXP	1125899906842624
 # define INF	2251799813685248
 # define ZER	4503599627370496
 # define UND	9007199254740992
@@ -52,7 +56,7 @@
 # define SPEC			(*flags << 40) >> 56
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
-# define EJECT(x)		((g_count + x) >= BUFF_SIZE ? eject() : 1)
+# define EJECT(x)		((g_buff__.g_count + x) >= BUFF_SIZE ? eject() : 1)
 
 typedef union			u_nbr
 {
@@ -69,12 +73,25 @@ typedef struct			s_bits
 	t_nbr				nbr;
 }						t_bits;
 
-extern char				g_buff[BUFF_SIZE];
-extern int				g_count;
-extern int				g_bytes;
-extern int				g_fd;
+typedef struct			s_buff
+{
+	char				g_buff[BUFF_SIZE];
+	int					g_count;
+	int					g_bytes;
+	int					g_fd;
+}						t_buff_manage;
+
+extern t_buff_manage	g_buff__;
 
 void					uni(wchar_t c);
+int						bi(size_t *flags, int howmuch, int left);
+int						width_collector(const char **str, va_list *list,
+						size_t *flags, int *wid);
+int						precision_collector(const char **str, va_list *list,
+						size_t *flags, int *pre);
+void					file_descriptor(const char **str, va_list *list,
+						size_t *flags);
+void					color_chooser(const char **str, size_t *flags);
 int						eject(void);
 int						putfloat(char **tra, t_bits *tally, size_t *flags,
 						int *pre);
@@ -110,13 +127,12 @@ void					pointer_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_uni_string(wchar_t *s, size_t *flags,
 						int *wid, int *pre);
-void					calculation_expo(long double *nbr, int *expo);
 void					print_usual_string(char *s, size_t *flags,
 						int *wid, int *pre);
 void					adjustment_wid_pre(size_t *flags, int *wid,
 						int *pre, int i);
 void					inf_handler(size_t *flags, int *wid, int *pre);
-void					roundd(char **str, int n, int *pre);
+void					roundd(char **str, int *pre, int zer, int che);
 void					get_bits(t_bits *tally, long double *nbr,
 						size_t *flags, int *pre);
 void					flags_collector(const char **str, va_list *list,
@@ -131,5 +147,18 @@ void					print_double_g_f(long double nbr, size_t *flags,
 						int *wid, int *pre);
 void					date_non_printable_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
+void					hexadouble_handler(va_list *list, size_t *flags,
+						int *wid, int *pre);
+void					print_hexadouble(long double nbr, size_t *flags,
+						int *wid, int *pre);
+int						add_expo(char **str, int cou, size_t *flags, int *expo);
+void					calc_expo(char **med, int i, int why, int *expo, int *pre);
+void					add_power(char **med, int pwr, int cou);
+void					add_power_neg(char **med, int pwr, int cou);
+int						ft_atoi(const char *str);
+void					ft_bzero(void *s, size_t n);
+int						ft_isspace(int c);
+int						ft_strcmp(const char *s1, const char *s2);
+size_t					ft_strlen(const char *s);
 
 #endif

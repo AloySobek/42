@@ -1,134 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_douie.c                                     :+:      :+:    :+:   */
+/*   print_double.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/24 15:19:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 21:08:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		add_power(char **med, int pwr, int cou)
-{
-	char	power[pwr / 2 + 2];
-	int		n;
-	int		m;
-	int		z;
-
-	m = pwr / 2;
-	ft_bzero(power, m + 2);
-	power[m] = 1;
-	while (pwr-- && (n = m + 1))
-	{
-		while (n--)
-			power[n] *= 2;
-		n = m + 1;
-		while (n--)
-			if (power[n] > 9)
-			{
-				power[n] -= 10;
-				++power[n - 1];
-			}
-	}
-	n = m;
-	z = cou;
-	while (n >= 0)
-		(*med)[z--] += power[n--];
-	z = cou + 1;
-	while (z--)
-	{
-		if ((*med)[z] > 9)
-		{
-			(*med)[z] -= 10;
-			++((*med)[z - 1]);
-		}
-	}
-}
-
-void		add_power_neg(char **med, int pwr, int cou)
-{
-	char	power[-pwr + 2];
-	int		n;
-	int		m;
-
-	pwr *= -1;
-	m = pwr;
-	ft_bzero(power, m + 2);
-	power[m - 1] = 1;
-	while (pwr-- && (n = m))
-	{
-		while (n--)
-			power[n] *= 5;
-		n = m;
-		while (n--)
-			while (power[n] > 9)
-			{
-				power[n] -= 10;
-				++power[n - 1];
-			}
-	}
-	n = m;
-	while (n--)
-		(*med)[cou + n] += power[n];
-	n = m;
-	while (n--)
-		while ((*med)[cou + n] > 9)
-		{
-			(*med)[cou + n] -= 10;
-			++(*med)[cou + n - 1];
-		}
-}
-
-void		roundd(char **str, int n, int *pre)
-{
-	if ((*str)[n--] >= '5')
-		(*str)[n + 1] == '5' && (*str)[n] % 2 == 0 && *pre > 30 ? 0 :
-		((*str)[n] += 1);
-	while ((*str)[n] > '9' && (*str)[n] != '.')
-	{
-		(*str)[n] -= 10;
-		(*str)[n - 1] != '.' ? (*str)[n - 1] += 1 : 0;
-		n--;
-	}
-	(*str)[n] == '.' ? (*str)[--n]++ : 0;
-	while (n >= 0 && (*str)[n] > '9')
-	{
-		(*str)[n] -= 10;
-		(*str)[n - 1] += 1;
-		(*str)[n - 1] < '0' ? (*str)[n - 1] += '0' : 0;
-		n--;
-	}
-}
-
 void		inf_handler(size_t *flags, int *wid, int *pre)
 {
 	if (*flags & NAN)
-		if (!(*flags & BIG) && (g_buff[g_count++] = 'n'))
+		if (!(*flags & BIG) && (g_buff__.g_buff[g_buff__.g_count++] = 'n'))
 		{
-			g_buff[g_count++] = 'a';
-			g_buff[g_count++] = 'n';
+			g_buff__.g_buff[g_buff__.g_count++] = 'a';
+			g_buff__.g_buff[g_buff__.g_count++] = 'n';
 		}
 		else
 		{
-			g_buff[g_count++] = 'N';
-			g_buff[g_count++] = 'A';
-			g_buff[g_count++] = 'N';
+			g_buff__.g_buff[g_buff__.g_count++] = 'N';
+			g_buff__.g_buff[g_buff__.g_count++] = 'A';
+			g_buff__.g_buff[g_buff__.g_count++] = 'N';
 		}
 	else if (*flags & INF)
 	{
-		if (!(*flags & BIG) && (g_buff[g_count++] = 'i'))
+		if (!(*flags & BIG) && (g_buff__.g_buff[g_buff__.g_count++] = 'i'))
 		{
-			g_buff[g_count++] = 'n';
-			g_buff[g_count++] = 'f';
+			g_buff__.g_buff[g_buff__.g_count++] = 'n';
+			g_buff__.g_buff[g_buff__.g_count++] = 'f';
 		}
-		else if (*flags & BIG && (g_buff[g_count++] = 'I'))
+		else if (*flags & BIG && (g_buff__.g_buff[g_buff__.g_count++] = 'I'))
 		{
-			g_buff[g_count++] = 'N';
-			g_buff[g_count++] = 'F';
+			g_buff__.g_buff[g_buff__.g_count++] = 'N';
+			g_buff__.g_buff[g_buff__.g_count++] = 'F';
 		}
 	}
 }
@@ -155,18 +63,34 @@ void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 		(*tally).size = (*tally).expo;
 }
 
-void		pass_zero(char **med, size_t *flags, int *cou)
+void		pass_zero(char **med, size_t *flags, int che, int *pre)
 {
 	if (((SPEC) == 'g' || (SPEC) == 'G') && !(*flags & HAS) &&
-		(*med)[(*cou - 1)] == '0')
+		(*med)[che + *pre] == '0')
 	{
-		(*cou)--;
-		while ((*med)[*cou] == '0')
-			(*cou)--;
-		(*med)[*cou] == '.' ? (*cou)-- : 0;
-		(*cou)++;
+		while ((*med)[che + *pre] == '0')
+			(*pre)--;
+		(*med)[*pre] == '.' ? (*pre)-- : 0;
 	}
 }
+
+/*void		fill_str(char **med, int zer, int che, int *pre)
+{
+	int i;
+	int cou;
+
+	i = 0;
+	cou = 1;
+	while (!(*med)[i])
+		i++;
+	zer ? (*med)[(*cou)++] = '0' : 0;
+	while (i <= che)
+		(*med)[cou++] = ((*med)[bit++] + '0');
+	*pre > 0 ? (*med)[cou++] = '.' : 0;
+	bit = che + 2;
+	while (bit <= *pre + che + 2)
+		(*med)[cou++] = (*med)[bit++] + '0';
+}*/
 
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
@@ -195,11 +119,18 @@ int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 		(*med)[cou++] = ((*med)[bit++] + '0');
 	*pre > 0 ? (*med)[cou++] = '.' : 0;
 	bit = che + 2;
-	while (bit <= *pre + che + 2)
+	zer = (*tally).expo - 63;
+	zer < 0 ? zer *= -1 : 0;
+	che = cou;
+	while (bit < zer)
 		(*med)[cou++] = (*med)[bit++] + '0';
-	roundd(med, --cou, pre);
-	pass_zero(med, flags, &cou);
-	return (cou - 1);
+	bit = 0;
+	*flags & EXP ? calc_expo(med, (med[0] != 0 ? 1 : 0), *pre > 0 ? zer : che, &bit, pre) : 0;
+	*flags & EXP ? *pre -= bit : 0;
+	roundd(med, pre, zer, che);
+	pass_zero(med, flags, che, pre);
+	!(*flags & (INF | NAN)) && *flags & EXP ? add_expo(med, che + *pre, flags, &bit) && (*pre += 4) : 0;
+	return (che + *pre - 1);
 }
 
 void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
@@ -209,19 +140,19 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	int		i;
 	int		j;
 
+	j = 0;
+	i = 1;
 	get_bits(&tally, &nbr, flags, pre);
 	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 2) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
-	j = 0;
-	i = 1;
 	!(*flags & (INF | NAN)) ? j = putfloat(&med, &tally, flags, pre) : 0;
 	!(*flags & (INF | NAN)) && med[0] != 0 ? !(i = 0) && (*wid)-- : 0;
 	adjustment_wid_pre(flags, wid, pre, j);
 	fill_width(flags, wid, pre);
-	(*flags & (INF | NAN)) ? inf_handler(flags, wid, pre) : 0;
+	(*flags & (INF | NAN)) && EJECT(3) ? inf_handler(flags, wid, pre) : 0;
 	while (i <= j && EJECT(1) && !(*flags & (INF | NAN)))
-		g_buff[g_count++] = med[i++];
+		g_buff__.g_buff[g_buff__.g_count++] = med[i++];
 	while ((*wid)-- > 0 && EJECT(1))
-		g_buff[g_count++] = (*flags << 56) >> 56;
+		g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;
 	!(*flags & (INF | NAN)) ? free(med) : 0;
 }

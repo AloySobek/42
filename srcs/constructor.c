@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/25 20:14:00 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 16:50:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,29 @@
 void	constructor(size_t *flags, int *pre)
 {
 	if (*flags & NEG && EJECT(1))
-		g_buff[g_count++] = '-';
+		g_buff__.g_buff[g_buff__.g_count++] = '-';
 	if (*flags & HAS && BASE == 8 && EJECT(1))
-		g_buff[g_count++] = '0';
+		g_buff__.g_buff[g_buff__.g_count++] = '0';
 	if (((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
 		EJECT(2))
 	{
-		g_buff[g_count++] = '0';
-		g_buff[g_count++] = 'x';
+		g_buff__.g_buff[g_buff__.g_count++] = '0';
+		g_buff__.g_buff[g_buff__.g_count++] = 'x';
 	}
 	else if (*flags & HAS && BASE == 16 && !(*flags & PTR) && EJECT(2))
 	{
-		g_buff[g_count++] = '0';
-		g_buff[g_count++] = 'X';
+		g_buff__.g_buff[g_buff__.g_count++] = '0';
+		g_buff__.g_buff[g_buff__.g_count++] = 'X';
 	}
-	else if (*flags & HAS && BASE == 2 && EJECT(2) && (g_buff[g_count++] = '0'))
-		g_buff[g_count++] = *flags & BIG ? 'B' : 'b';
+	else if (*flags & HAS && BASE == 2 && EJECT(2) &&
+		(g_buff__.g_buff[g_buff__.g_count++] = '0'))
+		g_buff__.g_buff[g_buff__.g_count++] = *flags & BIG ? 'B' : 'b';
 	if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & END) &&
 		!(*flags & NAN) && EJECT(1))
-		g_buff[g_count++] = '+';
+		g_buff__.g_buff[g_buff__.g_count++] = '+';
 	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
 		|| *flags & END) && !(*flags & NAN) && EJECT(1))
-		g_buff[g_count++] = ' ';
+		g_buff__.g_buff[g_buff__.g_count++] = ' ';
 }
 
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
@@ -45,6 +46,7 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	(*flags & END) && *pre == 0 && !(*flags & (INF | NAN)) ? (*wid)++ : 0;
 	*flags & NEG ? (*wid)-- : 0;
 	*flags & INF || *flags & NAN ? (*wid) -= 3 : 0;
+	*flags & EXP ? *wid -= 4 : 0;
 	BASE == 8 && *flags & HAS ? (*pre)-- : 0;
 	*wid -= len;
 	*wid -= *pre > 0 && !(*flags & END) ? *pre : 0;
@@ -70,13 +72,13 @@ int		zero_handler(size_t *flags, int *wid, int *pre)
 	if (*pre == 0 && *flags & POI)
 	{
 		if (BASE == 8 && (*flags & HAS) && EJECT(1))
-			g_buff[g_count++] = '0';
+			g_buff__.g_buff[g_buff__.g_count++] = '0';
 	}
 	else
 	{
 		BASE == 10 ? constructor(flags, pre) : 0;
 		EJECT(1);
-		!(*flags & PTR) ? g_buff[g_count++] = '0' : 0;
+		!(*flags & PTR) ? g_buff__.g_buff[g_buff__.g_count++] = '0' : 0;
 	}
 	if (*flags & HAS && !(*flags & PTR) && BASE != 10)
 		*flags ^= HAS;
@@ -96,14 +98,14 @@ void	fill_width(size_t *flags, int *wid, int *pre)
 		if (SIGN == 32)
 		{
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff[g_count++] = SIGN;
+				g_buff__.g_buff[g_buff__.g_count++] = SIGN;
 			!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
 		}
 		else
 		{
 			!(*flags & ZER) || *flags & PTR ? constructor(flags, pre) : 0;
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff[g_count++] = SIGN;
+				g_buff__.g_buff[g_buff__.g_count++] = SIGN;
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/19 20:30:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/26 13:56:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 	adjustment_wid_pre(flags, wid, pre, j);
 	fill_width(flags, wid, pre);
 	while ((*pre)-- > 0 && EJECT(1))
-		g_buff[g_count++] = '0';
+		g_buff__.g_buff[g_buff__.g_count++] = '0';
 	while (--j >= 0 && EJECT(1))
-		g_buff[g_count++] = tra[j];
+		g_buff__.g_buff[g_buff__.g_count++] = tra[j];
 	while ((*wid)-- > 0 && EJECT(1))
-		g_buff[g_count++] = (*flags << 56) >> 56;
+		g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;
 }
