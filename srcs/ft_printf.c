@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 15:29:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 17:42:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,19 @@ void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		decimal_handler(list, flags, wid, pre);
 	else if (SPEC == 'u' || SPEC == 'U')
 		unsigned_decimal_handler(list, flags, wid, pre);
-	else if (SPEC == 'f' || SPEC == 'F')
-		double_handler(list, flags, wid, pre);
-	else if (SPEC == 'e' || SPEC == 'E')
-		expo_handler(list, flags, wid, pre);
-	else if (SPEC == 'g' || SPEC == 'G')
-		g_handler(list, flags, wid, pre);
 	else if (SPEC == 'x' || SPEC == 'X' || SPEC == 'p')
 		hexadecimal_handler(list, flags, wid, pre);
 	else if (SPEC == 'o' || SPEC == 'O')
 		octal_handler(list, flags, wid, pre);
 	else if (SPEC == 'b' || SPEC == 'B')
 		binary_handler(list, flags, wid, pre);
+	else if (SPEC == 'f' || SPEC == 'F' || SPEC == 'e' || SPEC == 'E' ||
+			SPEC == 'g' || SPEC == 'G')
+		double_handler(list, flags, wid, pre);
+	else if (SPEC == 'a' || SPEC == 'A')
+		;//hexadouble_handler(list, flags, wid, pre);
 	else if (SPEC == 'r' || SPEC == 'k')
 		;//date_non_printable_handler(list, flags, wid, pre);
-	else if (SPEC == 'a' || SPEC == 'A')
-		hexadouble_handler(list, flags, wid, pre);
 }
 
 int			length_modifier_collector(const char **str, size_t *flags)
@@ -89,9 +86,9 @@ void		flags_collector(const char **str, va_list *list, size_t *flags,
 				*(*str - 1) > 57) && (*flags |= FLO))
 			*flags |= 48;
 		else if (**str == '@' && *(*str + 1) == '{')
-			color_chooser(str, flags);
+			color_chooser(str);
 		else if (**str == '>' && *(*str + 1) == '>' && *(*str + 2) == '{')
-			file_descriptor(str, list, flags);
+			file_descriptor(str, list);
 		else if (**str == '.' && precision_collector(str, list, flags, pre))
 			continue;
 		else if (((**str >= 48 && **str <= 57) || **str == '*') &&

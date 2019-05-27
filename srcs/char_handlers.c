@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 12:46:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 17:43:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void	char_handler(va_list *list, size_t *flags, int *wid)
 {
 	SPEC == 'C' || *flags & L ? *flags |= UNI : 0;
-	SIGN == 32 && *flags & POI ? *flags |= 48 : 0;
+	*flags & FLO && !(*flags & BIA) ? *flags |= 48 : 0;
 	if (SPEC == '%')
 		print_any_char('%', flags, wid);
+
 	else
 		print_any_char(va_arg(*list, wchar_t), flags, wid);
 }

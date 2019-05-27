@@ -65,10 +65,12 @@ int main(void)
 	int test;
 
 	test = 0;
-	e = 2.4445;
-	test = ft_printf(">%.100Lf<\n", e);
+	e = 12342134.0;
+	int *ptr;
+	ptr = 0x7fff5b1b495c;
+	test = ft_printf(">%#.0lle<\n", 1703.0541684);
 	printf("   bytes = %d\n", test);
-	test = printf(">%.100Lf<\n", e);
-	printf("   bytes = %d\n", test);
+	test = printf(">%#3.0lle<\n", 1703.0541684);
+	printf("   bytes = %d\n", test);	
 	return (0);
 }

@@ -3,16 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   print_double.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 02:02:37 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/27 21:11:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		inf_handler(size_t *flags, int *wid, int *pre)
+/*
+if (SPEC == 'g' || SPEC == 'G' || SPEC == 'e' || SPEC == 'E')
+	{
+		if (SPEC == 'g' || SPEC == 'G')
+		{
+			(*tally).size = calc_expo(*med, *pre, bit, (*tally).size);
+			if ((*tally).size < *pre && (*tally).size >= -4)
+				*pre -= (*tally).size + 1;
+			else
+			{
+				(*pre -= 1); 
+				swimming_dot(med, pre,(*tally).size, bit, test);
+			}
+		}
+		(*tally).size = calc_expo(med, *pre, bit, (*tally).size);
+		swimming_dot(med, pre, (*tally).size, bit, test);
+	}
+*/
+
+void		inf_handler(size_t *flags)
 {
 	if (*flags & NAN)
 		if (!(*flags & BIG) && (g_buff__.g_buff[g_buff__.g_count++] = 'n'))
@@ -43,8 +62,6 @@ void		inf_handler(size_t *flags, int *wid, int *pre)
 
 void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 {
-	int		size;
-
 	(*tally).nbr.nbr = *nbr;
 	(*tally).mant = *(long long *)&(*tally).nbr.nbr;
 	(*tally).expo = (*tally).nbr.array[4] - 16383;
@@ -74,60 +91,39 @@ void		pass_zero(char **med, size_t *flags, int che, int *pre)
 	}
 }
 
-/*void		fill_str(char **med, int zer, int che, int *pre)
-{
-	int i;
-	int cou;
-
-	i = 0;
-	cou = 1;
-	while (!(*med)[i])
-		i++;
-	zer ? (*med)[(*cou)++] = '0' : 0;
-	while (i <= che)
-		(*med)[cou++] = ((*med)[bit++] + '0');
-	*pre > 0 ? (*med)[cou++] = '.' : 0;
-	bit = che + 2;
-	while (bit <= *pre + che + 2)
-		(*med)[cou++] = (*med)[bit++] + '0';
-}*/
-
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
-	int		end;
+	int		mid;
 	int		cou;
 	int		bit;
-	int 	tes;
 
-	cou = 1;
+	mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
+	(*tally).size = (*tally).nbr.array[4] - 16383 - 63;
+	(*tally).size < 0 ? (*tally).size *= -1 : 0;
 	bit = 64;
-	end = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
+	cou = 1;
 	while (bit-- > 0)
 	{
 		if ((*tally).mant & (1L << bit))
-			(*tally).expo >= 0 ? add_power(med, (*tally).expo, end) :
-			add_power_neg(med, (*tally).expo, end + 2);
+			(*tally).expo >= 0 ? add_power(med, (*tally).expo, mid) :
+			add_power_neg(med, (*tally).expo, mid + 2);
 		(*tally).expo--;
 	}
-	bit = 1;
-	while (!(*med)[bit])
-		bit++;
-	(*tally).nbr.array[4] - 16383 < 0 ? (*med)[cou++] = '0' : 0;
-	while (bit <= end)
+	while (!(*med)[++bit] && bit < mid)
+		;
+	while (bit <= mid)
 		(*med)[cou++] = ((*med)[bit++] + '0');
-	*pre > 0 ? (*med)[cou++] = '.' : 0;
-	end += 2;
+	*pre > 0 || (*flags & HAS) ? (*med)[cou++] = '.' : 0;
 	bit = cou;
-	tes = (*tally).nbr.array[4] - 16383 - 63;
-	tes < 0 ? tes *= -1 : 0;
-	while (end < tes)
-		(*med)[cou++] = (*med)[end++] + '0';
-	roundd(med, pre, bit, end);
-	while (end++ <= *pre + 3)
+	mid += 2;
+	while (mid < (*tally).size)
+		(*med)[cou++] = (*med)[mid++] + '0';
+	SPEC == 'e' || SPEC == 'E' ? (*tally).size = calc_expo(med, pre, bit, (*tally).size) : 0;
+	roundd(med, pre, bit - 1, mid);
+	while (mid++ + 2 <= *pre + 3)
 		(*med)[cou++] = '0';
-	*flags & EXP ? calc_expo(med, pre, bit);
-	pass_zero(med, flags, end, pre);
-	!(*flags & (INF | NAN)) && *flags & EXP ? add_expo(med, end + *pre, flags, &bit) && (*pre += 4) : 0;
+	pass_zero(med, flags, mid, pre);
+	SPEC == 'e' || SPEC == 'E' ? add_expo(med, flags, (*tally).size, bit + *pre) : 0;
 	return (bit + *pre);
 }
 
@@ -141,16 +137,17 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	j = 0;
 	i = 1;
 	get_bits(&tally, &nbr, flags, pre);
-	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 2) : 0;
+	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 4) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
 	!(*flags & (INF | NAN)) ? j = putfloat(&med, &tally, flags, pre) : 0;
 	!(*flags & (INF | NAN)) && med[0] >= '0' ? i = 0 : 0;
 	adjustment_wid_pre(flags, wid, pre, j - i);
-	fill_width(flags, wid, pre);
-	(*flags & (INF | NAN)) && EJECT(3) ? inf_handler(flags, wid, pre) : 0;
+	fill_width(flags, wid);
+	(*flags & (INF | NAN)) && EJECT(3) ? inf_handler(flags) : 0;
+	SPEC == 'e' || SPEC == 'E' ? j += 4 : 0;
 	while (i < j && EJECT(1) && !(*flags & (INF | NAN)))
 		g_buff__.g_buff[g_buff__.g_count++] = med[i++];
 	while ((*wid)-- > 0 && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;
-	!(*flags & (INF | NAN)) ? free(med) : 0;
+	//!(*flags & (INF | NAN)) ? free(med) : 0;
 }

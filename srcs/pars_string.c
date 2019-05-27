@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 13:09:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 17:42:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int		precision_collector(const char **str, va_list *list, size_t *flags,
 	return (1);
 }
 
-void	file_descriptor(const char **str, va_list *list, size_t *flags)
+void	file_descriptor(const char **str, va_list *list)
 {
 	*str += 3;
 	if (**str == '*')
@@ -83,7 +83,7 @@ void	file_descriptor(const char **str, va_list *list, size_t *flags)
 		(*str)++;
 }
 
-void	color_chooser(const char **str, size_t *flags)
+void	color_chooser(const char **str)
 {
 	char	*str2;
 	int		count;

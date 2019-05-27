@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 15:28:58 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 16:30:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	print_ten(char c)
 		write(g_buff__.g_fd, "[LF]", 4);
 }
 
-void	print_non_printable(char *str, size_t *flags, int *wid, int *pre)
+/*void	print_non_printable(char *str, size_t *flags, int *wid, int *pre)
 {
 	while (*str != 0)
 	{
@@ -98,7 +98,7 @@ void	print_non_printable(char *str, size_t *flags, int *wid, int *pre)
 		*str == 127 ? write(1, "[DEL]", 5) : 0;
 		str++;
 	}
-}
+}*/
 
 /*void	print_date(long long iso, size_t *flags, int *wid, int *pre)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   long_arithmetic.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 01:41:57 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/27 21:20:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,20 @@ void		roundd(char **str, int *pre, int sta, int end)
 {
 	int flag;
 	int n;
+	int i;
 
-	n = sta + *pre - 1;
+	sta--;
+	n = sta + *pre;
 	flag = 0;
-	if ((*str)[n + 1] >= '5')
+	i = 1;
+	(*str)[n + 1] == '.' ? i = 2 : 0;
+	if ((*str)[n + i] >= '5')
 	{
-		if ((*str)[n + 1] == '5')
-			while (end > n + 1)
+		if ((*str)[n + i] == '5')
+			while (end > n + i)
 				if ((*str)[end--] > '0' && (flag = 1))
 					break ;
-		if ((!((*str)[n] % 2 == 0) || flag) && (*str)[n] != '.')
+		if ((!((*str)[n + i] < '5' && (*str)[n] % 2 == 0) || flag) && (*str)[n] != '.')
 			(*str)[n] += 1;
 	}
 	while ((*str)[n] > '9' && (*str)[n] != '.')
@@ -105,7 +109,7 @@ void		roundd(char **str, int *pre, int sta, int end)
 		(*str)[n - 1] != '.' ? (*str)[n - 1] += 1 : 0;
 		n--;
 	}
-	(*str)[n] == '.' ? (*str)[--n]++ : 0;
+	(*str)[n] == '.' && n != sta + *pre ? (*str)[--n]++ : 0;
 	while (n >= 0 && (*str)[n] > '9')
 	{
 		(*str)[n] -= 10;

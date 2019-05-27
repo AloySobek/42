@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 11:40:40 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 13:56:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 16:27:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		print_sig_dig(intmax_t nbr, size_t *flags, int *wid, int *pre)
 		nbr /= 10;
 	}
 	adjustment_wid_pre(flags, wid, pre, j);
-	fill_width(flags, wid, pre);
+	fill_width(flags, wid);
 	while ((*pre)-- > 0 && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = '0';
 	while (--j >= 0 && EJECT(1))

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/16 13:25:24 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 13:19:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/27 16:32:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		print_usual_string(char *s, size_t *flags, int *wid, int *pre)
 {
 	if (!s)
 		s = "(null)";
-	*wid -= (((ft_strlen(s) > *pre && *flags & POI) ? (*pre) : ft_strlen(s)));
+	*wid -= (((ft_strlen(s) > (size_t)*pre && *flags & POI) ? (*pre) : ft_strlen(s)));
 	if (!(*flags & BIA))
 		while (((*wid)-- > 0) && EJECT(1))
 			g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;

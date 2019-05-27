@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/26 23:37:41 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/27 16:34:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,17 @@ int						width_collector(const char **str, va_list *list,
 						size_t *flags, int *wid);
 int						precision_collector(const char **str, va_list *list,
 						size_t *flags, int *pre);
-void					file_descriptor(const char **str, va_list *list,
-						size_t *flags);
-void					color_chooser(const char **str, size_t *flags);
+void					file_descriptor(const char **str, va_list *list);
+void					color_chooser(const char **str);
 int						eject(void);
 int						putfloat(char **tra, t_bits *tally, size_t *flags,
 						int *pre);
 int						ft_printf(const char *format, ...);
 void					g_handler(va_list *list, size_t *flags, int *wid,
 						int *pre);
-void					fill_width(size_t *flags, int *wid, int *pre);
-void					constructor(size_t *flags, int *pre);
-int						zero_handler(size_t *flags, int *wid, int *pre);
+void					fill_width(size_t *flags, int *wid);
+void					constructor(size_t *flags);
+int						zero_handler(size_t *flags, int *pre);
 void					char_handler(va_list *list, size_t *flags,
 						int *wid);
 void					print_double(long double nbr, size_t *flags,
@@ -131,7 +130,7 @@ void					print_usual_string(char *s, size_t *flags,
 						int *wid, int *pre);
 void					adjustment_wid_pre(size_t *flags, int *wid,
 						int *pre, int i);
-void					inf_handler(size_t *flags, int *wid, int *pre);
+void					inf_handler(size_t *flags);
 void					roundd(char **str, int *pre, int zer, int che);
 void					get_bits(t_bits *tally, long double *nbr,
 						size_t *flags, int *pre);
@@ -151,8 +150,8 @@ void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
-int						add_expo(char **str, int cou, size_t *flags, int *expo);
-void					calc_expo(char **med, int i, int why, int *expo, int *pre);
+int						add_expo(char **str, size_t *flags, int expo, int cou);
+int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
 void					add_power_neg(char **med, int pwr, int cou);
 int						ft_atoi(const char *str);
