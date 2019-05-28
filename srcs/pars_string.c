@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pars_string.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 17:42:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 00:58:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		bi(size_t *flags, int howmuch, int left)
+int		shift(size_t *flags, int howmuch, char direction)
 {
-	if (left)
+	if (direction == 'l')
 	{
 		*flags <<= howmuch;
 		*flags >>= howmuch;
 	}
-	else
+	else if (direction = 'r')
 	{
 		*flags >>= howmuch;
 		*flags <<= howmuch;

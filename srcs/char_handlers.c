@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   char_handlers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 17:43:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 00:45:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,19 @@
 void	char_handler(va_list *list, size_t *flags, int *wid)
 {
 	SPEC == 'C' || *flags & L ? *flags |= UNI : 0;
-	*flags & FLO && !(*flags & BIA) ? *flags |= 48 : 0;
+	*flags & NUL && !(*flags & BIA) ? *flags |= 48 : 0;
 	if (SPEC == '%')
 		print_any_char('%', flags, wid);
-
 	else
 		print_any_char(va_arg(*list, wchar_t), flags, wid);
 }
 
 void	string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
-	(*flags & BIA) ? (*flags >>= 8) && (*flags <<= 8) && (*flags |= 32) : 0;
-	*flags & FLO && SIGN == 32 && !(*flags & BIA) ? *flags |= 48 : 0;
-	if (SPEC == 'S' || *flags & L)
-	{
-		*flags |= UNI;
+	SPEC == 'C' || *flags & L ? *flags |= UNI : 0;
+	*flags & NUL && !(*flags & BIA) ? *flags |= 48 : 0;
+	if (*flags & UNI)
 		print_uni_string(va_arg(*list, wchar_t *), flags, wid, pre);
-	}
 	else
 		print_usual_string(va_arg(*list, char *), flags, wid, pre);
 }

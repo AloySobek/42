@@ -66,9 +66,9 @@ int main(void)
 
 	test = 0;
 	e = 0.0000000002341234;
-	test = ft_printf(">%#8e<\n", e);
+	test = ft_printf(">%100d<\n", 1234);
 	printf("   bytes = %d\n", test);
-	test = printf(">%#8e<\n", e);
+	test = printf(">%100d<\n", 1234);
 	printf("   bytes = %d\n", test);
 	return (0);
 }

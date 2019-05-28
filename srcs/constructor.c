@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/28 16:57:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 00:54:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,31 +68,10 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	}
 }
 
-int		zero_handler(size_t *flags, int *pre)
-{
-	if (*pre == 0 && *flags & POI)
-	{
-		if (BASE == 8 && (*flags & HAS) && EJECT(1))
-			g_buff__.g_buff[g_buff__.g_count++] = '0';
-	}
-	else
-	{
-		EJECT(1);
-		!(*flags & PTR) ? g_buff__.g_buff[g_buff__.g_count++] = '0' : 0;
-	}
-	if (*flags & HAS && !(*flags & PTR) && BASE != 10)
-		*flags ^= HAS;
-	return (1);
-}
-
 void	fill_width(size_t *flags, int *wid)
 {
-	if (*flags & INF || *flags & NAN)
-	{
-		*flags >>= 8;
-		*flags <<= 8;
+	if ((*flags & INF || *flags & NAN) && shift(*flags, 8, 'r'))
 		*flags |= 32;
-	}
 	if (!(*flags & BIA))
 	{
 		if (SIGN == 32)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/28 16:24:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 00:53:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define INF	2251799813685248
 # define ZER	4503599627370496
 # define UND	9007199254740992
-# define FLO	18014398509481984
+# define NUL	18014398509481984
 # define NAN	36028797018963968
 # define HH		72057594037927936
 # define LL		144115188075855872
@@ -84,7 +84,7 @@ typedef struct			s_buff
 extern t_buff_manage	g_buff__;
 
 void					uni(wchar_t c);
-int						bi(size_t *flags, int howmuch, int left);
+int						shift(size_t *flags, int howmuch, char direction);
 int						width_collector(const char **str, va_list *list,
 						size_t *flags, int *wid);
 int						precision_collector(const char **str, va_list *list,
@@ -99,7 +99,6 @@ void					g_handler(va_list *list, size_t *flags, int *wid,
 						int *pre);
 void					fill_width(size_t *flags, int *wid);
 void					constructor(size_t *flags);
-int						zero_handler(size_t *flags, int *pre);
 void					char_handler(va_list *list, size_t *flags,
 						int *wid);
 void					print_double(long double nbr, size_t *flags,
