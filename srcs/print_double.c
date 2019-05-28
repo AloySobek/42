@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 21:11:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/28 21:12:58 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,27 @@ if (SPEC == 'g' || SPEC == 'G' || SPEC == 'e' || SPEC == 'E')
 void		inf_handler(size_t *flags)
 {
 	if (*flags & NAN)
-		if (!(*flags & BIG) && (g_buff__.g_buff[g_buff__.g_count++] = 'n'))
+	{
+		if (!(*flags & BIG) && EJECT(3) && (g_buff__.g_buff[g_buff__.g_count++] = 'n'))
 		{
 			g_buff__.g_buff[g_buff__.g_count++] = 'a';
 			g_buff__.g_buff[g_buff__.g_count++] = 'n';
 		}
-		else
+		else if (EJECT(3))
 		{
 			g_buff__.g_buff[g_buff__.g_count++] = 'N';
 			g_buff__.g_buff[g_buff__.g_count++] = 'A';
 			g_buff__.g_buff[g_buff__.g_count++] = 'N';
 		}
+	}
 	else if (*flags & INF)
 	{
-		if (!(*flags & BIG) && (g_buff__.g_buff[g_buff__.g_count++] = 'i'))
+		if (!(*flags & BIG) && EJECT(3) && (g_buff__.g_buff[g_buff__.g_count++] = 'i'))
 		{
 			g_buff__.g_buff[g_buff__.g_count++] = 'n';
 			g_buff__.g_buff[g_buff__.g_count++] = 'f';
 		}
-		else if (*flags & BIG && (g_buff__.g_buff[g_buff__.g_count++] = 'I'))
+		else if (*flags & BIG && EJECT(3) && (g_buff__.g_buff[g_buff__.g_count++] = 'I'))
 		{
 			g_buff__.g_buff[g_buff__.g_count++] = 'N';
 			g_buff__.g_buff[g_buff__.g_count++] = 'F';
@@ -69,6 +71,7 @@ void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 	*nbr != *nbr ? (*flags |= NAN) && (*pre = 0) : 0;
 	*nbr && *nbr == (*nbr * 10) ? (*flags |= INF) && (*pre = 0) : 0;
 	(*tally).sign ? *flags |= NEG : 0;
+	*flags & NAN && *flags & NEG ? (*flags ^= NEG) : 0;
 	if ((*tally).expo < 0)
 		(*tally).size = ((*tally).expo - 63) * -1;
 	else if ((*tally).expo <= 63 && (*tally).expo >= 0)
@@ -91,14 +94,42 @@ void		pass_zero(char **med, size_t *flags, int che, int *pre)
 	}
 }
 
+int			expo(char **med, int *pre, int sta, int end)
+{
+	int expo;
+	int i;
+
+	i = 1; 
+	expo = 0;
+	(*med)[0] > '0' ? i = 0 : 0;
+	if ((*med)[i] != '0')
+	{
+		while((*med)[expo] != '.' && expo < sta)
+			expo++;
+		expo -= 2;
+	}
+	else
+	{
+		while ((*med)[expo] <= '0' && expo < end)
+			expo ++;
+		if ((*med)[expo] < '1' || (*med)[expo] > '9')
+			return (0);
+		expo -= 2;
+		(*med)[2] != '.' ? expo += 1 : 0;
+		expo *= -1;
+	}
+	return (expo);
+}
+
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
 	int		mid;
 	int		cou;
 	int		bit;
+	int		test;
 
 	mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
-	(*tally).size = (*tally).nbr.array[4] - 16383 - 63;
+	(*tally).size = (*tally).expo - 63;
 	(*tally).size < 0 ? (*tally).size *= -1 : 0;
 	bit = 64;
 	cou = 1;
@@ -118,9 +149,34 @@ int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 	mid += 2;
 	while (mid < (*tally).size)
 		(*med)[cou++] = (*med)[mid++] + '0';
+	if (SPEC == 'g' || SPEC == 'G')
+	{
+		test = (*tally).size;
+		(*tally).size = expo(med, pre, bit, (*tally).size);
+		if ((*tally).size < *pre && (*tally).size >= -4)
+		{
+			*pre -= (*tally).size + 1;
+			roundd(med, pre, bit - 1, mid);
+			while (cou <= *pre + bit)
+				(*med)[cou++] = '0';
+			pass_zero(med, flags, mid, pre);
+			return (bit + *pre);
+		}
+		else
+		{
+			*pre -= 1;
+			(*tally).size = calc_expo(med, pre, bit, test);
+			*pre + (*tally).size <= 0 && (*flags & HAS) ? roundd(med, pre, bit - 2, mid) : roundd(med, pre, bit - 1, mid);
+			while (cou <= *pre + bit)
+				(*med)[cou++] = '0';
+			pass_zero(med, flags, mid, pre);
+			add_expo(med, flags, (*tally).size, bit + *pre);
+			return (bit + *pre);
+		}
+	}
 	SPEC == 'e' || SPEC == 'E' ? (*tally).size = calc_expo(med, pre, bit, (*tally).size) : 0;
-	roundd(med, pre, bit - 1, mid);
-	while (mid++ + 2 <= *pre + 3)
+	(SPEC == 'e' || SPEC == 'E') && *pre + (*tally).size <= 0 && (*flags & HAS) ? roundd(med, pre, bit - 2, mid) : roundd(med, pre, bit - 1, mid);
+	while (cou <= *pre + bit)
 		(*med)[cou++] = '0';
 	pass_zero(med, flags, mid, pre);
 	SPEC == 'e' || SPEC == 'E' ? add_expo(med, flags, (*tally).size, bit + *pre) : 0;
@@ -149,5 +205,5 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 		g_buff__.g_buff[g_buff__.g_count++] = med[i++];
 	while ((*wid)-- > 0 && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;
-	//!(*flags & (INF | NAN)) ? free(med) : 0;
+	!(*flags & (INF | NAN)) ? free(med) : 0;
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 19:28:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/28 16:57:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ void	constructor(size_t *flags)
 		g_buff__.g_buff[g_buff__.g_count++] = '-';
 	if (*flags & HAS && BASE == 8 && !(*flags & ZER) && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = '0';
-	if (((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
-		!(*flags & ZER) && EJECT(2))
+	if ((((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
+		!(*flags & ZER) && EJECT(2)) || SPEC == 'a' || SPEC == 'A')
 	{
 		g_buff__.g_buff[g_buff__.g_count++] = '0';
 		g_buff__.g_buff[g_buff__.g_count++] = 'x';
 	}
-	else if (*flags & HAS && BASE == 16 && !(*flags & PTR) && !(*flags & ZER)
-		&& EJECT(2))
+	else if ((*flags & HAS && BASE == 16 && !(*flags & PTR) && !(*flags & ZER)
+		&& EJECT(2)) || SPEC == 'a' || SPEC == 'A')
 	{
 		g_buff__.g_buff[g_buff__.g_count++] = '0';
 		g_buff__.g_buff[g_buff__.g_count++] = 'X';
@@ -46,9 +46,9 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	!(*flags & END) || *flags & INF || *flags & NAN ? *pre -= len : 0;
 	*flags & NEG ? (*wid)-- : 0;
 	*flags & INF || *flags & NAN ? (*wid) -= 3 : 0;
-	SPEC == 'e' || SPEC == 'G' ? *wid -= 4 : 0;
+	SPEC == 'e' || SPEC == 'E' ? *wid -= 4 : 0;
 	BASE == 8 && *flags & HAS && !(*flags & ZER) ? (*pre)-- : 0;
-	*wid -= len;
+	*wid -= len > 0 ? len : 0;
 	*wid -= *pre > 0 && !(*flags & END) ? *pre : 0;
 	if (*flags & SPA && !(*flags & PLU) && !(*flags & NEG) && !(*flags & PTR)
 		&& !(*flags & NAN) && BASE != 8 && BASE != 16)
@@ -58,12 +58,12 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	if (SIGN == 32)
 	{
 		*wid -= (*flags & HAS && BASE == 8 && !(*flags & ZER) && !(*flags & END)) ? 1 : 0;
-		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) &&
-		!(*flags & ZER) && !(*flags & END)) ? 2 : 0;
+		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & ZER)
+		&& !(*flags & END)) || SPEC == 'a' || SPEC == 'A' ? 2 : 0;
 	}
 	else
 	{
-		if (*flags & HAS && !(*flags & END) && !(*flags & ZER) && BASE != 10)
+		if ((*flags & HAS && !(*flags & END) && !(*flags & ZER) && BASE != 10) || SPEC == 'a' || SPEC == 'A')
 			*wid -= ((BASE == 8) ? 1 : 2);
 	}
 }

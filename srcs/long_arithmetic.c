@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 21:20:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/28 19:17:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,19 +89,19 @@ void		roundd(char **str, int *pre, int sta, int end)
 	int n;
 	int i;
 
-	sta--;
 	n = sta + *pre;
 	flag = 0;
-	i = 1;
-	(*str)[n + 1] == '.' ? i = 2 : 0;
+	(*str)[n + 1] == '.' ? i = 2 : (i = 1);
 	if ((*str)[n + i] >= '5')
 	{
 		if ((*str)[n + i] == '5')
 			while (end > n + i)
 				if ((*str)[end--] > '0' && (flag = 1))
 					break ;
-		if ((!((*str)[n + i] < '5' && (*str)[n] % 2 == 0) || flag) && (*str)[n] != '.')
+		if ((*str)[n + i] > '5')
 			(*str)[n] += 1;
+		else if ((*str)[n + i] == '5')
+			(*str)[n] % 2 != 0 || flag ? ((*str)[n] += 1) : 0;
 	}
 	while ((*str)[n] > '9' && (*str)[n] != '.')
 	{

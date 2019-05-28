@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/27 16:34:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/28 16:24:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define PLU	2199023255552
 # define SPA	4398046511104
 # define HAS	8796093022208
-# define POI	17592186044416
+# define POI 	17592186044416
 # define BIG	35184372088832
 # define PTR	70368744177664
 # define END	140737488355328
@@ -153,6 +153,7 @@ void					print_hexadouble(long double nbr, size_t *flags,
 int						add_expo(char **str, size_t *flags, int expo, int cou);
 int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
+void	print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
 void					add_power_neg(char **med, int pwr, int cou);
 int						ft_atoi(const char *str);
 void					ft_bzero(void *s, size_t n);

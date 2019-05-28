@@ -61,16 +61,14 @@ int main(void)
 		printf("%c", str[i++]);
 	printf("5d");
 	*/
-	long double e;
+	double e;
 	int test;
 
 	test = 0;
-	e = 12342134.0;
-	int *ptr;
-	ptr = 0x7fff5b1b495c;
-	test = ft_printf(">%#.0lle<\n", 1703.0541684);
+	e = 0.0000000002341234;
+	test = ft_printf(">%#8e<\n", e);
 	printf("   bytes = %d\n", test);
-	test = printf(">%#3.0lle<\n", 1703.0541684);
-	printf("   bytes = %d\n", test);	
+	test = printf(">%#8e<\n", e);
+	printf("   bytes = %d\n", test);
 	return (0);
 }
