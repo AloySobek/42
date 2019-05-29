@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 20:32:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 21:11:08 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct			s_buff
 	int					g_count;
 	int					g_bytes;
 	int					g_fd;
+	int					g_error;
 }						t_buff_manage;
 
 extern t_buff_manage	g_buff__;

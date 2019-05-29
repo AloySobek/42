@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 15:44:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 21:17:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,12 @@ void	color_chooser(const char **str)
 	int		size;
 
 	size = 32;
-	if (!((char *)malloc(sizeof(char) * size)))
-		exit(7);
+	if (!((char *)malloc(sizeof(char) * size)) && (g_buff__.g_error = -1))
+		return ;
 	while (**str && **str != '}' && size-- > 0)
 		*color++ = *(*str)++;
-	size == 0 ? exit(7) : 0;
+	if (size == 0 && (g_buff__.g_error = -1))	
+		return ;
 	*color = 0;
 	if (ft_strcmp(color, "red") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;31m", 7);

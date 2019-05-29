@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 15:43:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 21:12:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ t_buff_manage g_buff__;
 
 int			eject(void)
 {
-	g_buff__.g_bytes += write(g_buff__.g_fd, g_buff__.g_buff, g_buff__.g_count);
+	if (!g_buff__.g_error)
+		g_buff__.g_bytes += write(g_buff__.g_fd, g_buff__.g_buff, g_buff__.g_count);
+	else
+		return (0);
 	g_buff__.g_count = 0;
 	return (1);
 }
@@ -112,6 +115,7 @@ int			ft_printf(const char *format, ...)
 	g_buff__.g_count = 0;
 	g_buff__.g_bytes = 0;
 	g_buff__.g_fd = 1;
+	g_buff__.g_error = 0;
 	pre = 0;
 	wid = 0;
 	while (*format)
@@ -121,6 +125,8 @@ int			ft_printf(const char *format, ...)
 			if (flags & UND)
 				continue;
 			*format && format++ ? ever_handler(&listv, &flags, &wid, &pre) : 0;
+			if (g_buff__.g_error == -1)
+				return (-1);
 		}
 		else if (*format == '@' && *(format + 1) == '{')
 			color_chooser(&format);
