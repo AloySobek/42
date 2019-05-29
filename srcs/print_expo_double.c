@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/28 20:37:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 20:44:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 int		add_expo(char **str, size_t *flags, int expo, int cou)
 {
@@ -22,10 +22,16 @@ int		add_expo(char **str, size_t *flags, int expo, int cou)
 		(*str)[cou++] = '+';
 	else
 		((*str)[cou++] = '-') && (expo *= -1);
-	if (expo >= 10)
+	if (expo >= 10 && expo < 100)
 	{
 		(*str)[cou++] = expo / 10 + '0';
 		(*str)[cou++] = expo % 10 + '0';
+	}
+	else if (expo >= 100)
+	{
+		(*str)[cou++] = expo / 100 + '0';
+		(*str)[cou++] = (expo % 100) / 10 + '0';
+		(*str)[cou++] = (expo % 100) % 10 + '0';
 	}
 	else
 	{
@@ -41,10 +47,8 @@ int		calc_expo(char **med, int *pre, int sta, int end)
 	int expo;
 	int i;
 
-	i = 1;
 	expo = 0;
-	(*med)[0] > '0' ? i = 0 : 0;
-	if ((*med)[i] != '0')
+	if ((*med)[1] != '0')
 	{
 		while ((*med)[expo] != '.' && expo < sta)
 			expo++;
@@ -61,9 +65,9 @@ int		calc_expo(char **med, int *pre, int sta, int end)
 			expo++;
 		if ((*med)[expo] < '1' || (*med)[expo] > '9')
 			return (0);
-		((*med)[i] = (*med)[expo]);
-		*pre > 0 ? ((*med)[i + 1] = '.') : 0;
-		i += 2;
+		((*med)[1] = (*med)[expo]);
+		*pre > 0 ? ((*med)[2] = '.') : 0;
+		i = 3;
 		swim = expo + 1;
 		while (swim < end)
 			(*med)[i++] = (*med)[swim++];
@@ -90,27 +94,27 @@ int				puthex(char **med, t_bits *tally, size_t *flags, int *pre)
 	expo = 0;
 	cou = 0;
 	nbr = (*tally).nbr.nbr;
-	if (nbr >= (*flags & BL ? 8 : 2))
-		while (nbr >= ((*flags & BL) ? 15 : 2) && expo++ >= 0)
-			nbr /= 2;
-	else
-		while (nbr < ((*flags & BL) ? 8 : 1) && expo-- <= 0)
-			nbr *= 2;
+	//if (nbr >= (*flags & BL ? 8 : 2))
+	//	while (nbr >= ((*flags & BL) ? 15 : 2) && expo++ >= 0)
+	//		nbr /= 2;
+	//else
+	//	while (nbr < ((*flags & BL) ? 8 : 1) && expo-- <= 0)
+	//		nbr *= 2;
 	(*med)[cou++] = (int)nbr > 9 ? (int)nbr + 87 : (int)nbr + 48;
 	nbr -= (int)nbr;
 	if ((*flags & POI))
 		*pre > 0 || (*flags & HAS) ? (*med)[cou++] = '.' : 0;
 	else
 		(*med)[cou++] = '.';
-	while (nbr && (*flags & POI ? (*pre)-- > 0 : 1))
+	//while (nbr && (*flags & POI ? (*pre)-- > 0 : 1))
 	{
-		nbr *= 16;
-		(*med)[cou++] = (int)nbr + ((int)nbr > 9 ? 87 : 48);
-		nbr -= (int)nbr;
+	//	nbr *= 16;
+	//	(*med)[cou++] = (int)nbr + ((int)nbr > 9 ? 87 : 48);
+	//	nbr -= (int)nbr;
 	}
-	if (*flags & POI)
-		while ((*pre)-- > 0)
-			(*med)[cou++] = '0';
+	//if (*flags & POI)
+	//	while ((*pre)-- > 0)
+	//		(*med)[cou++] = '0';
 	(*med)[cou++] = 'p';
 	expo >= 0 ? (*med)[cou++] = '+' : ((*med)[cou++] = '-') && (expo *= -1);
 	expo < 10 ? ((*med)[cou++] = expo + '0') : ((*med)[cou++] = expo / 10 + '0') && ((*med)[cou++ ] = expo % 10 + '0');

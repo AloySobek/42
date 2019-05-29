@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/28 19:17:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/29 17:57:47 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 void		add_power(char **med, int pwr, int cou)
 {
@@ -47,6 +47,11 @@ void		add_power(char **med, int pwr, int cou)
 			++((*med)[z - 1]);
 		}
 	}
+}
+
+void		add_power_rec(char **med ,int pwr, int cou)
+{
+
 }
 
 void		add_power_neg(char **med, int pwr, int cou)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 00:53:27 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/29 20:32:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define POI 	17592186044416
 # define BIG	35184372088832
 # define PTR	70368744177664
-# define END	140737488355328
+# define FLO	140737488355328
 # define NEG	281474976710656
 # define UNI	562949953421312
 # define EXP	1125899906842624
@@ -95,8 +95,6 @@ int						eject(void);
 int						putfloat(char **tra, t_bits *tally, size_t *flags,
 						int *pre);
 int						ft_printf(const char *format, ...);
-void					g_handler(va_list *list, size_t *flags, int *wid,
-						int *pre);
 void					fill_width(size_t *flags, int *wid);
 void					constructor(size_t *flags);
 void					char_handler(va_list *list, size_t *flags,
@@ -152,7 +150,7 @@ void					print_hexadouble(long double nbr, size_t *flags,
 int						add_expo(char **str, size_t *flags, int expo, int cou);
 int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
-void	print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
+void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
 void					add_power_neg(char **med, int pwr, int cou);
 int						ft_atoi(const char *str);
 void					ft_bzero(void *s, size_t n);

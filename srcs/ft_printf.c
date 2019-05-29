@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 00:58:36 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/29 15:43:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 t_buff_manage g_buff__;
 
@@ -44,7 +44,7 @@ void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
 	else if (SPEC == 'a' || SPEC == 'A')
 		hexadouble_handler(list, flags, wid, pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		date_non_printable_handler(list, flags, wid, pre);
+		;//date_non_printable_handler(list, flags, wid, pre);
 }
 
 int			length_modifier_collector(const char **str, size_t *flags)

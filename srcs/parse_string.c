@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pars_string.c                                      :+:      :+:    :+:   */
+/*   parse_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 00:58:36 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/29 15:44:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 int		shift(size_t *flags, int howmuch, char direction)
 {
@@ -19,7 +19,7 @@ int		shift(size_t *flags, int howmuch, char direction)
 		*flags <<= howmuch;
 		*flags >>= howmuch;
 	}
-	else if (direction = 'r')
+	else if (direction == 'r')
 	{
 		*flags >>= howmuch;
 		*flags <<= howmuch;
@@ -77,47 +77,56 @@ void	file_descriptor(const char **str, va_list *list)
 	*str += 3;
 	if (**str == '*')
 		g_buff__.g_fd = va_arg(*list, int);
-	else
+	else if (**str >= '0' && **str <= '9')
 		g_buff__.g_fd = ft_atoi(*str);
-	while (**str && **str != '}')
+	else if (**str == 'f')
+	{
+		;/*
+		open file name feature
+		i can't use the "open" function
+		so here no this feature;
+		*/	
+	}
+	while (**str && *(*str - 1) != '}')
 		(*str)++;
 }
 
 void	color_chooser(const char **str)
 {
-	char	*str2;
-	int		count;
+	char	*color;
+	int		size;
 
-	*str += 2;
-	str2 = (char *)malloc(20);
-	count = 0;
-	while (**str && **str != '}' && count >= 0)
-		str2[count++] = *(*str)++;
-	str2[count] = '\0';
-	if (ft_strcmp(str2, "red") == 0)
+	size = 32;
+	if (!((char *)malloc(sizeof(char) * size)))
+		exit(7);
+	while (**str && **str != '}' && size-- > 0)
+		*color++ = *(*str)++;
+	size == 0 ? exit(7) : 0;
+	*color = 0;
+	if (ft_strcmp(color, "red") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;31m", 7);
-	else if (ft_strcmp(str2, "bold red") == 0)
+	else if (ft_strcmp(color, "bold red") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;31m", 7);
-	else if (ft_strcmp(str2, "green") == 0)
+	else if (ft_strcmp(color, "green") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;32m", 7);
-	else if (ft_strcmp(str2, "bold green") == 0)
+	else if (ft_strcmp(color, "bold green") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;32m", 7);
-	else if (ft_strcmp(str2, "yellow") == 0)
+	else if (ft_strcmp(color, "yellow") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;33m", 7);
-	else if (ft_strcmp(str2, "bold yellow") == 0)
+	else if (ft_strcmp(color, "bold yellow") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;33m", 7);
-	else if (ft_strcmp(str2, "blue") == 0)
+	else if (ft_strcmp(color, "blue") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;34m", 7);
-	else if (ft_strcmp(str2, "bold blue") == 0)
+	else if (ft_strcmp(color, "bold blue") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;34m", 7);
-	else if (ft_strcmp(str2, "magenta") == 0)
+	else if (ft_strcmp(color, "magenta") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;35m", 7);
-	else if (ft_strcmp(str2, "bold magenta") == 0)
+	else if (ft_strcmp(color, "bold magenta") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;35m", 7);
-	else if (ft_strcmp(str2, "cyan") == 0)
+	else if (ft_strcmp(color, "cyan") == 0)
 		g_buff__.g_bytes += write(1, "\033[0;36m", 7);
-	else if (ft_strcmp(str2, "bold cyan") == 0)
+	else if (ft_strcmp(color, "bold cyan") == 0)
 		g_buff__.g_bytes += write(1, "\033[1;36m", 7);
-	else if (ft_strcmp(str2, "reset") == 0)
+	else if (ft_strcmp(color, "eoc") == 0)
 		g_buff__.g_bytes += write(1, "\033[0m", 4);
 }

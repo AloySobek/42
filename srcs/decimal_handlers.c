@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   decimal_handlers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:20:46 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 00:55:25 by marvin           ###   ########.fr       */
+/*   Updated: 2019/05/29 15:43:30 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 void	hexadecimal_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	*flags |= (16 << 8);
-	if (SPEC == 'p')
+	if (SPEC == 'p' && (*flags |= HAS))
 	{
-		*flags |= HAS;
 		*flags |= PTR;
 		print_uns_dig(va_arg(*list, intptr_t), flags, wid, pre);
 		return ;

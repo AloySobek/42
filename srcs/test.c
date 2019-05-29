@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 #include <limits.h>
 #include <math.h>
 #include <fcntl.h>
@@ -65,10 +65,10 @@ int main(void)
 	int test;
 
 	test = 0;
-	e = 0.0000000002341234;
-	test = ft_printf(">%100d<\n", 1234);
-	printf("   bytes = %d\n", test);
-	test = printf(">%100d<\n", 1234);
-	printf("   bytes = %d\n", test);
+	e = 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008;
+	test = ft_printf(">%23.58le<", e);
+	printf("      >>>>>      bytes = %d\n", test);
+	test = printf(">%23.58le<", e);
+	printf("      >>>>>      bytes = %d\n", test);
 	return (0);
 }
