@@ -46,7 +46,7 @@
 	}
 }*/
 
-int main(void)
+int main(int argc, char **argv)
 {
 	/*char str[102] = {0};
 	int i;
@@ -61,14 +61,17 @@ int main(void)
 		printf("%c", str[i++]);
 	printf("5d");
 	*/
-	double e;
+	long double e;
 	int test;
 
 	test = 0;
-	e = 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008;
-	test = ft_printf(">%23.58le<", e);
+	e = 0.5464846452198456854654654L;
+	int count = 0;
+	test = ft_printf("%k", 20001703170320L);
 	printf("      >>>>>      bytes = %d\n", test);
-	test = printf(">%23.58le<", e);
+	//printf("%d\n", count);
+	test = printf("%30.70Lf", e);
 	printf("      >>>>>      bytes = %d\n", test);
+	//printf("%d\n", count);
 	return (0);
 }

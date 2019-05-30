@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 21:03:30 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 19:07:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,30 @@
 void	constructor(size_t *flags)
 {
 	if (*flags & NEG && EJECT(1))
-		g_buff__.g_buff[g_buff__.g_count++] = '-';
+		BUFF.g_buff[BUFF.g_count++] = '-';
 	if (*flags & HAS && BASE == 8 && !(*flags & ZER) && EJECT(1))
-		g_buff__.g_buff[g_buff__.g_count++] = '0';
+		BUFF.g_buff[BUFF.g_count++] = '0';
+	if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & FLO) &&
+		!(*flags & NAN) && EJECT(1))
+		BUFF.g_buff[BUFF.g_count++] = '+';
+	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
+		|| *flags & FLO) && !(*flags & NAN) && EJECT(1))
+		BUFF.g_buff[BUFF.g_count++] = ' ';
 	if ((((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
 		!(*flags & ZER) && EJECT(2)) || SPEC == 'a' || SPEC == 'A')
 	{
-		g_buff__.g_buff[g_buff__.g_count++] = '0';
-		g_buff__.g_buff[g_buff__.g_count++] = 'x';
+		BUFF.g_buff[BUFF.g_count++] = '0';
+		BUFF.g_buff[BUFF.g_count++] = 'x';
 	}
 	else if ((*flags & HAS && BASE == 16 && !(*flags & PTR) && !(*flags & ZER)
 		&& EJECT(2)) || SPEC == 'a' || SPEC == 'A')
 	{
-		g_buff__.g_buff[g_buff__.g_count++] = '0';
-		g_buff__.g_buff[g_buff__.g_count++] = 'X';
+		BUFF.g_buff[BUFF.g_count++] = '0';
+		BUFF.g_buff[BUFF.g_count++] = 'X';
 	}
 	else if (*flags & HAS && BASE == 2 && EJECT(2) &&
-		(g_buff__.g_buff[g_buff__.g_count++] = '0'))
-		g_buff__.g_buff[g_buff__.g_count++] = *flags & BIG ? 'B' : 'b';
-	if (!(*flags & NEG) && *flags & PLU && (BASE == 10 || *flags & FLO) &&
-		!(*flags & NAN) && EJECT(1))
-		g_buff__.g_buff[g_buff__.g_count++] = '+';
-	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
-		|| *flags & FLO) && !(*flags & NAN) && EJECT(1))
-		g_buff__.g_buff[g_buff__.g_count++] = ' ';
+		(BUFF.g_buff[BUFF.g_count++] = '0'))
+		BUFF.g_buff[BUFF.g_count++] = *flags & BIG ? 'B' : 'b';
 }
 
 void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
@@ -57,13 +57,15 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= 1;
 	if (SIGN == 32)
 	{
-		*wid -= (*flags & HAS && BASE == 8 && !(*flags & ZER) && !(*flags & FLO)) ? 1 : 0;
+		if (*flags & HAS && BASE == 8 && !(*flags & ZER) && !(*flags & FLO))
+			wid -= 1;
 		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & ZER)
 		&& !(*flags & FLO)) || SPEC == 'a' || SPEC == 'A' ? 2 : 0;
 	}
 	else
 	{
-		if ((*flags & HAS && !(*flags & FLO) && !(*flags & ZER) && BASE != 10) || SPEC == 'a' || SPEC == 'A')
+		if ((*flags & HAS && !(*flags & FLO) && !(*flags & ZER) && BASE != 10)
+			|| SPEC == 'a' || SPEC == 'A')
 			*wid -= ((BASE == 8) ? 1 : 2);
 	}
 }
@@ -77,14 +79,14 @@ void	fill_width(size_t *flags, int *wid)
 		if (SIGN == 32)
 		{
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff__.g_buff[g_buff__.g_count++] = SIGN;
+				BUFF.g_buff[BUFF.g_count++] = SIGN;
 			constructor(flags);
 		}
 		else
 		{
 			constructor(flags);
 			while ((*wid)-- > 0 && EJECT(1))
-				g_buff__.g_buff[g_buff__.g_count++] = SIGN;
+				BUFF.g_buff[BUFF.g_count++] = SIGN;
 		}
 	}
 	else

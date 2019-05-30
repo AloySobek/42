@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 17:57:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 18:54:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,7 @@ void		add_power(char **med, int pwr, int cou)
 			power[n] *= 2;
 		n = m + 1;
 		while (n--)
-			if (power[n] > 9)
-			{
-				power[n] -= 10;
-				++power[n - 1];
-			}
+			power[n] > 9 ? (power[n] -= 10) >= 0 && ++power[n - 1] : 0;
 	}
 	n = m;
 	z = cou;
@@ -40,18 +36,7 @@ void		add_power(char **med, int pwr, int cou)
 		(*med)[z--] += power[n--];
 	z = cou + 1;
 	while (z--)
-	{
-		if ((*med)[z] > 9)
-		{
-			(*med)[z] -= 10;
-			++((*med)[z - 1]);
-		}
-	}
-}
-
-void		add_power_rec(char **med ,int pwr, int cou)
-{
-
+		(*med)[z] > 9 ? ((*med)[z] -= 10) >= 0 && ++((*med)[z - 1]) : 0;
 }
 
 void		add_power_neg(char **med, int pwr, int cou)
@@ -70,22 +55,15 @@ void		add_power_neg(char **med, int pwr, int cou)
 			power[n] *= 5;
 		n = m;
 		while (n--)
-			while (power[n] > 9)
-			{
-				power[n] -= 10;
+			while (power[n] > 9 && (power[n] -= 10) >= 0)
 				++power[n - 1];
-			}
 	}
 	n = m;
 	while (n--)
 		(*med)[cou + n] += power[n];
-	n = m;
-	while (n--)
-		while ((*med)[cou + n] > 9)
-		{
-			(*med)[cou + n] -= 10;
-			++(*med)[cou + n - 1];
-		}
+	while (m--)
+		while ((*med)[cou + m] > 9 && ((*med)[cou + m] -= 10) >= 0)
+			++(*med)[cou + m - 1];
 }
 
 void		roundd(char **str, int *pre, int sta, int end)
@@ -96,7 +74,8 @@ void		roundd(char **str, int *pre, int sta, int end)
 
 	n = sta + *pre;
 	flag = 0;
-	(*str)[n + 1] == '.' ? i = 2 : (i = 1);
+	i = 1;
+	(*str)[n + 1] == '.' ? i = 2 : 0;
 	if ((*str)[n + i] >= '5')
 	{
 		if ((*str)[n + i] == '5')
@@ -108,18 +87,9 @@ void		roundd(char **str, int *pre, int sta, int end)
 		else if ((*str)[n + i] == '5')
 			(*str)[n] % 2 != 0 || flag ? ((*str)[n] += 1) : 0;
 	}
-	while ((*str)[n] > '9' && (*str)[n] != '.')
-	{
-		(*str)[n] -= 10;
-		(*str)[n - 1] != '.' ? (*str)[n - 1] += 1 : 0;
-		n--;
-	}
+	while ((*str)[n] > '9' && (*str)[n] != '.' && ((*str)[n--] -= 10) >= 0)
+		(*str)[n] != '.' ? (*str)[n] += 1 : 0;
 	(*str)[n] == '.' && n != sta + *pre ? (*str)[--n]++ : 0;
-	while (n >= 0 && (*str)[n] > '9')
-	{
-		(*str)[n] -= 10;
-		(*str)[n - 1] += 1;
-		(*str)[n - 1] < '0' ? (*str)[n - 1] += '0' : 0;
-		n--;
-	}
+	while (n >= 0 && (*str)[n] > '9' && ((*str)[n--] -= 10) >= 0 && ++(*str)[n])
+		(*str)[n] < '0' ? (*str)[n] += '0' : 0;
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 21:12:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 19:55:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,40 @@ t_buff_manage g_buff__;
 
 int			eject(void)
 {
-	if (!g_buff__.g_error)
-		g_buff__.g_bytes += write(g_buff__.g_fd, g_buff__.g_buff, g_buff__.g_count);
+	if (!BUFF.g_error)
+		BUFF.g_bytes += write(BUFF.g_fd, BUFF.g_buff, BUFF.g_count);
 	else
 		return (0);
-	g_buff__.g_count = 0;
+	BUFF.g_count = 0;
 	return (1);
 }
 
-void		ever_handler(va_list *list, size_t *flags, int *wid, int *pre)
+void		ever_handler(va_list *list, size_t *flags, int wid, int pre)
 {
 	if (SPEC == 'c' || SPEC == 'C' || SPEC == '%')
-		char_handler(list, flags, wid);
+		char_handler(list, flags, &wid);
 	else if (SPEC == 's' || SPEC == 'S')
-		string_handler(list, flags, wid, pre);
+		string_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'd' || SPEC == 'D' || SPEC == 'i')
-		decimal_handler(list, flags, wid, pre);
+		decimal_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'x' || SPEC == 'X' || SPEC == 'p')
-		hexadecimal_handler(list, flags, wid, pre);
+		hexadecimal_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'f' || SPEC == 'F' || SPEC == 'e')
-		double_handler(list, flags, wid, pre);
+		double_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'E' || SPEC == 'g' || SPEC == 'G')
-		double_handler(list, flags, wid, pre);
+		double_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'u' || SPEC == 'U')
-		unsigned_decimal_handler(list, flags, wid, pre);
+		unsigned_decimal_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'o' || SPEC == 'O')
-		octal_handler(list, flags, wid, pre);
+		octal_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'b' || SPEC == 'B')
-		binary_handler(list, flags, wid, pre);
+		binary_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'a' || SPEC == 'A')
-		hexadouble_handler(list, flags, wid, pre);
+		hexadouble_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		;//date_non_printable_handler(list, flags, wid, pre);
+		print_date(va_arg(*list, long long), flags, &wid, &pre);
+	else if (SPEC == 'n')
+		rec_to_n(va_arg(*list, int *));
 }
 
 int			length_modifier_collector(const char **str, size_t *flags)
@@ -74,7 +76,7 @@ int			length_modifier_collector(const char **str, size_t *flags)
 }
 
 void		flags_collector(const char **str, va_list *list, size_t *flags,
-			int *wid, int *pre)
+			int *wi)
 {
 	while (!CONV(**str) && !(*flags & UND))
 	{
@@ -88,19 +90,18 @@ void		flags_collector(const char **str, va_list *list, size_t *flags,
 			*flags |= HAS;
 		else if (**str == '0' && (*flags |= NUL))
 			*flags |= 48;
-		else if (**str == '.' && precision_collector(str, list, flags, pre))
+		else if (**str == '.' && precision_collector(str, list, flags, &wi[1]))
 			continue;
 		else if (((**str >= 48 && **str <= 57) || **str == '*') &&
-				width_collector(str, list, flags, wid))
+				width_collector(str, list, flags, &wi[0]))
 			continue;
 		else if (length_modifier_collector(str, flags))
 			;
 		else if (**str != 'h' && **str != 'l' && (*flags |= UND))
-			print_any_char(**str, flags, wid);
+			print_any_char(**str, flags, &wi[0]);
 		(*str)++;
 	}
-	if ((*flags & BIA || *flags & POI) && shift(flags, 8, 'r'))
-		*flags |= 32;
+	(*flags & BIA || *flags & POI) && shift(flags, 8, 'r') ? *flags |= 32 : 0;
 	*flags |= (**str) << 16;
 }
 
@@ -108,29 +109,23 @@ int			ft_printf(const char *format, ...)
 {
 	va_list	listv;
 	size_t	flags;
-	int		pre;
-	int		wid;
+	int		w[2];
 
 	va_start(listv, format);
-	g_buff__.g_count = 0;
-	g_buff__.g_bytes = 0;
-	g_buff__.g_fd = 1;
-	g_buff__.g_error = 0;
-	pre = 0;
-	wid = 0;
+	zeroing_buff(&w[0]);
 	while (*format)
 		if (*format == '%' && !(flags = 0) && format++ && (flags |= 32))
 		{
-			flags_collector(&format, &listv, &flags, &wid, &pre);
+			flags_collector(&format, &listv, &flags, &w[0]);
 			if (flags & UND)
 				continue;
-			*format && format++ ? ever_handler(&listv, &flags, &wid, &pre) : 0;
+			*format && format++ ? ever_handler(&listv, &flags, w[0], w[1]) : 0;
 			if (g_buff__.g_error == -1)
 				return (-1);
 		}
 		else if (*format == '@' && *(format + 1) == '{')
-			color_chooser(&format);
-		else if (*format == '>' && *(format + 1) == '>' && (*format + 2) == '{')
+			colour_chooser(&format);
+		else if (*format == '>' && *(format + 1) == '>' && *(format + 2) == '{')
 			file_descriptor(&format, &listv);
 		else if (EJECT(1))
 			g_buff__.g_buff[g_buff__.g_count++] = *format++;

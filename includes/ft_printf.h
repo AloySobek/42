@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 21:11:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 19:56:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
 # define EJECT(x)		((g_buff__.g_count + x) >= BUFF_SIZE ? eject() : 1)
+# define BUFF			g_buff__
 
 typedef union			u_nbr
 {
@@ -91,7 +92,7 @@ int						width_collector(const char **str, va_list *list,
 int						precision_collector(const char **str, va_list *list,
 						size_t *flags, int *pre);
 void					file_descriptor(const char **str, va_list *list);
-void					color_chooser(const char **str);
+void					colour_chooser(const char **str);
 int						eject(void);
 int						putfloat(char **tra, t_bits *tally, size_t *flags,
 						int *pre);
@@ -132,8 +133,6 @@ void					inf_handler(size_t *flags);
 void					roundd(char **str, int *pre, int zer, int che);
 void					get_bits(t_bits *tally, long double *nbr,
 						size_t *flags, int *pre);
-void					flags_collector(const char **str, va_list *list,
-						size_t *flags, int *wid, int *pre);
 void					hexadecimal_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					unsigned_decimal_handler(va_list *list, size_t *flags,
@@ -148,7 +147,8 @@ void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
-int						add_expo(char **str, size_t *flags, int expo, int cou);
+void					print_date(long long iso, size_t *flags, int *wid, int *pre);
+int						add_expo(char **str, size_t *flags, int expo, int *pre, int bit);
 int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
 void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
@@ -158,5 +158,7 @@ void					ft_bzero(void *s, size_t n);
 int						ft_isspace(int c);
 int						ft_strcmp(const char *s1, const char *s2);
 size_t					ft_strlen(const char *s);
+void					rec_to_n(int *n);
+void					zeroing_buff(int *wid_pre);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 15:43:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 18:28:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	hexadouble_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	(SPEC) == 'A' ? *flags |= BIG : 0;
 	!(*flags & BIA) && (*flags & NUL) ? (*flags |= 48) : 0;
-	*flags |= (16 << 8);
+	*flags |= FLO;
 	if (*flags & BL)
 		print_hexadouble(va_arg(*list, long double), flags, wid, pre);
 	else

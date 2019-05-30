@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/29 16:56:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 19:34:22 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,9 @@ void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 	char	tra[64];
 	int		j;
 
-	j = 0;
-	if (nbr == 0 && !(*flags & POI && *pre == 0) && !(*flags & PTR))
-	{
-		(*flags |= ZER); 
+	if (!(j = 0) && nbr == 0 && !(*flags & POI && *pre == 0) && !(*flags & PTR)
+		&& (*flags |= ZER))
 		tra[j++] = '0';
-	}
 	nbr == 0 && BASE == 16 && !(*flags & PTR) ? (*flags |= ZER) : 0;
 	nbr == 0 && *flags & PTR ? tra[j++] = '0' : 0;
 	nbr == 0 && *flags & PTR && (*flags & POI && *pre == 0) ? j-- : 0;
