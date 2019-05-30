@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	test = 0;
 	e = 0.5464846452198456854654654L;
 	int count = 0;
-	test = ft_printf("%k", 20001703170320L);
+	test = ft_printf("%-30.10k", 20001703170320L);
 	printf("      >>>>>      bytes = %d\n", test);
 	//printf("%d\n", count);
 	test = printf("%30.70Lf", e);

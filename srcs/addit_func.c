@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 20:02:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/30 20:20:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,29 @@ int		shift(size_t *flags, int howmuch, char direction)
 	}
 }*/
 
+void			compute_date(char **date, long long *iso, long long *k, int i, int *cou)
+{	
+	while (i--)
+	{
+		(*date)[(*cou)++] = *iso / *k + '0';
+		*iso %= *k;
+		*k /= 10;
+	}
+}
+
 void			print_date(long long iso, size_t *flags, int *wid, int *pre)
 {
+	char		*date;
 	long long	tmp;
 	long long	k;
+	int			cou;
 	int			i;
 
+	if (!(date = (char *)malloc(sizeof(char) * 32)))
+	{
+		BUFF.g_error = -1;
+		return ;
+	}
 	k = 1;
 	tmp = iso;
 	while (tmp)
@@ -145,53 +162,20 @@ void			print_date(long long iso, size_t *flags, int *wid, int *pre)
 		k *= 10;
 	}
 	k /= 10;
-	i = 4;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
-	BUFF.g_buff[BUFF.g_count++] = '-';
-	i = 2;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
-	BUFF.g_buff[BUFF.g_count++] = '-';
-	i = 2;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
-	BUFF.g_buff[BUFF.g_count++] = 'T';
-	i = 2;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
-	BUFF.g_buff[BUFF.g_count++] = ':';
-	i = 2;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
-	BUFF.g_buff[BUFF.g_count++] = ':';
-	i = 2;
-	while (i--)
-	{
-		BUFF.g_buff[BUFF.g_count++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
-	}
+	cou = 0;
+	compute_date(&date, &iso, &k, 4, &cou);
+	date[cou++] = '-';
+	compute_date(&date, &iso, &k, 2, &cou);
+	date[cou++] = '-';
+	compute_date(&date, &iso, &k, 2, &cou);
+	date[cou++] = 'T';
+	compute_date(&date, &iso, &k, 2, &cou);
+	date[cou++] = ':';
+	compute_date(&date ,&iso, &k, 2, &cou);
+	date[cou++] = ':';
+	compute_date(&date ,&iso, &k, 2, &cou);
+	date[cou] = 0;
+	print_usual_string(date, flags, wid, pre);
 	return ;
 }
 
