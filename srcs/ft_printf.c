@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 19:55:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 12:42:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		ever_handler(va_list *list, size_t *flags, int wid, int pre)
 	else if (SPEC == 'a' || SPEC == 'A')
 		hexadouble_handler(list, flags, &wid, &pre);
 	else if (SPEC == 'r' || SPEC == 'k')
-		print_date(va_arg(*list, long long), flags, &wid, &pre);
+		date_nprint(list, flags, &wid, &pre);
 	else if (SPEC == 'n')
 		rec_to_n(va_arg(*list, int *));
 }

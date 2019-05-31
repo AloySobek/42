@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 19:25:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 15:55:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,12 @@ void		inf_handler(size_t *flags)
 
 void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 {
+	(*tally).bit = 64;
 	(*tally).nbr.nbr = *nbr;
 	(*tally).mant = *(long long *)&(*tally).nbr.nbr;
 	(*tally).expo = (*tally).nbr.array[4] - 16383;
 	(*tally).sign = (*tally).nbr.array[4] >> 15;
+	(*tally).mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
 	*nbr != *nbr ? (*flags |= NAN) && (*pre = 0) : 0;
 	*nbr && *nbr == (*nbr * 10) ? (*flags |= INF) && (*pre = 0) : 0;
 	(*tally).sign ? *flags |= NEG : 0;
@@ -103,72 +105,45 @@ int			expo(char **med, int sta, int end)
 }
 
 int			g_handler(char **med, t_bits *tally, size_t *flags, int *pre,
-			int mid, int cou, int bit)
+			int cou)
 {
 	int		size;
 
 	size = (*tally).size;
-	(*tally).size = expo(med, bit, (*tally).size);
+	(*tally).size = expo(med, (*tally).bit, (*tally).size);
 	if ((*tally).size < *pre && (*tally).size >= -4)
 	{
 		*pre > 0 ? *pre -= ((*tally).size + 1) : 0;
-		roundd(med, pre, bit - 1, mid);
-		while (cou <= *pre + bit)
+		roundd(med, pre, (*tally).bit - 1, (*tally).mid);
+		while (cou <= *pre + (*tally).bit)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, bit);
+		pass_zero(med, flags, pre, (*tally).bit);
 	}
 	else
 	{
 		*pre > 0 ? *pre -= 1 : 0;
-		(*tally).size = calc_expo(med, pre, bit, size);
+		(*tally).size = calc_expo(med, pre, (*tally).bit, size);
+		//å(*tally).bit -= (*tally).size;
 		if (*pre + (*tally).size <= 0 && (*flags & HAS))
-			roundd(med, pre, bit - 2, mid);
+			roundd(med, pre, (*tally).bit - 2, (*tally).mid);
 		else
-			roundd(med, pre, bit - 1, mid);
-		while (cou <= *pre + bit)
+			roundd(med, pre, (*tally).bit - 1, (*tally).mid);
+		while (cou <= *pre + (*tally).bit)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, bit);
-		if ((*tally).size != 0 && add_expo(med, flags, (*tally).size, pre, bit))
-			(*pre += 4);
+		pass_zero(med, flags, pre, (*tally).bit);
+		if ((*tally).size != 0 && add_expo(med, flags, tally, pre))
+			*pre += 4;
 	}
-	return (bit + *pre);
+	return ((*tally).bit + *pre);
 }
 
-int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
+int		expo_handler(char **med, t_bits *tally, size_t *flags, int *pre,
+		int cou)
 {
-	int		mid;
-	int		cou;
-	int		bit;
-
-	mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
-	(*tally).size = (*tally).expo - 63;
-	(*tally).size < 0 ? (*tally).size *= -1 : 0;
-	bit = 64;
-	cou = 1;
-	while (bit-- > 0)
-	{
-		if ((*tally).mant & (1L << bit))
-			(*tally).expo >= 0 ? add_power(med, (*tally).expo, mid) :
-			add_power_neg(med, (*tally).expo, mid + 2);
-		(*tally).expo--;
-	}
-	while (!(*med)[++bit] && bit < mid)
-		;
-	while (bit <= mid)
-		(*med)[cou++] = ((*med)[bit++] + '0');
-	*pre > 0 || (*flags & HAS) ? (*med)[cou++] = '.' : 0;
-	bit = cou;
-	mid += 2;
-	while (mid < (*tally).size + 4)
-		(*med)[cou++] = (*med)[mid++] + '0';
-	if (SPEC == 'g' || SPEC == 'G')
-		return (g_handler(med, tally, flags, pre, mid, cou, bit));
-	if (SPEC == 'e' || SPEC == 'E')
-		(*tally).size = calc_expo(med, pre, bit, (*tally).size);
-	if ((SPEC == 'e' || SPEC == 'E') && *pre + (*tally).size <= 0 && (*flags & HAS))
-		roundd(med, pre, bit - 2, mid);
-	else
-		roundd(med, pre, bit - 1, mid);
+	(*tally).size = calc_expo(med, pre, (*tally).bit, (*tally).expo);
+	(*tally).bit = 2;
+	*pre > 0 || *flags & HAS ? ++(*pre) : 0;
+	roundd(med, pre, (*tally).bit, (*tally).mid);
 	if ((*med)[0] > '0')
 	{
 		(*med)[2] = (*med)[1];
@@ -176,11 +151,46 @@ int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 		(*tally).size++;
 		(*pre)--;
 	}
-	while (cou <= *pre + bit)
+	while (cou <= *pre + (*tally).bit)
 		(*med)[cou++] = '0';
-	SPEC == 'e' || SPEC == 'E' ? add_expo(med, flags, (*tally).size, pre, bit) : 0;
+	add_expo(med, flags, tally, pre);
 	(*tally).size < 0 ? (*tally).size *= -1 : 0;
-	return (bit + *pre);
+	return ((*tally).bit + *pre);
+}
+
+int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
+{
+	int		cou;
+
+	cou = 1;
+	while ((*tally).bit-- > 0)
+	{
+		if ((*tally).mant & (1L << (*tally).bit))
+			(*tally).expo >= 0 ? add_power(med, (*tally).expo, (*tally).mid) :
+			add_power_neg(med, (*tally).expo, (*tally).mid + 2);
+		(*tally).expo--;
+	}
+	while (!(*med)[++(*tally).bit] && (*tally).bit < (*tally).mid)
+		;
+	while ((*tally).bit <= (*tally).mid)
+		(*med)[cou++] = ((*med)[(*tally).bit++] + '0');
+	(*med)[cou++] = '.';
+	(*tally).bit = cou - 2;
+	(*tally).mid += 2;
+	if ((*tally).expo > 0)
+		(*tally).expo += (*tally).mid;
+	else
+		(*tally).expo = -(*tally).expo + (*tally).mid;
+	while ((*tally).mid < (*tally).expo)
+		(*med)[cou++] = (*med)[(*tally).mid++] + '0';
+	if (SPEC == 'e' || SPEC == 'E')
+		return (expo_handler(med, tally, flags, pre, cou - 1));
+	if (SPEC == 'g' || SPEC == 'G')
+		return (g_handler(med, tally, flags, pre, cou));
+	roundd(med, pre, (*tally).bit, (*tally).mid);
+	while (cou <= *pre + (*tally).bit)
+		(*med)[cou++] = '0';
+	return ((*tally).bit + *pre);
 }
 
 void		print_double(long double nbr, size_t *flags, int *wid, int *pre)

@@ -6,41 +6,41 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 18:02:58 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 15:32:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-int		add_expo(char **str, size_t *flags, int expo, int *pre, int bit)
+int		add_expo(char **str, size_t *flags, t_bits *tally, int *pre)
 {
 	int cou;
 
-	cou = bit  + *pre;
+	cou = (*tally).bit + (pre > 0 ? *pre : 0);
 	if (*flags & BIG)
 		(*str)[cou++] = 'E';
 	else
 		(*str)[cou++] = 'e';
-	if (expo >= 0)
+	if ((*tally).size >= 0)
 		(*str)[cou++] = '+';
 	else
-		((*str)[cou++] = '-') && (expo *= -1);
-	if (expo >= 10 && expo < 100)
+		((*str)[cou++] = '-') && ((*tally).size *= -1);
+	if ((*tally).size >= 10 && (*tally).size < 100)
 	{
-		(*str)[cou++] = expo / 10 + '0';
-		(*str)[cou++] = expo % 10 + '0';
+		(*str)[cou++] = (*tally).size / 10 + '0';
+		(*str)[cou++] = (*tally).size % 10 + '0';
 	}
-	else if (expo >= 100)
+	else if ((*tally).size >= 100)
 	{
-		(*str)[cou++] = expo / 100 + '0';
-		(*str)[cou++] = (expo % 100) / 10 + '0';
-		(*str)[cou++] = (expo % 100) % 10 + '0';
+		(*str)[cou++] = (*tally).size / 100 + '0';
+		(*str)[cou++] = ((*tally).size % 100) / 10 + '0';
+		(*str)[cou++] = ((*tally).size % 100) % 10 + '0';
 		(*pre)++;
 	}
 	else
 	{
 		(*str)[cou++] = '0';
-		(*str)[cou++] = expo + '0';
+		(*str)[cou++] = (*tally).size + '0';
 	}
 	return (1);
 }
@@ -61,7 +61,6 @@ int		calc_expo(char **med, int *pre, int sta, int end)
 			(*med)[swim] = (*med)[swim - 1];
 		*pre > 0 || (*med)[2] != '.' ? (*med)[swim] = '.' : 0;
 		expo -= 2;
-		*pre -= expo;
 	}
 	else
 	{

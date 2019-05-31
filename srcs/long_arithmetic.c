@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 18:54:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 16:00:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,18 @@ void		roundd(char **str, int *pre, int sta, int end)
 {
 	int flag;
 	int n;
-	int i;
 
-	n = sta + *pre;
+	n = sta + (*pre > 0 ? *pre : 0);
 	flag = 0;
-	i = 1;
-	(*str)[n + 1] == '.' ? i = 2 : 0;
-	if ((*str)[n + i] >= '5')
+	if ((*str)[n + 2] >= '5')
 	{
-		if ((*str)[n + i] == '5')
-			while (end > n + i)
+		if ((*str)[n + 2] == '5')
+			while (end > n + 2)
 				if ((*str)[end--] > '0' && (flag = 1))
 					break ;
-		if ((*str)[n + i] > '5')
-			(*str)[n] += 1;
-		else if ((*str)[n + i] == '5')
+		if ((*str)[n + 2] > '5')
+			(*str)[n + 1] != '.' ? ++(*str)[n + 1] : ++(*str)[n];
+		else if ((*str)[n + 1] == '5')
 			(*str)[n] % 2 != 0 || flag ? ((*str)[n] += 1) : 0;
 	}
 	while ((*str)[n] > '9' && (*str)[n] != '.' && ((*str)[n--] -= 10) >= 0)
@@ -92,4 +89,7 @@ void		roundd(char **str, int *pre, int sta, int end)
 	(*str)[n] == '.' && n != sta + *pre ? (*str)[--n]++ : 0;
 	while (n >= 0 && (*str)[n] > '9' && ((*str)[n--] -= 10) >= 0 && ++(*str)[n])
 		(*str)[n] < '0' ? (*str)[n] += '0' : 0;
+	j = 0;
+	while (++j < 20)
+		printf("%c", (*str)[j]);
 }

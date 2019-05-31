@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 19:07:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 12:17:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 	if (SIGN == 32)
 	{
 		if (*flags & HAS && BASE == 8 && !(*flags & ZER) && !(*flags & FLO))
-			wid -= 1;
+			*wid -= 1;
 		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & ZER)
 		&& !(*flags & FLO)) || SPEC == 'a' || SPEC == 'A' ? 2 : 0;
 	}

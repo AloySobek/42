@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 19:56:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/05/31 14:18:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct			s_bits
 	long long			expo: 15;
 	long long			sign: 1;
 	int					size;
+	int					bit;
+	int					mid;
 	t_nbr				nbr;
 }						t_bits;
 
@@ -102,8 +104,6 @@ void					constructor(size_t *flags);
 void					char_handler(va_list *list, size_t *flags,
 						int *wid);
 void					print_double(long double nbr, size_t *flags,
-						int *wid, int *pre);
-void					expo_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_sig_dig(intmax_t nbr, size_t *flags,
 						int *wid, int *pre);
@@ -141,14 +141,14 @@ void					print_expo_double(long double nbr, size_t *flags,
 						int *wid, int *pre);
 void					print_double_g_f(long double nbr, size_t *flags,
 						int *wid, int *pre);
-void					date_non_printable_handler(va_list *list, size_t *flags,
-						int *wid, int *pre);
+void					date_nprint(va_list *list, size_t *flags, int *wid,
+						int *pre);
 void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
 void					print_date(long long iso, size_t *flags, int *wid, int *pre);
-int						add_expo(char **str, size_t *flags, int expo, int *pre, int bit);
+int						add_expo(char **str, size_t *flags, t_bits *tally, int *pre);
 int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
 void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);

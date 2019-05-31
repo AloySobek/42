@@ -46,6 +46,24 @@
 	}
 }*/
 
+# define TEST 18446744073709551615U
+
+void 	test_car(char **str1, char **str2, char **result)
+{
+	
+}
+
+/*void	 caratsuba_multiply(char **str, int pwr)
+{
+	if (pwr > 64)
+		caratsuba_multiply(str, pwr / 2);
+	else
+	{
+		multiply(char **str);
+	}
+	
+}*/
+
 int main(int argc, char **argv)
 {
 	/*char str[102] = {0};
@@ -61,16 +79,22 @@ int main(int argc, char **argv)
 		printf("%c", str[i++]);
 	printf("5d");
 	*/
-	long double e;
+	char str[21] = {49, 56, 52, 52, 54, 55, 52, 52, 48, 55, 51, 55, 48, 57, 53, 53, 49, 54, 49, 53};
+	double e;
 	int test;
+	char hello[129];
 
+	int i = 0;
+	while (++i <= 127)
+		hello[i - 1] = i;
+	hello[i] = 0;
 	test = 0;
-	e = 0.5464846452198456854654654L;
+	e = 2.51;
 	int count = 0;
-	test = ft_printf("%-30.10k", 20001703170320L);
+	test = ft_printf("{%.f}", e);
 	printf("      >>>>>      bytes = %d\n", test);
 	//printf("%d\n", count);
-	test = printf("%30.70Lf", e);
+	test = printf("{%.f}", e);
 	printf("      >>>>>      bytes = %d\n", test);
 	//printf("%d\n", count);
 	return (0);
