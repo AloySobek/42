@@ -8,61 +8,28 @@
 
 # define MIN_LENGTH_FOR_KARATSUBA 4
 
-typedef struct	long_nbr
+typedef struct	long_nbr_s
 {
 	long long	*nbr;
-	long long	size;
-}				long_nbr;
+	unsigned long long	size;
+}				long_nbr_t;
 
-int		max_size(long_nbr x, long_nbr y)
+long_nbr_t	sum(long_nbr_t a, long_nbr_t b)
 {
-	if (x.size > y.size)
-		return (x.size);
-	return (y.size);
-}
-
-/*long_nbr	sum(long_nbr a, long_nbr b)
-{
-	long_nbr s;
-	long_nbr high;
-	long_nbr low;
+	long_nbr_t s;
 	int i;
 	int j;
 
-	
-	if (a.size > b.size)
-	{
-		high = a;
-		low = b;
-	}
-	else
-	{
-		high = b;
-		low = a;
-	}
-	s.size = high.size + 1;
-	s.nbr = (long long *)malloc(sizeof(long long) * s.size);
-	s.nbr[s.size - 1] = 0;
+	s.size = a.size + 1;
+	s.nbr = malloc(sizeof(long long) * s.size);
+	s.nbr[a.size] = 0;
 	i = -1;
-	while (++i < s.size - 1)
-		s.nbr[i] = high.nbr[i] + (low.size > i ? low.nbr[i] : 0);
+	while (++i < b.size)
+		s.nbr[i] = a.nbr[i] + b.nbr[i];
 	return (s);
-}*/
-
-long_nbr sum(long_nbr a, long_nbr b)
-{
-  long_nbr s;
-  s.size = a.size + 1;
-  s.nbr = (long long *)malloc(sizeof(long long) * s.size);
- 
-  s.nbr[a.size - 1] = a.nbr[a.size - 1];
-  s.nbr[a.size] = 0;
-  for (long long i = 0; i < b.size; ++i)
-    s.nbr[i] = a.nbr[i] + b.nbr[i];
-  return s;
 }
 
-long_nbr	*sub(long_nbr *a, long_nbr b)
+long_nbr_t	*sub(long_nbr_t *a, long_nbr_t b)
 {
 	int i;
 
@@ -75,7 +42,7 @@ long_nbr	*sub(long_nbr *a, long_nbr b)
 	return (a);
 }
 
-void	normalize(long_nbr *l)
+void	normalize(long_nbr_t *l)
 {
 	int i;
 	long long tmp;
@@ -91,108 +58,221 @@ void	normalize(long_nbr *l)
 		}
 		else if ((*l).nbr[i] < 0)
 		{
-			tmp = ((*l).nbr[i]) / 10;
-			tmp == 0 ? (tmp = 1) : 0;
-			(*l).nbr[i + 1] -= tmp;
-			(*l).nbr[i] += tmp * 10;
+			tmp = ((*l).nbr[i] + 1) / 10 - 1;
+			(*l).nbr[i + 1] += tmp;
+			(*l).nbr[i] -= tmp * 10;
 		}
 		++i;
 	}
 }
 
-void	naive_multiply(long_nbr *x, long_nbr *y, long_nbr *res)
+long_nbr_t *naive_multiply(long_nbr_t a, long_nbr_t b, long_nbr_t *res)
 {
-	int n;
 	int i;
 	int j;
 
 	i = 0;
-	(*x).size > (*y).size ? (n = (*x).size) : (n = (*y).size);
-	while (i < n)
+	while (i < a.size)
 	{
 		j = 0;
-		while (j < n)
+		while (j < b.size)
 		{
-			(*res).nbr[i + j] += (*x).nbr[i] * (*y).nbr[j];
+			(*res).nbr[i + j] += a.nbr[i] * b.nbr[j];
 			++j;
 		}
 		++i;
 	}
-}
-
-long_nbr	karatsuba(long_nbr a, long_nbr b)
-{
-	long_nbr res;
-
-	res.size = a.size + b.size;
-	res.nbr = (long long *)malloc(sizeof(long long) * res.size);
-	if (a.size < MIN_LENGTH_FOR_KARATSUBA)
-	{
-		ft_bzero(res.nbr, sizeof(long long) * res.size);
-		for (long long i = 0; i < a.size; ++i)
-			for(long long j = 0; j < b.size; ++j)
-				res.nbr[i + j] += a.nbr[i] * b.nbr[j];
-	}
-	else
-	{
-		long_nbr a_l;
-		a_l.nbr = a.nbr;
-		a_l.size = (a.size + 1 ) / 2;
-		
-		long_nbr a_r;
-		a_r.nbr = a.nbr + a_l.size;
-		a_r.size = a.size / 2;
-		
-		long_nbr b_l;
-		b_l.nbr = b.nbr;
-		b_l.size = (b.size + 1 ) / 2;
-		
-		long_nbr b_r;
-		b_r.nbr = b.nbr + b_l.size;
-		b_r.size = b.size / 2;
-
-		long_nbr sum_of_l_r = sum(a_l, a_r);
-		normalize(&sum_of_l_r);
-		long_nbr sum_of_l_r_b = sum(b_l, b_r);
-		normalize(&sum_of_l_r_b);
-		long_nbr res_of_sums = karatsuba(sum_of_l_r, sum_of_l_r_b);
-
-		long_nbr res_1 = karatsuba(a_l, b_l);
-		long_nbr res_2 = karatsuba(a_r, b_r);
-
-		sub(sub(&res_of_sums, res_1), res_2);
-
-		memcpy(res.nbr, res_1.nbr, res_1.size * sizeof(long long));
-		memcpy(res.nbr + res_1.size, res_2.nbr, res_2.size * sizeof(long long));
-		for (long long i = 0; i < res_of_sums.size; ++i)
-			res.nbr[a_l.size + i] += res_of_sums.nbr[i];
-	}
-	//ree(res.nbr);
-	normalize(&res);
 	return (res);
 }
 
+long_nbr_t	karatsuba(long_nbr_t a, long_nbr_t b)
+{
+	long_nbr_t res;
+
+	res.size = a.size + b.size;
+	res.nbr = malloc(sizeof(long long) * res.size);
+	if (a.size < MIN_LENGTH_FOR_KARATSUBA)
+	{
+		ft_bzero(res.nbr, sizeof(long long) * res.size);
+		naive_multiply(a, b, &res);
+	}
+	else
+	{
+		long_nbr_t a_l;
+		a_l.nbr = a.nbr;
+		a_l.size = (a.size + 1 ) / 2;
+		
+		long_nbr_t a_r;
+		a_r.nbr = a.nbr + a_l.size;
+		a_r.size = a.size / 2;
+		
+		long_nbr_t b_l;
+		b_l.nbr = b.nbr;
+		b_l.size = (b.size + 1 ) / 2;
+		
+		long_nbr_t b_r;
+		b_r.nbr = b.nbr + b_l.size;
+		b_r.size = b.size / 2;
+
+		long_nbr_t sum_of_l_r = sum(a_l, a_r);
+		normalize(&sum_of_l_r);
+		long_nbr_t sum_of_l_r_b = sum(b_l, b_r);
+		normalize(&sum_of_l_r_b);
+		long_nbr_t res_of_sums = karatsuba(sum_of_l_r, sum_of_l_r_b);
+		
+		long_nbr_t res_1 = karatsuba(a_l, b_l);
+		long_nbr_t res_2 = karatsuba(a_r, b_r);
+		long_nbr_t all_sum = *sub(sub(&res_of_sums, res_1), res_2);
+		
+		memcpy(res.nbr, res_1.nbr,
+               res_1.size * sizeof(long long));
+        memcpy(res.nbr + res_1.size,
+               res_2.nbr, res_2.size
+               * sizeof(long long));
+		for (int i = 0; i < all_sum.size; ++i)
+            res.nbr[a_l.size + i] += all_sum.nbr[i];
+		free(res_1.nbr);
+		free(res_2.nbr);
+		free(sum_of_l_r.nbr);
+		free(sum_of_l_r_b.nbr);
+		free(res_of_sums.nbr);
+	}
+	normalize(&res);
+
+	return (res);
+}
+
+/*#include <stdlib.h>
+#include <string.h>
+ 
+#define BASE 10 //система счисления
+#define MIN_LENGTH_FOR_KARATSUBA 4 //числа короче умножаются квадратичным алгоритмом
+ 
+typedef int digit; //взят только для разрядов числа
+typedef unsigned long int size_length; //тип для длинны числа
+ 
+typedef struct long_value_t { //тип для длинных чисел
+    digit* values; //массив с цифрами числа записанными в обратном порядке
+    size_length length; //длинна числа
+} long_value;
+ 
+long_value sum(long_value a, long_value b) {
+    long_value s;
+    size_length i;
+    s.length = a.length + 1;
+    s.values = malloc(sizeof(digit) * s.length);
+ 
+    s.values[a.length - 1] = a.values[a.length - 1];
+    s.values[a.length] = 0;
+    for (i = 0; i < b.length; ++i) {
+        s.values[i] = a.values[i] + b.values[i];
+    }
+    return s;
+}
+ 
+long_value sub(long_value a, long_value b) {
+    for (size_length i = 0; i < b.length; ++i) {
+        a.values[i] -= b.values[i];
+    }
+    return a;
+}
+ 
+void normalize(long_value l) {
+    size_length i;
+    for (i = 0; i < l.length - 1; ++i) {
+        if (l.values[i] >= BASE) { //если число больше максимального, то организовавается перенос
+            digit carryover = l.values[i] / BASE;
+            l.values[i + 1] += carryover;
+            l.values[i] -= carryover * BASE;
+        } else if (l.values[i] < 0) { //если меньше - заем
+            digit carryover = (l.values[i] + 1) / BASE - 1;
+            l.values[i + 1] += carryover;
+            l.values[i] -= carryover * BASE;
+        }
+    }
+}
+ 
+long_value karatsuba(long_value a, long_value b) {
+    long_value product; //результирующее произведение
+    size_length i;
+    product.length = a.length + b.length;
+    product.values = malloc(sizeof(digit) * product.length);
+ 
+    if (a.length < MIN_LENGTH_FOR_KARATSUBA) { //если число короче то применять наивное умножение
+        memset(product.values, 0, sizeof(digit) * product.length);
+        for (size_length i = 0; i < a.length; ++i)
+            for (size_length j = 0; j < b.length; ++j) {
+                product.values[i + 
+            }
+    }
+    else { //умножение методом Карацубы
+        long_value a_part1; //младшая часть числа a
+        a_part1.values = a.values;
+        a_part1.length = (a.length + 1) / 2;
+ 
+        long_value a_part2; //старшая часть числа a
+        a_part2.values = a.values + a_part1.length;
+        a_part2.length = a.length / 2;
+ 
+        long_value b_part1; //младшая часть числа b
+        b_part1.values = b.values;
+        b_part1.length = (b.length + 1) / 2;
+ 
+        long_value b_part2; //старшая часть числа b
+        b_part2.values = b.values + b_part1.length;
+        b_part2.length = b.length / 2;
+ 
+        long_value sum_of_a_parts = sum(a_part1, a_part2); //cумма частей числа a
+        normalize(sum_of_a_parts);
+        long_value sum_of_b_parts = sum(b_part1, b_part2); //cумма частей числа b
+        normalize(sum_of_b_parts);
+        long_value product_of_sums_of_parts = karatsuba(sum_of_a_parts, sum_of_b_parts);
+        // произведение сумм частей
+ 
+        long_value product_of_first_parts = karatsuba(a_part1, b_part1); //младший член
+        long_value product_of_second_parts = karatsuba(a_part2, b_part2); //старший член
+        long_value sum_of_middle_terms = sub(sub(product_of_sums_of_parts, product_of_first_parts), product_of_second_parts);
+        //нахождение суммы средних
+        memcpy(product.values, product_of_first_parts.values,
+               product_of_first_parts.length * sizeof(digit));
+        memcpy(product.values + product_of_first_parts.length,
+               product_of_second_parts.values, product_of_second_parts.length
+               * sizeof(digit));
+        for (i = 0; i < sum_of_middle_terms.length; ++i) {
+            product.values[a_part1.length + i] += sum_of_middle_terms.values
+        free(sum_of_a_parts.values);
+        free(sum_of_b_parts.values);
+        free(product_of_sums_of_parts.values);
+        free(product_of_first_parts.values);
+        free(product_of_second_parts.values);
+    }
+ 
+    normalize(product); //конечная нормализация числа
+ 
+    return product;
+}*/
+
 int main(void)
 {
-	long_nbr a;
-	long_nbr b;
-	long_nbr res;
-	a.nbr = (long long *)malloc(5);
-	b.nbr = (long long *)malloc(5);
-	a.nbr[0] = 0;
-	a.nbr[1] = 5;
-	a.nbr[2] = 5;
-	a.nbr[3] = 5;
-	a.nbr[4] = 5;
-	b.nbr[0] = 0;
-	b.nbr[1] = 5;
-	b.nbr[2] = 5;
-	b.nbr[3] = 5;
-	b.nbr[4] = 5;
+	long_nbr_t a;
+	long_nbr_t b;
+	long_nbr_t res;
+	a.nbr = malloc(5 * sizeof(long long));
+	b.nbr = malloc(5 * sizeof(long long));
+	a.nbr[0] = 3;
+	a.nbr[1] = 3;
+	a.nbr[2] = 3;
+	a.nbr[3] = 3;
+	a.nbr[4] = 3;
+	b.nbr[0] = 3;
+	b.nbr[1] = 3;
+	b.nbr[2] = 3;
+	b.nbr[3] = 3;
+	b.nbr[4] = 3;
 	a.size = 5;
 	b.size = 5;
 	res = karatsuba(a, b);
-	int i = 3;
+	int i = 8;
 	while (i >= 0)
 		printf("%lld", res.nbr[i--]);
 	return (0);
