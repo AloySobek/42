@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/31 16:00:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/01 19:58:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,14 @@ void		roundd(char **str, int *pre, int sta, int end)
 					break ;
 		if ((*str)[n + 2] > '5')
 			(*str)[n + 1] != '.' ? ++(*str)[n + 1] : ++(*str)[n];
-		else if ((*str)[n + 1] == '5')
-			(*str)[n] % 2 != 0 || flag ? ((*str)[n] += 1) : 0;
+		else if ((*str)[n + 2] == '5')
+		{
+			if ((*str)[n + 1] != '.')
+				(*str)[n + 1] % 2 != 0 || flag ? ++(*str)[n + 1] : 0;
+			else
+				(*str)[n]  % 2 != 0 || flag ? ++(*str)[n] : 0;
 	}
-	while ((*str)[n] > '9' && (*str)[n] != '.' && ((*str)[n--] -= 10) >= 0)
+	while ((*str)[n + 1] > '9' && (*str)[n + 1] != '.' && ((*str)[n--] -= 10) >= 0)
 		(*str)[n] != '.' ? (*str)[n] += 1 : 0;
 	(*str)[n] == '.' && n != sta + *pre ? (*str)[--n]++ : 0;
 	while (n >= 0 && (*str)[n] > '9' && ((*str)[n--] -= 10) >= 0 && ++(*str)[n])
