@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   long_arithmetic.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/02 21:32:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/03 01:46:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 #include <string.h>
+#include <stdio.h>
 
 void		add_power(char **med, int pwr, int cou)
 {
@@ -140,7 +141,7 @@ long_nbr_t *naive_multiply(long_nbr_t a, long_nbr_t b, long_nbr_t *res)
 }
 
 long_nbr_t		karatsuba(long_nbr_t a, long_nbr_t b)
-{
+{	
 	long_nbr_t	res;
 	int			i;
 
@@ -163,7 +164,6 @@ long_nbr_t		karatsuba(long_nbr_t a, long_nbr_t b)
 		long_nbr_t	res_1;
 		long_nbr_t	res_2;
 		long_nbr_t	all_sum;
-		printf("1");
 		a_l.nbr = a.nbr;
 		a_l.size = (a.size + 1) / 2;		
 		a_r.nbr = a.nbr + a_l.size;
@@ -172,22 +172,19 @@ long_nbr_t		karatsuba(long_nbr_t a, long_nbr_t b)
 		b_l.size = (b.size + 1) / 2;
 		b_r.nbr = b.nbr + b_l.size;
 		b_r.size = b.size / 2;
+		res_1 = karatsuba(a_l, b_l);
+		res_2 = karatsuba(a_r, b_r);
 		sum_of_l_r = sum(a_l, a_r);
 		normalize(&sum_of_l_r);
 		sum_of_l_r_b = sum(b_l, b_r);
 		normalize(&sum_of_l_r_b);
 		res_of_sums = karatsuba(sum_of_l_r, sum_of_l_r_b);		
-		res_1 = karatsuba(a_l, b_l);
-		res_2 = karatsuba(a_r, b_r);
 		all_sum = *sub(sub(&res_of_sums, res_1), res_2);
 		ft_memcpy(res.nbr, res_1.nbr, res_1.size * sizeof(long long));
         ft_memcpy(res.nbr + res_1.size, res_2.nbr, res_2.size * sizeof(long long));
-		i = 0;
-		while (i < all_sum.size)
-		{
+		i = -1;
+		while (++i < all_sum.size)
             res.nbr[a_l.size + i] += all_sum.nbr[i];
-			++i;
-		}
 		free(res_1.nbr);
 		free(res_2.nbr);
 		free(sum_of_l_r.nbr);
@@ -195,6 +192,7 @@ long_nbr_t		karatsuba(long_nbr_t a, long_nbr_t b)
 		free(res_of_sums.nbr);
 	}
 	normalize(&res);
+	i = res.size - 1;
 	return (res);
 }
 
@@ -202,6 +200,7 @@ void			test(long_nbr_t *nbr, int power, int base)
 {
 	long_nbr_t a;
 	long_nbr_t b;
+	int i;
 	
 	a.nbr = (long long *)malloc(sizeof(long long));
 	a.size = 1;
@@ -209,19 +208,40 @@ void			test(long_nbr_t *nbr, int power, int base)
 	b.nbr = (long long *)malloc(sizeof(long long));
 	b.size = 1;
 	b.nbr[0] = 2;
-	power = 4193;
-	printf("|||%d|||\n", power);
+	power = 4192;
 	while (power)
 	{
 		if (power & 1)
+		{
 			a = karatsuba(a, b);
+			i = a.size - 1;
+			while (i >= 0)
+				printf("%lld", a.nbr[i--]);
+			printf("|||");
+			while (a.size - 1 >= 0 && a.nbr[a.size - 1] == 0)
+				a.size--;
+			i = a.size - 1;
+			while (i >= 0)
+				printf("%lld", a.nbr[i--]);
+			printf("\n\n\n");
+		}
+		i = b.size - 1;
+		while (i >= 0)
+			printf("%lld", b.nbr[i--]);	
+		printf("///");
 		b = karatsuba(b, b);
+		while (b.size - 1 >= 0 && b.nbr[b.size - 1] == 0)
+			b.size--;
+		i = b.size - 1;
+		while (i >= 0)
+			printf("%lld", b.nbr[i--]);
+		printf("\n\n\n");
 		power >>= 1;
 	}
 	int j = a.size - 1;
 	while (j >= 0)
 		printf("%lld", a.nbr[j--]);
-	printf("///%ld///", strlen(""));
+	//printf("///%ld///", strlen(""));
 	exit(1);
 	if ((*nbr).size > 0)
 	{
