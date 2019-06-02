@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/01 19:58:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/02 21:31:20 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,26 @@
 # define T		9223372036854775808U
 
 # define BUFF_SIZE		256
+# define EJECT(x)		((g_buff__.g_count + x) >= BUFF_SIZE ? eject() : 1)
+# define BUFF			g_buff__
+
 # define SPEC			(*flags << 40) >> 56
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
-# define EJECT(x)		((g_buff__.g_count + x) >= BUFF_SIZE ? eject() : 1)
-# define BUFF			g_buff__
+
+# define MIN_LENGTH_FOR_KARATSUBA 18
 
 typedef union			u_nbr
 {
 	long double			nbr;
 	short				array[5];
 }						t_nbr;
+
+typedef struct			long_nbr_s
+{
+	long long			*nbr;
+	unsigned long long	size;
+}						long_nbr_t;	
 
 typedef struct			s_bits
 {
@@ -158,7 +167,9 @@ void					ft_bzero(void *s, size_t n);
 int						ft_isspace(int c);
 int						ft_strcmp(const char *s1, const char *s2);
 size_t					ft_strlen(const char *s);
+void					*ft_memcpy(void *dst, const void *src, size_t n);
 void					rec_to_n(int *n);
 void					zeroing_buff(int *wid_pre);
+void					test(long_nbr_t *nbr, int power, int base);
 
 #endif

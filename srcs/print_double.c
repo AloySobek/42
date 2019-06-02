@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/31 15:55:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/02 21:12:18 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int			g_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 	{
 		*pre > 0 ? *pre -= 1 : 0;
 		(*tally).size = calc_expo(med, pre, (*tally).bit, size);
-		//å(*tally).bit -= (*tally).size;
+		//(*tally).bit -= (*tally).size;
 		if (*pre + (*tally).size <= 0 && (*flags & HAS))
 			roundd(med, pre, (*tally).bit - 2, (*tally).mid);
 		else
@@ -160,37 +160,41 @@ int		expo_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
+	long_nbr_t whole;
+	long_nbr_t fract;
 	int		cou;
 
 	cou = 1;
+	whole.size = 0;
+	fract.size = 0;
 	while ((*tally).bit-- > 0)
-	{
+	{ 
 		if ((*tally).mant & (1L << (*tally).bit))
-			(*tally).expo >= 0 ? add_power(med, (*tally).expo, (*tally).mid) :
-			add_power_neg(med, (*tally).expo, (*tally).mid + 2);
+			(*tally).expo >= 0 ? test(&whole, (*tally).expo, 2) : test(&fract, -(*tally).expo, 5);
 		(*tally).expo--;
 	}
-	while (!(*med)[++(*tally).bit] && (*tally).bit < (*tally).mid)
-		;
-	while ((*tally).bit <= (*tally).mid)
-		(*med)[cou++] = ((*med)[(*tally).bit++] + '0');
+	int j = whole.size - 1;
+	while (whole.nbr[j] == 0)
+		j--;
+	while (j >= 0)
+		(*med)[cou++] = whole.nbr[j--] + '0';
 	(*med)[cou++] = '.';
-	(*tally).bit = cou - 2;
-	(*tally).mid += 2;
-	if ((*tally).expo > 0)
-		(*tally).expo += (*tally).mid;
-	else
-		(*tally).expo = -(*tally).expo + (*tally).mid;
-	while ((*tally).mid < (*tally).expo)
-		(*med)[cou++] = (*med)[(*tally).mid++] + '0';
+	j = fract.size - 1;
+	while (fract.nbr[j] == 0 && j >= 0)
+		j--;
+	while (j >= 0)
+	{
+		(*med)[cou++] = fract.nbr[j--] + '0';
+		--(*pre);
+	}
 	if (SPEC == 'e' || SPEC == 'E')
 		return (expo_handler(med, tally, flags, pre, cou - 1));
 	if (SPEC == 'g' || SPEC == 'G')
 		return (g_handler(med, tally, flags, pre, cou));
-	roundd(med, pre, (*tally).bit, (*tally).mid);
-	while (cou <= *pre + (*tally).bit)
+	//roundd(med, pre, (*tally).bit, (*tally).mid);
+	while ((*pre)--)
 		(*med)[cou++] = '0';
-	return ((*tally).bit + *pre);
+	return (cou);
 }
 
 void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
