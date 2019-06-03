@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/02 21:31:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/04 00:22:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
 
-# define MIN_LENGTH_FOR_KARATSUBA 18
+# define MIN_LENGTH_FOR_KARATSUBA 4
 
 typedef union			u_nbr
 {
