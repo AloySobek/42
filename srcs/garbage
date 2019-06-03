@@ -1,0 +1,71 @@
+else
+	{
+		//printf("hello\n");
+		long_nbr_t a_l;
+		a_l.nbr = a.nbr;
+		a_l.size = (a.size + 1) / 2;
+	//	printf("a_l\n");
+	//	print_nbr(a_l);
+		long_nbr_t a_r;
+		a_r.nbr = a.nbr + a_l.size;
+		a_r.size = a.size / 2;
+	//	printf("a_r\n");
+	//	print_nbr(a_r);
+		long_nbr_t b_l;
+		b_l.nbr = b.nbr;
+		b_l.size = (b.size + 1) / 2;
+	//	printf("b_l\n");
+	//	print_nbr(b_l);
+		long_nbr_t b_r;
+		b_r.nbr = b.nbr + b_l.size;
+		b_r.size = b.size / 2;
+	//	printf("b_r\n");
+	//	print_nbr(b_r);
+		long_nbr_t mul1 = karatsuba(a_r, b_r);
+		printf("mul1\n");
+		print_nbr(mul1);
+		long_nbr_t mul2 = karatsuba(a_l, b_l);
+		printf("mul2\n");
+		print_nbr(mul2);
+		long_nbr_t mul3 = karatsuba(sum(a_l, a_r), sum(b_l, b_r));
+		printf("--------\n");
+		printf("sum1\n");
+		print_nbr(sum(a_l, a_r));
+		printf("sum2\n");
+		print_nbr(sum(b_l, b_r));
+		printf("--------\n");
+		printf("mul333before substraction\n");
+		print_nbr(mul3);
+		sub(sub(&mul3, mul1), mul2);
+		normalize(&mul3);
+		printf("mul333\n");
+		print_nbr(mul3);
+		if (a.size == 20)
+		{
+			restore_parity(&mul1, a.size);
+			restore_parity(&mul3, a.size / 2);
+		}
+	//	printf("mul3\n");
+	//	print_nbr(mul3);
+	//	printf("mul2\n");
+	//	print_nbr(mul2);
+	//	printf("mul1\n");
+	//	print_nbr(mul1);
+		res = sum(mul1, mul3);
+		printf("res after first sum\n");
+		print_nbr(res);
+		res = sum(res, mul2);
+		printf("res after second sum\n");
+		print_nbr(res);
+		if (a.size == 20)
+			compensation(&res, zero);
+		printf("\nres:\n");
+		print_nbr(res);
+		free(mul1.nbr);
+		free(mul2.nbr);
+		free(mul3.nbr);
+	}
+	normalize(&res);
+	return (res);
+}
+

@@ -1,0 +1,32 @@
+long_nbr_t a_l;
+		a_l.nbr = a.nbr;
+		a_l.size = (a.size + 1) / 2;		
+		long_nbr_t a_r;
+		a_r.nbr = a.nbr + a_l.size;
+		a_r.size = a.size / 2;	
+		long_nbr_t b_l;
+		b_l.nbr = b.nbr;
+		b_l.size = (b.size + 1) / 2;
+		long_nbr_t b_r;
+		b_r.nbr = b.nbr + b_l.size;
+		b_r.size = b.size / 2;
+		long_nbr_t sum1 = sum(a_l, a_r);
+		normalize(&sum1);
+		long_nbr_t sum2 = sum(b_l, b_r);
+		normalize(&sum2);
+		long_nbr_t res_of_sums = karatsuba(sum1, sum2);		
+		long_nbr_t res_1 = karatsuba(a_l, b_l);
+		long_nbr_t res_2 = karatsuba(a_r, b_r);
+		sub(sub(&res_of_sums, res_1), res_2);
+		normalize(&res_of_sums);
+		ft_memcpy(res.nbr, res_1.nbr, res_1.size * sizeof(long long));
+        ft_memcpy(res.nbr + res_1.size, res_2.nbr, res_2.size * sizeof(long long));
+		i = 0;
+		while (i < res_of_sums.size)
+		{
+            res.nbr[a_l.size + i] += res_of_sums.nbr[i];
+			++i;
+		}
+		free(res_1.nbr);
+		free(res_2.nbr);
+		free(res_of_sums.nbr);
