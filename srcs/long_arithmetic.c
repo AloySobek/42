@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   long_arithmetic.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/04 00:20:07 by marvin           ###   ########.fr       */
+/*   Updated: 2019/06/04 20:58:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,23 @@
 #include <string.h>
 #include <stdio.h>
 
-/*void		add_power(char **med, int pwr, int cou)
+void				zero_passer(t_long *a, int b)
 {
-	char	power[pwr / 2 + 2];
-	int		n;
-	int		m;
-	int		z;
+	int				i;
 
-	m = pwr / 2;
-	ft_bzero(power, m + 2);
-	power[m] = 1;
-	while (pwr-- && (n = m + 1))
-	{
-		while (n--)
-			power[n] *= 2;
-		n = m + 1;
-		while (n--)
-			power[n] > 9 ? (power[n] -= 10) >= 0 && ++power[n - 1] : 0;
-	}
-	n = m;
-	z = cou;
-	while (n >= 0)
-		(*med)[z--] += power[n--];
-	z = cou + 1;
-	while (z--)
-		(*med)[z] > 9 ? ((*med)[z] -= 10) >= 0 && ++((*med)[z - 1]) : 0;
+	i = (*a).len - 1;
+	while (i >= 0 && (*a).nbr[i--] == 0)
+		(*a).len--;
+	b ? (*a).len++ : 0;
 }
 
-void		add_power_neg(char **med, int pwr, int cou)
+void				add_power_neg(char **a, int pwr)
 {
-	char	power[-pwr + 2];
-	int		n;
-	int		m;
+	char			power[pwr + 2];
+	int				n;
+	int				m;
+	long long		tmp;
 
-	pwr *= -1;
 	m = pwr;
 	ft_bzero(power, m + 2);
 	power[m - 1] = 1;
@@ -57,289 +40,243 @@ void		add_power_neg(char **med, int pwr, int cou)
 			power[n] *= 5;
 		n = m;
 		while (n--)
-			while (power[n] > 9 && (power[n] -= 10) >= 0)
-				++power[n - 1];
+			while (power[n] > 9)
+			{
+				tmp = power[n] / 10;
+				power[n - 1] += tmp;
+				power[n] -= tmp * 10;
+			}
 	}
 	n = m;
 	while (n--)
-		(*med)[cou + n] += power[n];
+		(*a)[n] += power[n];
 	while (m--)
-		while ((*med)[cou + m] > 9 && ((*med)[cou + m] -= 10) >= 0)
-			++(*med)[cou + m - 1];
-}*/
-
-void		pass_zer(long_nbr_t *a)
-{
-	int i;
-
-	i = (*a).size - 1;
-	while (i >= 0 && (*a).nbr[i--] == 0);
-		(*a).size--;
+	{
+		while ((*a)[m] > 9)
+		{
+			tmp = (*a)[m] / 10;
+			(*a)[m - 1] += tmp;
+			(*a)[m] -= tmp * 10;
+		}
+	}
 }
 
-void		compensation(long_nbr_t *a, int zero)
+void				compensation(t_long *a, int zero)
 {
-	long long *new_nbr;
-	int i;
-	int j;
-	int z;
+	long long		*new_nbr;
+	int				x;
+	int				y;
+	int				z;
 
-	new_nbr = (long long *)malloc(sizeof(long long) * ((*a).size - zero ));
-	i = 0;
-	j = 0;
+	new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len - zero));
+	ft_bzero(new_nbr, sizeof(long long) * ((*a).len - zero));
+	x = 0;
+	y = 0;
 	z = zero;
 	while (zero--)
-		j++;
-	while (j <= (*a).size - 1)
-		new_nbr[i++] = (*a).nbr[j++];
+		y++;
+	while (y <= (*a).len - 1)
+		new_nbr[x++] = (*a).nbr[y++];
 	free((*a).nbr);
 	(*a).nbr = new_nbr;
-	(*a).size -= z;
+	(*a).len -= z;
 }
 
-void	restore_parity(long_nbr_t *nbr, int size)
+void				restore_parity(t_long *a, int len)
 {
-	long long *new_nbr;
-	int i;
-	int j;
-	int z;
+	long long		*new_nbr;
+	int				x;
+	int				y;
+	int				z;
 
-	new_nbr = (long long *)malloc(sizeof(long long) * ((*nbr).size + size));
-	ft_bzero(new_nbr, sizeof(long long) * ((*nbr).size + size));
-	i = 0;
-	j = size;
-	while (j--)
-		new_nbr[i++] = 0;
-	z = (*nbr).size - 1;
-	while (z >= 0 && (*nbr).nbr[z] == 0)
+	new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len + len));
+	ft_bzero(new_nbr, sizeof(long long) * ((*a).len + len));
+	x = 0;
+	y = len;
+	while (y--)
+		new_nbr[x++] = 0;
+	z = (*a).len - 1;
+	while (z >= 0 && (*a).nbr[z] == 0)
 		z--;
-	j = 0;
-	while (j <= z)
-		new_nbr[i++] = (*nbr).nbr[j++];
-	//free((*nbr).nbr);
-	(*nbr).nbr = new_nbr;
-	(*nbr).size += size;
+	y = 0;
+	while (y <= z)
+		new_nbr[x++] = (*a).nbr[y++];
+	free((*a).nbr);
+	(*a).nbr = new_nbr;
+	(*a).len += len;
 }
 
-void	normalize(long_nbr_t *l)
+void				normalize(t_long *a)
 {
-	long long i;
-	long long tmp;
+	long long		tmp;
+	int				i;
 
 	i = 0;
-	while (i < ((*l).size - 1)) 
+	while (i < ((*a).len - 1))
 	{
-		if ((*l).nbr[i] >= 10)
+		if ((*a).nbr[i] >= 10)
 		{
-			tmp = (*l).nbr[i] / 10;
-			(*l).nbr[i + 1] += tmp;
-			(*l).nbr[i] -= tmp * 10;
+			tmp = (*a).nbr[i] / 10;
+			(*a).nbr[i + 1] += tmp;
+			(*a).nbr[i] -= tmp * 10;
 		}
-		else if ((*l).nbr[i] < 0)
+		else if ((*a).nbr[i] < 0)
 		{
-			tmp = (((*l).nbr[i] + 1) / 10) - 1;
-			(*l).nbr[i + 1] += tmp;
-			(*l).nbr[i] -= tmp * 10;
+			tmp = (((*a).nbr[i] + 1) / 10) - 1;
+			(*a).nbr[i + 1] += tmp;
+			(*a).nbr[i] -= tmp * 10;
 		}
 		++i;
 	}
 }
 
-long_nbr_t		sum(long_nbr_t a, long_nbr_t b)
+t_long				sum(t_long a, t_long b)
 {
-	long_nbr_t	s;
-	int			i;
+	t_long			s;
+	int				i;
 
-	s.size = a.size > b.size ? a.size + 1 : b.size + 1;
-	s.nbr = (long long *)malloc(sizeof(long long) * s.size);
+	s.len = a.len > b.len ? a.len + 1 : b.len + 1;
+	s.nbr = (long long *)malloc(sizeof(long long) * s.len);
 	i = -1;
-	while (++i < s.size)
-		s.nbr[i] = (i < a.size ? a.nbr[i] : 0) + (i < b.size ? b.nbr[i] : 0);
+	while (++i < s.len)
+		s.nbr[i] = (i < a.len ? a.nbr[i] : 0) + (i < b.len ? b.nbr[i] : 0);
 	normalize(&s);
 	return (s);
 }
 
-long_nbr_t	*sub(long_nbr_t *a, long_nbr_t b)
+t_long				*sub(t_long *a, t_long b)
 {
-	int		i;
+	int				i;
 
 	i = -1;
-	while (++i < b.size)
+	while (++i < b.len)
 		(*a).nbr[i] -= b.nbr[i];
 	normalize(a);
 	return (a);
 }
 
-void		multi(long_nbr_t a, long_nbr_t b, long_nbr_t *res)
+void				multi(t_long a, t_long b, t_long *res)
 {
-	int		i;
-	int		j;
+	int				i;
+	int				j;
 
-	ft_bzero((*res).nbr, sizeof(long long) * (*res).size);
+	ft_bzero((*res).nbr, sizeof(long long) * (*res).len);
 	i = -1;
-	while (++i < a.size)
+	while (++i < a.len)
 	{
 		j = -1;
-		while (++j < b.size)
+		while (++j < b.len)
 			(*res).nbr[i + j] += a.nbr[i] * b.nbr[j];
 	}
 }
 
-long_nbr_t		karatsuba(long_nbr_t a, long_nbr_t b)
-{	
-	long_nbr_t	res;
-	int			n;
-	int			i;
-
-	res.size = a.size + b.size;
-	res.nbr = (long long *)malloc(sizeof(long long) * res.size);
-	if (a.size < MIN_LENGTH_FOR_KARATSUBA || b.size < MIN_LENGTH_FOR_KARATSUBA)
-		multi(a, b, &res);
+void				init_var(t_long *a, t_karatsuba_var *var, int flag)
+{
+	if (flag)
+	{
+		(*var).a_l.nbr = (*a).nbr;
+		(*var).a_l.len = ((*a).len + 1) / 2;
+		(*var).a_r.nbr = (*a).nbr + (*var).a_l.len;
+		(*var).a_r.len = (*a).len / 2;
+	}
 	else
 	{
-		long_nbr_t a_l;
-		a_l.nbr = a.nbr;
-		a_l.size = (a.size + 1) / 2;		
-		long_nbr_t  a_r;
-		a_r.nbr = a.nbr + a_l.size;
-		a_r.size = a.size / 2;	
-		long_nbr_t b_l;
-		b_l.nbr = b.nbr;
-		b_l.size = (b.size + 1) / 2;
-		long_nbr_t b_r;
-		b_r.nbr = b.nbr + b_l.size;
-		b_r.size = b.size / 2;
-		long_nbr_t res_1 = karatsuba(a_l, b_l);
-		long_nbr_t res_2 = karatsuba(a_r, b_r);
-		long_nbr_t res_3 = karatsuba((sum(a_l, a_r)), (sum(b_l, b_r)));	
-		sub(sub(&res_3, res_1), res_2);
-		ft_memcpy(res.nbr, res_1.nbr, res_1.size * sizeof(long long));
-        ft_memcpy(res.nbr + res_1.size, res_2.nbr, res_2.size * sizeof(long long));
-		i = -1;
-		while (++i < res_3.size)
-            res.nbr[a_l.size + i] += res_3.nbr[i];
-		free(res_1.nbr);
-		free(res_2.nbr);
-		free(res_3.nbr);
+		(*var).b_l.nbr = (*a).nbr;
+		(*var).b_l.len = ((*a).len + 1) / 2;
+		(*var).b_r.nbr = (*a).nbr + (*var).a_l.len;
+		(*var).b_r.len = (*a).len / 2;
 	}
-	normalize(&res);
-	return (res);
 }
 
-void			test(long_nbr_t *nbr, int power, int base)
+void				tidy_up(t_karatsuba_var *var)
 {
-	/*long_nbr_t a;
-	long_nbr_t b;
-	int i;
-	
-	a.nbr = (long long *)malloc(sizeof(long long));
-	a.size = 1;
-	a.nbr[0] = 1;
-	b.nbr = (long long *)malloc(sizeof(long long));
-	b.size = 1;
-	b.nbr[0] = 2;
-	power = 4192;
+	free((*var).res_1.nbr);
+	free((*var).res_2.nbr);
+	free((*var).res_3.nbr);
+}
+
+t_long				karatsuba(t_long a, t_long b)
+{
+	t_karatsuba_var	var;
+	int				i;
+
+	var.res.len = a.len + b.len;
+	var.res.nbr = (long long *)malloc(sizeof(long long) * var.res.len);
+	if (a.len < KARATSUBA_MIN || b.len < KARATSUBA_MIN)
+		multi(a, b, &var.res);
+	else
+	{
+		init_var(&a, &var, 1);
+		init_var(&b, &var, 0);
+		var.res_1 = karatsuba(var.a_l, var.b_l);
+		var.res_2 = karatsuba(var.a_r, var.b_r);
+		var.res_3 = karatsuba((sum(var.a_l, var.a_r)), (sum(var.b_l, var.b_r)));
+		sub(sub(&var.res_3, var.res_1), var.res_2);
+		ft_memcpy(var.res.nbr, var.res_1.nbr, var.res_1.len * 8);
+		ft_memcpy(var.res.nbr + var.res_1.len, var.res_2.nbr, var.res_2.len *
+		sizeof(long long));
+		i = -1;
+		while (++i < var.res_3.len)
+			var.res.nbr[var.a_l.len + i] += var.res_3.nbr[i];
+		tidy_up(&var);
+	}
+	normalize(&var.res);
+	return (var.res);
+}
+
+void				init_long(t_long *a, int nbr)
+{
+	(*a).nbr = (long long *)malloc(sizeof(long long));
+	(*a).len = 1;
+	(*a).nbr[0] = nbr;
+}
+
+void				test(t_long *nbr, int power)
+{
+	t_long			a;
+	t_long			b;
+	int				i;
+
+	i = 0;
+	init_long(&a, 1);
+	init_long(&b, 2);
 	while (power)
 	{
 		if (power & 1)
 		{
-			if (a.size != b.size)
+			if (a.len != b.len)
 			{
-				if (a.size > b.size)
-				{ 
-					i = a.size - b.size;
+				if (a.len > b.len)
+				{
+					i = a.len - b.len;
 					restore_parity(&b, i);
 				}
 				else
 				{	
-					i = a.size - b.size;
+					i = b.len - a.len;
 					restore_parity(&a, i);
 				}
 			}
 			a = karatsuba(a, b);
-			compensation(&a, i);
-			//pass_zer(&a);
+			if (i)
+			{
+				compensation(&a, i);
+				i = 0;
+			}
+			zero_passer(&a, 0);
 		}
 		b = karatsuba(b, b);
-		//pass_zer(&b);
+		zero_passer(&b, 1);
 		power >>= 1;
 	}
-	int j = a.size - 1;
-	while (j >= 0)
-		printf("%lld", a.nbr[j--]);*/
-	long_nbr_t test;
-	test.nbr = (long long *)malloc(sizeof(long long) * 13);
-	test.size = 13;
-	test.nbr[0] = 6;
-	test.nbr[1] = 9;
-	test.nbr[2] = 2;
-	test.nbr[3] = 7;
-	test.nbr[4] = 6;
-	test.nbr[5] = 9;
-	test.nbr[6] = 4;
-	test.nbr[7] = 9;
-	test.nbr[8] = 2;
-	test.nbr[9] = 4;
-	test.nbr[10] = 4;
-	test.nbr[11] = 4;
-	test.nbr[12] = 4;
-	long_nbr_t test1;
-	test1.nbr = (long long *)malloc(sizeof(long long) * 30);
-	test1.size = 30;
-	test1.nbr[0] = 6;
-	test1.nbr[1] = 1;
-	test1.nbr[2] = 6;
-	test1.nbr[3] = 1;
-	test1.nbr[4] = 5;
-	test1.nbr[5] = 5;
-	test1.nbr[6] = 9;
-	test1.nbr[7] = 0;
-	test1.nbr[8] = 1;
-	test1.nbr[9] = 3;
-	test1.nbr[10] = 7;
-	test1.nbr[11] = 0;
-	test1.nbr[12] = 4;
-	test1.nbr[13] = 4;
-	test1.nbr[14] = 7;
-	test1.nbr[15] = 6;
-	test1.nbr[16] = 4;
-	test1.nbr[17] = 4;
-	test1.nbr[18] = 8;
-	test1.nbr[19] = 1;
-	test1.nbr[20] = 7;
-	test1.nbr[21] = 0;
-	test1.nbr[22] = 4;
-	test1.nbr[23] = 4;
-	test1.nbr[24] = 7;
-	test1.nbr[25] = 6;
-	test1.nbr[26] = 4;
-	test1.nbr[27] = 4;
-	test1.nbr[28] = 8;
-	test1.nbr[29] = 1;
-	long_nbr_t res;
-	long long j = test1.size - test.size;
-	restore_parity(&test, j);
-	//res = *sub(&test1, test);
-	res = karatsuba(test, test1);
-	compensation(&res, j);
-	pass_zer(&res);
-	int h = res.size - 1;
-	while (h >= 0)
-		printf("%lld", res.nbr[h--]);
-	exit(1);
-	if ((*nbr).size > 0)
-	{
-
-		normalize(nbr);
-	}
-	else ;
-//		*nbr = a;*/
+	*nbr = sum(*nbr, a);
+	zero_passer(nbr, 0);
 }
 
-void		roundd(char **str, int *pre, int sta, int end)
+void				roundd(char **str, int *pre, int sta, int end)
 {
-	int flag;
-	int n;
+	int				flag;
+	int				n;
 
 	n = sta + (*pre > 0 ? *pre : 0);
 	flag = 0;

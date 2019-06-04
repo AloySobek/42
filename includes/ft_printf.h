@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/04 00:22:42 by marvin           ###   ########.fr       */
+/*   Updated: 2019/06/04 20:55:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
 
-# define MIN_LENGTH_FOR_KARATSUBA 4
+# define KARATSUBA_MIN 256
 
 typedef union			u_nbr
 {
@@ -68,11 +68,11 @@ typedef union			u_nbr
 	short				array[5];
 }						t_nbr;
 
-typedef struct			long_nbr_s
+typedef struct			s_long
 {
 	long long			*nbr;
-	unsigned long long	size;
-}						long_nbr_t;	
+	long long			len;
+}						t_long;	
 
 typedef struct			s_bits
 {
@@ -82,8 +82,21 @@ typedef struct			s_bits
 	int					size;
 	int					bit;
 	int					mid;
+	int					exp;
 	t_nbr				nbr;
 }						t_bits;
+
+typedef struct			s_karatsuba_var
+{
+	t_long				res;
+	t_long				a_l;
+	t_long				a_r;
+	t_long				b_l;
+	t_long				b_r;
+	t_long				res_1;
+	t_long				res_2;
+	t_long				res_3;
+}						t_karatsuba_var;
 
 typedef struct			s_buff
 {
@@ -161,7 +174,7 @@ int						add_expo(char **str, size_t *flags, t_bits *tally, int *pre);
 int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
 void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
-void					add_power_neg(char **med, int pwr, int cou);
+void					add_power_neg(char **a, int pwr);
 int						ft_atoi(const char *str);
 void					ft_bzero(void *s, size_t n);
 int						ft_isspace(int c);
@@ -170,6 +183,7 @@ size_t					ft_strlen(const char *s);
 void					*ft_memcpy(void *dst, const void *src, size_t n);
 void					rec_to_n(int *n);
 void					zeroing_buff(int *wid_pre);
-void					test(long_nbr_t *nbr, int power, int base);
+void					test(t_long *nbr, int power);
+void					init_long(t_long *a, int nbr);
 
 #endif

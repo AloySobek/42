@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/02 21:12:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:59:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 	(*tally).nbr.nbr = *nbr;
 	(*tally).mant = *(long long *)&(*tally).nbr.nbr;
 	(*tally).expo = (*tally).nbr.array[4] - 16383;
+	(*tally).exp = (*tally).expo;
 	(*tally).sign = (*tally).nbr.array[4] >> 15;
 	(*tally).mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
 	*nbr != *nbr ? (*flags |= NAN) && (*pre = 0) : 0;
@@ -160,41 +161,50 @@ int		expo_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
-	long_nbr_t whole;
-	long_nbr_t fract;
+	t_long whole;
+	char	*fract;
 	int		cou;
+	int		i;
 
+	init_long(&whole, 0);
+	//fract.nbr = (long long *)malloc(sizeof(long long) * (*tally).size * 2);
+	//ft_bzero(fract.nbr, sizeof(long long) * ((*tally).size * 2));
 	cou = 1;
-	whole.size = 0;
-	fract.size = 0;
+	fract = (char *)malloc((*tally).size * 2);
+	ft_bzero(fract, sizeof(char) * ((*tally).size * 2));
 	while ((*tally).bit-- > 0)
 	{ 
 		if ((*tally).mant & (1L << (*tally).bit))
-			(*tally).expo >= 0 ? test(&whole, (*tally).expo, 2) : test(&fract, -(*tally).expo, 5);
-		(*tally).expo--;
+		{
+			if ((*tally).exp >= 0)
+				test(&whole, (*tally).exp);
+			else
+			{
+				(*tally).size = -(*tally).exp;
+				add_power_neg(&fract, -(*tally).exp);
+			}
+		}
+		(*tally).exp--;
 	}
-	int j = whole.size - 1;
-	while (whole.nbr[j] == 0)
-		j--;
-	while (j >= 0)
-		(*med)[cou++] = whole.nbr[j--] + '0';
+	i = whole.len - 1;
+	while (i >= 0)
+		(*med)[cou++] = whole.nbr[i--] + '0';
 	(*med)[cou++] = '.';
-	j = fract.size - 1;
-	while (fract.nbr[j] == 0 && j >= 0)
-		j--;
-	while (j >= 0)
-	{
-		(*med)[cou++] = fract.nbr[j--] + '0';
-		--(*pre);
-	}
+	(*tally).bit = cou;
+	(*tally).mid = cou - 2;
+	i = 0;
+	while (i < (*tally).size)
+		(*med)[cou++] = fract[i++] + '0';
 	if (SPEC == 'e' || SPEC == 'E')
 		return (expo_handler(med, tally, flags, pre, cou - 1));
 	if (SPEC == 'g' || SPEC == 'G')
 		return (g_handler(med, tally, flags, pre, cou));
-	//roundd(med, pre, (*tally).bit, (*tally).mid);
-	while ((*pre)--)
+	roundd(med, pre, (*tally).mid, (*tally).size);
+	i = 0;
+	while (i++ < *pre)
 		(*med)[cou++] = '0';
-	return (cou);
+	*pre == 0 && !(*flags & HAS) ? (*tally).bit-- : 0;
+	return ((*tally).bit + *pre);
 }
 
 void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
@@ -206,6 +216,7 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 
 	j = 0;
 	i = 1;
+	//printf("%18.42Lf", nbr);
 	get_bits(&tally, &nbr, flags, pre);
 	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 4) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
