@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/31 15:32:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/05 21:10:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,31 @@ int		add_expo(char **str, size_t *flags, t_bits *tally, int *pre)
 {
 	int cou;
 
-	cou = (*tally).bit + (pre > 0 ? *pre : 0);
+	cou = (*tally).mid + (pre > 0 ? *pre : 0) + 2;
 	if (*flags & BIG)
 		(*str)[cou++] = 'E';
 	else
 		(*str)[cou++] = 'e';
-	if ((*tally).size >= 0)
+	if ((*tally).expo >= 0)
 		(*str)[cou++] = '+';
 	else
-		((*str)[cou++] = '-') && ((*tally).size *= -1);
-	if ((*tally).size >= 10 && (*tally).size < 100)
+		((*str)[cou++] = '-') && ((*tally).expo *= -1);
+	if ((*tally).expo >= 10 && (*tally).expo < 100)
 	{
-		(*str)[cou++] = (*tally).size / 10 + '0';
-		(*str)[cou++] = (*tally).size % 10 + '0';
+		(*str)[cou++] = (*tally).expo / 10 + '0';
+		(*str)[cou++] = (*tally).expo % 10 + '0';
 	}
-	else if ((*tally).size >= 100)
+	else if ((*tally).expo >= 100)
 	{
-		(*str)[cou++] = (*tally).size / 100 + '0';
-		(*str)[cou++] = ((*tally).size % 100) / 10 + '0';
-		(*str)[cou++] = ((*tally).size % 100) % 10 + '0';
+		(*str)[cou++] = (*tally).expo / 100 + '0';
+		(*str)[cou++] = ((*tally).expo % 100) / 10 + '0';
+		(*str)[cou++] = ((*tally).expo % 100) % 10 + '0';
 		(*pre)++;
 	}
 	else
 	{
 		(*str)[cou++] = '0';
-		(*str)[cou++] = (*tally).size + '0';
+		(*str)[cou++] = (*tally).expo + '0';
 	}
 	return (1);
 }
@@ -83,18 +83,33 @@ int		calc_expo(char **med, int *pre, int sta, int end)
 	return (expo);
 }
 
-void			round_hex(char **med, int sta, int end, int *pre)
+static int    round_hex(char *s, int spec)
 {
-	int flag;
-	int n;
-	int i;
+	int dif;
 
-	n = sta + *pre;
-	flag = 0;
-	
-	
-	return ;
+	dif = 1;
+	while (*--s != '.' && dif)
+	{
+		*s += (*s == '9' ? spec - '9' : 1);
+		if (*s == spec + 6)
+			*s = '0';
+		else
+			dif = 0;
+	}
+	if (dif)
+	{
+		--s;
+		*s += (*s == '9' ? spec - '9' : 1);
+		if (*s == spec + 6)
+		{
+			*s = '1';
+			return (4);
+		}
+	}
+    return (0);
 }
+//if ((int)n > 8 || ((int)n == 8 && ((int)(n * 16) % 2)))	
+//	p += round_a(out, prm->spec);
 
 int				puthex(char **med, t_bits *tally, size_t *flags, int *pre)
 {
@@ -127,6 +142,7 @@ int				puthex(char **med, t_bits *tally, size_t *flags, int *pre)
 	if (*flags & POI)
 		while ((*pre)-- > 0)
 			(*med)[cou++] = '0';
+	
 	(*med)[cou++] = 'p';
 	expo >= 0 ? (*med)[cou++] = '+' : ((*med)[cou++] = '-') && (expo *= -1);
 	expo < 10 ? ((*med)[cou++] = expo + '0') : 0; 

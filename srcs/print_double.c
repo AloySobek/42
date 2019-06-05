@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/04 20:59:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/05 21:33:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,50 @@ void		inf_handler(size_t *flags)
 	}
 }
 
+void				roundd(char **str, int *pre, int sta, int end)
+{
+	int				flag;
+	int				n;
+
+	n = sta + (*pre > 0 ? *pre : 0);
+	flag = 0;
+	if ((*str)[n + 2] >= '5')
+	{
+		if ((*str)[n + 2] == '5')
+			while (end > n + 2)
+				if ((*str)[end--] > '0' && (flag = 1))
+					break ;
+		if ((*str)[n + 2] > '5')
+			(*str)[n + 1] != '.' ? ++(*str)[n + 1] : ++(*str)[n];
+		else if ((*str)[n + 2] == '5')
+		{
+			if ((*str)[n + 1] != '.')
+				(*str)[n + 1] % 2 != 0 || flag ? ++(*str)[n + 1] : 0;
+			else
+				(*str)[n]  % 2 != 0 || flag ? ++(*str)[n] : 0;
+		}
+	}
+	while ((*str)[n + 1] > '9' && (*str)[n + 1] != '.')
+	{
+		(*str)[n + 1] -= 10;
+		(*str)[n] != '.' ? ++(*str)[n] : ++(*str)[n - 1];
+		n--;
+	}
+	while (n > 0 && (*str)[n] > '9')
+	{
+		(*str)[n] -= 10;
+		++(*str)[n - 1];
+		(*str)[n - 1] < '0' ? (*str)[n - 1] += '0' : 0;
+		n--;
+	}
+}
+
 void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 {
-	(*tally).bit = 64;
 	(*tally).nbr.nbr = *nbr;
 	(*tally).mant = *(long long *)&(*tally).nbr.nbr;
 	(*tally).expo = (*tally).nbr.array[4] - 16383;
+	(*tally).bit = 64;
 	(*tally).exp = (*tally).expo;
 	(*tally).sign = (*tally).nbr.array[4] >> 15;
 	(*tally).mid = (*tally).expo > 0 ? (*tally).expo / 2 + 1 : 2;
@@ -109,102 +147,94 @@ int			g_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 			int cou)
 {
 	int		size;
+	int		i;
 
-	size = (*tally).size;
-	(*tally).size = expo(med, (*tally).bit, (*tally).size);
-	if ((*tally).size < *pre && (*tally).size >= -4)
+	size = (*tally).exp;
+	(*tally).exp = expo(med, (*tally).mid, (*tally).mid + (*tally).size);
+	if ((*tally).exp < *pre && (*tally).exp >= -4)
 	{
-		*pre > 0 ? *pre -= ((*tally).size + 1) : 0;
-		roundd(med, pre, (*tally).bit - 1, (*tally).mid);
-		while (cou <= *pre + (*tally).bit)
+		*pre > 0 ? *pre -= ((*tally).exp + 1) : 0;
+		roundd(med, pre, ((*tally).mid - 2), ((*tally).mid + (*tally).size));
+		i = 0;
+		while (i++ < *pre)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, (*tally).bit);
+		pass_zero(med, flags, pre, (*tally).mid);
 	}
 	else
 	{
 		*pre > 0 ? *pre -= 1 : 0;
-		(*tally).size = calc_expo(med, pre, (*tally).bit, size);
-		//(*tally).bit -= (*tally).size;
-		if (*pre + (*tally).size <= 0 && (*flags & HAS))
-			roundd(med, pre, (*tally).bit - 2, (*tally).mid);
-		else
-			roundd(med, pre, (*tally).bit - 1, (*tally).mid);
-		while (cou <= *pre + (*tally).bit)
+		(*tally).exp = calc_expo(med, pre, (*tally).mid, (*tally).mid + (*tally).size);
+		(*tally).mid = 1;
+		roundd(med, pre, (*tally).mid, (*tally).mid + (*tally).size + ((*tally).exp > 0 ? (*tally).exp : 0));
+		i = 0;
+		while (i++ < *pre)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, (*tally).bit);
-		if ((*tally).size != 0 && add_expo(med, flags, tally, pre))
-			*pre += 4;
+		pass_zero(med, flags, pre, (*tally).mid);
+		add_expo(med, flags, tally, pre);
+		(*tally).mid += 6;
 	}
-	return ((*tally).bit + *pre);
+	return ((*tally).mid + *pre);
 }
 
 int		expo_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 		int cou)
 {
-	(*tally).size = calc_expo(med, pre, (*tally).bit, (*tally).expo);
-	(*tally).bit = 2;
-	*pre > 0 || *flags & HAS ? ++(*pre) : 0;
-	roundd(med, pre, (*tally).bit, (*tally).mid);
+	(*tally).exp = calc_expo(med, pre, (*tally).mid, (*tally).mid + (*tally).size);
+	(*tally).mid = 1;
+	roundd(med, pre, (*tally).mid, (*tally).mid + (*tally).size + ((*tally).exp > 0 ? (*tally).exp : 0));
 	if ((*med)[0] > '0')
 	{
 		(*med)[2] = (*med)[1];
 		(*med)[1] = '.';
-		(*tally).size++;
-		(*pre)--;
+		(*tally).exp++;
+		(*tally).mid = 0;
 	}
-	while (cou <= *pre + (*tally).bit)
+	(*tally).expo = (*tally).exp;
+	while ((*tally).exp++ < *pre)
 		(*med)[cou++] = '0';
+	*pre <= 0 && !(*flags & HAS) ? (*tally).mid-- : 0;
 	add_expo(med, flags, tally, pre);
-	(*tally).size < 0 ? (*tally).size *= -1 : 0;
-	return ((*tally).bit + *pre);
+	return ((*tally).mid + *pre + 2);
 }
 
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
-	t_long whole;
-	char	*fract;
+	t_long	whole;
+	t_long	fract;
 	int		cou;
-	int		i;
 
 	init_long(&whole, 0);
-	//fract.nbr = (long long *)malloc(sizeof(long long) * (*tally).size * 2);
-	//ft_bzero(fract.nbr, sizeof(long long) * ((*tally).size * 2));
+	init_long(&fract, 0);
 	cou = 1;
-	fract = (char *)malloc((*tally).size * 2);
-	ft_bzero(fract, sizeof(char) * ((*tally).size * 2));
 	while ((*tally).bit-- > 0)
 	{ 
 		if ((*tally).mant & (1L << (*tally).bit))
-		{
-			if ((*tally).exp >= 0)
-				test(&whole, (*tally).exp);
-			else
-			{
-				(*tally).size = -(*tally).exp;
-				add_power_neg(&fract, -(*tally).exp);
-			}
-		}
+			(*tally).exp >= 0 ? restorer(&whole, (*tally).exp, 2)
+			: restorer(&fract, -(*tally).exp, 5);
 		(*tally).exp--;
 	}
-	i = whole.len - 1;
-	while (i >= 0)
-		(*med)[cou++] = whole.nbr[i--] + '0';
+	while (--(whole.len) >= 0)
+		(*med)[cou++] = whole.nbr[whole.len] + '0';
 	(*med)[cou++] = '.';
-	(*tally).bit = cou;
-	(*tally).mid = cou - 2;
-	i = 0;
-	while (i < (*tally).size)
-		(*med)[cou++] = fract[i++] + '0';
+	(*tally).mid = cou;
+	fract.power -= fract.len;
+	(*tally).size = fract.len + (fract.power > 0 ? fract.power : 0);
+	while (fract.power-- > 0)
+		(*med)[cou++] = '0';
+	while (--(fract.len) >= 0)
+		(*med)[cou++] = fract.nbr[fract.len] + '0';
+	free(whole.nbr);
+	free(fract.nbr);
 	if (SPEC == 'e' || SPEC == 'E')
-		return (expo_handler(med, tally, flags, pre, cou - 1));
+		return (expo_handler(med, tally, flags, pre, cou));
 	if (SPEC == 'g' || SPEC == 'G')
 		return (g_handler(med, tally, flags, pre, cou));
-	roundd(med, pre, (*tally).mid, (*tally).size);
-	i = 0;
-	while (i++ < *pre)
+	roundd(med, pre, ((*tally).mid - 2), ((*tally).mid + (*tally).size));
+	fract.len = 0;
+	while (fract.len++ < *pre)
 		(*med)[cou++] = '0';
-	*pre == 0 && !(*flags & HAS) ? (*tally).bit-- : 0;
-	return ((*tally).bit + *pre);
+	*pre == 0 && !(*flags & HAS) ? (*tally).mid-- : 0;
+	return ((*tally).mid + *pre);
 }
 
 void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
@@ -216,7 +246,6 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 
 	j = 0;
 	i = 1;
-	//printf("%18.42Lf", nbr);
 	get_bits(&tally, &nbr, flags, pre);
 	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 4) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;

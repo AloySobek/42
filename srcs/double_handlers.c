@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 18:28:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/05 19:22:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	double_handler(va_list *list, size_t *flags, int *wid, int *pre)
 {
 	(SPEC) == 'F' || SPEC == 'E' || SPEC == 'G' ? *flags |= BIG : 0;
 	!(*flags & BIA) && (*flags & NUL) ? (*flags |= 48) : 0;
-	!(*flags & POI) ? *pre = 6 : 0;
+	!(*flags & POI) || *pre < 0 ? *pre = 6 : 0;
 	*flags |= FLO;
 	if (*flags & BL)
 		print_double(va_arg(*list, long double), flags, wid, pre);

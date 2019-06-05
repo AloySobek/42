@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/04 20:55:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/05 20:32:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define BASE			((*flags << 48) >> 56)
 # define SIGN			(*flags << 56) >> 56
 
-# define KARATSUBA_MIN 256
+# define KARATSUBA_MIN 128
 
 typedef union			u_nbr
 {
@@ -72,6 +72,7 @@ typedef struct			s_long
 {
 	long long			*nbr;
 	long long			len;
+	long long			power;
 }						t_long;	
 
 typedef struct			s_bits
@@ -93,9 +94,12 @@ typedef struct			s_karatsuba_var
 	t_long				a_r;
 	t_long				b_l;
 	t_long				b_r;
-	t_long				res_1;
-	t_long				res_2;
-	t_long				res_3;
+	t_long				sum1;
+	t_long				sum2;
+	t_long				res1;
+	t_long				res2;
+	t_long				res3;
+	int					i;
 }						t_karatsuba_var;
 
 typedef struct			s_buff
@@ -183,7 +187,14 @@ size_t					ft_strlen(const char *s);
 void					*ft_memcpy(void *dst, const void *src, size_t n);
 void					rec_to_n(int *n);
 void					zeroing_buff(int *wid_pre);
-void					test(t_long *nbr, int power);
+void					restorer(t_long *nbr, int power, int base);
 void					init_long(t_long *a, int nbr);
+void					normalize(t_long *a);
+t_long					sum(t_long a, t_long b);
+void					zero_passer(t_long *a);
+void					tidy_up(t_karatsuba_var *var);
+t_long					*sub(t_long *a, t_long b);
+void					init_var(t_long *a, t_karatsuba_var *var, int flag);
+void					restore_parity(t_long *a, int len);
 
 #endif

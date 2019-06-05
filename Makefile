@@ -6,7 +6,8 @@ SRC =     $(addprefix $(SRCDIR)/, ft_printf.c char_handlers.c constructor.c \
 		  		addit_func.c decimal_handlers.c double_handlers.c \
 				parse_string.c print_char.c print_double.c print_expo_double.c \
 				print_integer.c ft_atoi.c ft_isspace.c ft_strlen.c \
-				ft_bzero.c ft_strcmp.c ft_memcpy.c long_arithmetic.c)
+				ft_bzero.c ft_strcmp.c ft_memcpy.c long_arithmetic.c long_arithmetic2.c \
+				long_arithmetic3.c)
 
 OBJ = ${SRC:.c=.o}
 

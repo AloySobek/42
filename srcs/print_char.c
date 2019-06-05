@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/16 13:25:24 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/30 20:19:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/05 16:42:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			unistrlen(const wchar_t *s)
 
 void		print_any_char(wchar_t c, size_t *flags, int *wid)
 {
-	c >= 0xD800 && c <= 0xDBFF ? EJECT(BUFF_SIZE) && (BUFF.g_error = -1) : 0;
+	//c >= 0xD800 && c <= 0xDBFF ? EJECT(BUFF_SIZE) && (BUFF.g_error = -1) : 0;
 	(*wid)--;
 	if (!(*flags & BIA))
 		while ((*wid)-- > 0 && EJECT(1))
