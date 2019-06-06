@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/16 13:25:24 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 16:42:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 17:09:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			unistrlen(const wchar_t *s)
 
 void		print_any_char(wchar_t c, size_t *flags, int *wid)
 {
-	//c >= 0xD800 && c <= 0xDBFF ? EJECT(BUFF_SIZE) && (BUFF.g_error = -1) : 0;
+	c >= 0xD800 && c <= 0xDBFF ? EJECT(BUFF_SIZE) && (BUFF.g_error = -1) : 0;
 	(*wid)--;
 	if (!(*flags & BIA))
 		while ((*wid)-- > 0 && EJECT(1))
@@ -45,9 +45,12 @@ void		print_uni_string(wchar_t *s, size_t *flags, int *wid, int *pre)
 		while (((*wid)-- > 0) && EJECT(1))
 			BUFF.g_buff[BUFF.g_count++] = SIGN;
 	if (*flags & POI)
+	{
 		while (*s && (*pre)-- > 0 && EJECT(1))
 			(*flags & UNI && *s > 127) ? uni(*s++) :
 			(BUFF.g_buff[BUFF.g_count++] = *s++);
+		*pre < 0 ? *wid += -(*pre) : 0;
+	}
 	else
 		while (*s && EJECT(1))
 			*flags & UNI && *s > 127 ? uni(*s++) :

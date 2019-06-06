@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 21:33:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 17:12:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void				roundd(char **str, int *pre, int sta, int end)
 			if ((*str)[n + 1] != '.')
 				(*str)[n + 1] % 2 != 0 || flag ? ++(*str)[n + 1] : 0;
 			else
-				(*str)[n]  % 2 != 0 || flag ? ++(*str)[n] : 0;
+				(*str)[n] % 2 != 0 || flag ? ++(*str)[n] : 0;
 		}
 	}
 	while ((*str)[n + 1] > '9' && (*str)[n + 1] != '.')
@@ -100,19 +100,16 @@ void		get_bits(t_bits *tally, long double *nbr, size_t *flags, int *pre)
 		(*tally).size = (*tally).expo;
 }
 
-void		pass_zero(char **med, size_t *flags, int *pre, int bit)
+void		pass_zero(char **med, size_t *flags, int *pre, int sta)
 {
-	int flag;
+	int n;
 
-	flag = 0;
+	n = sta + (*pre > 0 ? *pre : 0);
 	if (!(*flags & HAS))
 	{
-		if ((*med)[1] == '0')
-			flag = 1;
-		while ((*med)[bit + *pre - 1] == '0')
+		while ((*med)[n--] == '0')
 			(*pre)--;
-		flag && (*flags & POI && *pre == -1) ? (*pre)++ : 0;
-		(*med)[bit + *pre - 1] == '.' ? (*pre)-- : 0;
+		(*med)[n + 1] == '.' ? (*pre)-- : 0;
 	}
 }
 
@@ -148,30 +145,37 @@ int			g_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 {
 	int		size;
 	int		i;
+	int		flag;
 
 	size = (*tally).exp;
-	(*tally).exp = expo(med, (*tally).mid, (*tally).mid + (*tally).size);
-	if ((*tally).exp < *pre && (*tally).exp >= -4)
+	(*tally).expo = expo(med, (*tally).mid, (*tally).mid + (*tally).size);
+	if ((*tally).expo < *pre && (*tally).expo >= -4)
 	{
-		*pre > 0 ? *pre -= ((*tally).exp + 1) : 0;
+		*pre > 0 ? *pre -= ((*tally).expo + 1) : 0;
 		roundd(med, pre, ((*tally).mid - 2), ((*tally).mid + (*tally).size));
 		i = 0;
 		while (i++ < *pre)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, (*tally).mid);
+		pass_zero(med, flags, pre, (*tally).mid - 1);
 	}
 	else
 	{
 		*pre > 0 ? *pre -= 1 : 0;
-		(*tally).exp = calc_expo(med, pre, (*tally).mid, (*tally).mid + (*tally).size);
-		(*tally).mid = 1;
-		roundd(med, pre, (*tally).mid, (*tally).mid + (*tally).size + ((*tally).exp > 0 ? (*tally).exp : 0));
+		(*tally).expo = calc_expo(med, pre, (*tally).mid, (*tally).mid + (*tally).size);
+		(*tally).mid = 3;
+		roundd(med, pre, (*tally).mid - 2, (*tally).mid + (*tally).size + ((*tally).expo > 0 ? (*tally).expo : 0));
+		if ((*med)[0] > '0')
+		{
+			(*med)[2] = (*med)[1];
+			(*med)[1] = '.';
+			(*tally).expo++;
+			(*tally).mid = 2;
+		}
 		i = 0;
 		while (i++ < *pre)
 			(*med)[cou++] = '0';
-		pass_zero(med, flags, pre, (*tally).mid);
-		add_expo(med, flags, tally, pre);
-		(*tally).mid += 6;
+		pass_zero(med, flags, pre, (*tally).mid - 1);
+		(*tally).expo != 0 ? add_expo(med, flags, tally, pre) && ((*pre) += 4) : 0;
 	}
 	return ((*tally).mid + *pre);
 }
@@ -180,22 +184,24 @@ int		expo_handler(char **med, t_bits *tally, size_t *flags, int *pre,
 		int cou)
 {
 	(*tally).exp = calc_expo(med, pre, (*tally).mid, (*tally).mid + (*tally).size);
-	(*tally).mid = 1;
-	roundd(med, pre, (*tally).mid, (*tally).mid + (*tally).size + ((*tally).exp > 0 ? (*tally).exp : 0));
+	(*tally).mid = 3;
+	roundd(med, pre, (*tally).mid - 2, (*tally).mid + (*tally).size + ((*tally).exp > 0 ? (*tally).exp : 0));
 	if ((*med)[0] > '0')
 	{
 		(*med)[2] = (*med)[1];
 		(*med)[1] = '.';
 		(*tally).exp++;
-		(*tally).mid = 0;
+		(*tally).mid = 2;
 	}
 	(*tally).expo = (*tally).exp;
 	while ((*tally).exp++ < *pre)
 		(*med)[cou++] = '0';
 	*pre <= 0 && !(*flags & HAS) ? (*tally).mid-- : 0;
 	add_expo(med, flags, tally, pre);
-	return ((*tally).mid + *pre + 2);
+	return ((*tally).mid + *pre);
 }
+
+void		main_loop(t_long *whole, t_long *fract)
 
 int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 {
@@ -207,7 +213,7 @@ int			putfloat(char **med, t_bits *tally, size_t *flags, int *pre)
 	init_long(&fract, 0);
 	cou = 1;
 	while ((*tally).bit-- > 0)
-	{ 
+	{
 		if ((*tally).mant & (1L << (*tally).bit))
 			(*tally).exp >= 0 ? restorer(&whole, (*tally).exp, 2)
 			: restorer(&fract, -(*tally).exp, 5);

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 20:32:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 16:19:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct			s_long
 	long long			*nbr;
 	long long			len;
 	long long			power;
-}						t_long;	
+}						t_long;
 
 typedef struct			s_bits
 {

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/31 12:17:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 16:36:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	constructor(size_t *flags)
 	if (!(*flags & NEG) && !(*flags & PLU) && *flags & SPA && (BASE == 10
 		|| *flags & FLO) && !(*flags & NAN) && EJECT(1))
 		BUFF.g_buff[BUFF.g_count++] = ' ';
-	if ((((*flags & HAS && BASE == 16 && !(*flags & BIG)) || *flags & PTR) &&
-		!(*flags & ZER) && EJECT(2)) || SPEC == 'a' || SPEC == 'A')
+	if ((((*flags & HAS && BASE == 16 && !(*flags & (BIG | ZER))) ||
+	*flags & PTR) && EJECT(2)) || (SPEC == 'a' && !(*flags & (INF | NAN))))
 	{
 		BUFF.g_buff[BUFF.g_count++] = '0';
 		BUFF.g_buff[BUFF.g_count++] = 'x';
 	}
-	else if ((*flags & HAS && BASE == 16 && !(*flags & PTR) && !(*flags & ZER)
-		&& EJECT(2)) || SPEC == 'a' || SPEC == 'A')
+	else if ((*flags & HAS && BASE == 16 && !(*flags & ZER)
+		&& EJECT(2)) || (SPEC == 'A' && !(*flags & (INF | NAN))))
 	{
 		BUFF.g_buff[BUFF.g_count++] = '0';
 		BUFF.g_buff[BUFF.g_count++] = 'X';
@@ -57,15 +57,15 @@ void	adjustment_wid_pre(size_t *flags, int *wid, int *pre, int len)
 		*wid -= 1;
 	if (SIGN == 32)
 	{
-		if (*flags & HAS && BASE == 8 && !(*flags & ZER) && !(*flags & FLO))
-			*wid -= 1;
+		*flags & HAS && BASE == 8 && !(*flags & (ZER | FLO)) ? *wid -= 1 : 0;
 		*wid -= (*flags & HAS && (BASE == 16 || BASE == 2) && !(*flags & ZER)
-		&& !(*flags & FLO)) || SPEC == 'a' || SPEC == 'A' ? 2 : 0;
+		&& !(*flags & FLO)) ? 2 : 0;
+		*wid -= (SPEC == 'a' || SPEC == 'A') && !(*flags & (NAN | INF)) ? 2 : 0;
 	}
 	else
 	{
 		if ((*flags & HAS && !(*flags & FLO) && !(*flags & ZER) && BASE != 10)
-			|| SPEC == 'a' || SPEC == 'A')
+			|| ((SPEC == 'a' || SPEC == 'A') && !(*flags & (INF | NAN))))
 			*wid -= ((BASE == 8) ? 1 : 2);
 	}
 }

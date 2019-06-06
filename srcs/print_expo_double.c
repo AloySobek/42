@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 21:10:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 17:03:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		add_expo(char **str, size_t *flags, t_bits *tally, int *pre)
 {
 	int cou;
 
-	cou = (*tally).mid + (pre > 0 ? *pre : 0) + 2;
+	cou = (*tally).mid + (pre > 0 ? *pre : 0);
 	if (*flags & BIG)
 		(*str)[cou++] = 'E';
 	else
@@ -83,42 +83,64 @@ int		calc_expo(char **med, int *pre, int sta, int end)
 	return (expo);
 }
 
-static int    round_hex(char *s, int spec)
+void			my_roundd(char **med, int *expo, int sta)
 {
-	int dif;
+	int i;
 
-	dif = 1;
-	while (*--s != '.' && dif)
+	i = sta - 1;
+	if ((*med)[i] != '.')
 	{
-		*s += (*s == '9' ? spec - '9' : 1);
-		if (*s == spec + 6)
-			*s = '0';
-		else
-			dif = 0;
-	}
-	if (dif)
-	{
-		--s;
-		*s += (*s == '9' ? spec - '9' : 1);
-		if (*s == spec + 6)
+		++(*med)[i];
+		while ((*med)[i] >= 16)
 		{
-			*s = '1';
-			return (4);
+			(*med)[i - 1] != '.' ? ++(*med)[i - 1] : ++(*med)[i - 2] && i--;
+			(*med)[i] -= 16;
+			i--;
 		}
 	}
-    return (0);
+	else
+	{
+		++(*med)[i - 1];
+		if ((*med)[i - 1] >= 16)
+		{
+			*expo += 4;
+			(*med)[i - 1] -= 16;
+		}
+	}
 }
-//if ((int)n > 8 || ((int)n == 8 && ((int)(n * 16) % 2)))	
-//	p += round_a(out, prm->spec);
+
+int			compute_nbr(long double nbr)
+{
+	nbr *= 16;
+	nbr -= (int)nbr;
+	if ((int)(nbr * 16) % 2)
+		return (1);
+	else
+		return (0);
+}
+
+void			transfer(char **med, size_t *flags, int *expo)
+{
+	if (*flags & BL)
+	{
+		;
+	}
+	else
+		(*med)[0] >= 2 ? (*med)[0] = 1 && (*expo += 1) : 0;
+}
 
 int				puthex(char **med, t_bits *tally, size_t *flags, int *pre)
 {
 	long double nbr;
 	int expo;
 	int cou;
+	int test;
+	int hello;
+	int flag;
 
 	expo = 0;
 	cou = 0;
+	flag = 0;
 	nbr = (*tally).nbr.nbr;
 	nbr < 0 ? nbr *= -1 : 0;
 	if (nbr > (*flags & BL ? 15 : 2))
@@ -127,28 +149,50 @@ int				puthex(char **med, t_bits *tally, size_t *flags, int *pre)
 	else
 		while (nbr != 0 && nbr < ((*flags & BL) ? 8 : 1) && expo-- <= 0)
 			nbr *= 2;
-	(*med)[cou++] = (int)nbr > 9 ? (int)nbr + 87 : (int)nbr + 48;
+	(*med)[cou++] = (int)nbr;
 	nbr -= (int)nbr;
-	if ((*flags & POI))
-		*pre > 0 || (*flags & HAS) ? (*med)[cou++] = '.' : 0;
-	else
-		(*tally).nbr.nbr != 0 || (*flags & HAS) ? (*med)[cou++] = '.' : 0;
+	(*med)[cou++] = '.';
+	hello = *pre;
 	while (nbr && (*flags & POI ? (*pre)-- > 0 : 1))
 	{
+		flag = 1;
 		nbr *= 16;
-		(*med)[cou++] = (int)nbr + ((int)nbr > 9 ? 87 : 48);
+		(*med)[cou++] = (int)nbr;
 		nbr -= (int)nbr;
+	}
+	transfer(med, flags, &expo);
+	if ((int)(nbr * 16) > 8 || ((int)(nbr * 16) == 8 && compute_nbr(nbr)))
+		my_roundd(med, &expo, cou);
+	int i = -1;
+	while (++i < cou)
+	{
+		if ((*med)[i] == '.')
+			continue;
+		(*med)[i] < 10 ? (*med)[i] += 48 : ((*med)[i] += (*flags & BIG ? 55 : 87));
+	}
+	if (*flags & POI)
+		hello <= 0 && !(*flags & HAS) ? cou-- : 0;
+	else
+	{
+		(*tally).nbr.nbr == 0 && !(*flags & HAS) ? cou-- : 0;
+		(*tally).nbr.nbr != 0 && !flag && expo == 0 && !(*flags & HAS) ? cou-- : 0;
 	}
 	if (*flags & POI)
 		while ((*pre)-- > 0)
 			(*med)[cou++] = '0';
-	
-	(*med)[cou++] = 'p';
+	(*med)[cou++] = *flags & BIG ? 'P' : 'p';
 	expo >= 0 ? (*med)[cou++] = '+' : ((*med)[cou++] = '-') && (expo *= -1);
-	expo < 10 ? ((*med)[cou++] = expo + '0') : 0; 
+	expo < 10 ? ((*med)[cou++] = expo + '0') : 0;
 	expo >= 10 && expo < 100 ? ((*med)[cou++] = expo / 10 + '0') && ((*med)[cou++] = expo % 10 + '0') : 0;
 	expo >= 100 && expo < 1000 ? ((*med)[cou++] = expo / 100 + '0') && ((*med)[cou++] = (expo % 100) / 10 + '0') && ((*med)[cou++] = expo % 10 + '0') : 0;
-	return (cou);
+	if (expo >= 1000 && expo < 10000)
+	{
+		(*med)[cou++] = expo / 1000 + '0';
+		(*med)[cou++] = (expo % 1000) / 100 + '0';
+		(*med)[cou++] = (expo % 100) / 10 + '0';
+		(*med)[cou++] = expo % 10 + '0';
+	}
+ 	return (cou);
 }
 
 void	print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre)
