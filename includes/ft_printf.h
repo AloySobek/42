@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 16:19:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 20:50:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@
 
 typedef union			u_nbr
 {
-	long double			nbr;
+	long double			nb;
 	short				array[5];
 }						t_nbr;
 
@@ -77,13 +77,13 @@ typedef struct			s_long
 
 typedef struct			s_bits
 {
-	unsigned long long	mant: 64;
-	long long			expo: 15;
-	long long			sign: 1;
+	unsigned long long	mantis: 64;
+	int					exhibi: 15;
+	int					negati: 1;
+	int					carria;
+	int					middle;
+	int					tmp_ex;
 	int					size;
-	int					bit;
-	int					mid;
-	int					exp;
 	t_nbr				nbr;
 }						t_bits;
 
@@ -157,7 +157,7 @@ void					adjustment_wid_pre(size_t *flags, int *wid,
 						int *pre, int i);
 void					inf_handler(size_t *flags);
 void					roundd(char **str, int *pre, int zer, int che);
-void					get_bits(t_bits *tally, long double *nbr,
+void					bits_handler(t_bits *tally, long double *nbr,
 						size_t *flags, int *pre);
 void					hexadecimal_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
@@ -173,9 +173,12 @@ void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
+void					print_non_printable(char *str, size_t *flags, int *wid, int *pre);
+int						choose_betw_f_e(char **med, t_bits *tally, size_t *flags, int *pre);
+int						swimming_dot(char **str, int *pre, int sta, int end);
+int						scientific_record(char **med, t_bits *tally, size_t *flags, int *pre);
 void					print_date(long long iso, size_t *flags, int *wid, int *pre);
 int						add_expo(char **str, size_t *flags, t_bits *tally, int *pre);
-int						calc_expo(char **med, int *pre, int sta, int end);
 void					add_power(char **med, int pwr, int cou);
 void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
 void					add_power_neg(char **a, int pwr);

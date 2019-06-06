@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/05/31 12:48:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 20:32:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-void	print_thirsty(char c)
+void			print_thirsty(char c)
 {
 	if (c == 21)
 		write(BUFF.g_fd, "[NAK]", 5);
@@ -38,7 +38,7 @@ void	print_thirsty(char c)
 		write(BUFF.g_fd, "[US]", 4);
 }
 
-void	print_twenty(char c)
+void			print_twenty(char c)
 {
 	if (c == 11)
 		write(BUFF.g_fd, "[VT]", 5);
@@ -62,7 +62,7 @@ void	print_twenty(char c)
 		write(BUFF.g_fd, "[DC4]", 5);
 }
 
-void	print_ten(char c)
+void			print_ten(char c)
 {
 	if (c == 1)
 		write(BUFF.g_fd, "[SOH]", 5);
@@ -86,38 +86,8 @@ void	print_ten(char c)
 		write(BUFF.g_fd, "[LF]", 4);
 }
 
-void	rec_to_n(int *n)
-{
-	EJECT(BUFF_SIZE);
-	*n = BUFF.g_bytes;
-}
-
-void		zeroing_buff(int *wid_pre)
-{
-	BUFF.g_count = 0;
-	BUFF.g_bytes = 0;
-	BUFF.g_fd = 1;
-	BUFF.g_error = 0;
-	wid_pre[0] = 0;
-	wid_pre[1] = 0;
-}
-
-int		shift(size_t *flags, int howmuch, char direction)
-{
-	if (direction == 'l')
-	{
-		*flags <<= howmuch;
-		*flags >>= howmuch;
-	}
-	else if (direction == 'r')
-	{
-		*flags >>= howmuch;
-		*flags <<= howmuch;
-	}
-	return (1);
-}
-
-void	print_non_printable(char *str, size_t *flags, int *wid, int *pre)
+void			print_non_printable(char *str, size_t *flags, int *wid,
+				int *pre)
 {
 	while (*str != 0)
 	{
@@ -138,35 +108,28 @@ void	print_non_printable(char *str, size_t *flags, int *wid, int *pre)
 void			print_date(long long iso, size_t *flags, int *wid, int *pre)
 {
 	char		*date;
-	long long	tmp;
-	long long	k;
+	long long	i_k[2];
 	int			cou;
-	int			i;
 
-	if (!(date = (char *)malloc(sizeof(char) * 32)) && (BUFF.g_error = -1))
-		return ;
-	k = 1;
-	tmp = iso;
-	while ((tmp /= 10))
-		k *= 10;
-	cou = 0;
-	i = -1;
-	while (++i < 14)
+	if (!(date = (char *)malloc(sizeof(char) * 32)))
 	{
-		i == 4 || i == 6 ? date[cou++] = '-' : 0;
-		i == 8 ? date[cou++] = 'T': 0;
-		i == 10 || i == 12 ? date[cou++] = ':' : 0;
-		date[cou++] = iso / k + '0';
-		iso %= k;
-		k /= 10;
+		BUFF.g_error = -1;
+		return ;
+	}
+	i_k[1] = 1;
+	i_k[0] = iso;
+	while ((i_k[0] /= 10))
+		i_k[1] *= 10;
+	cou = 0;
+	i_k[0] = -1;
+	while (++(i_k[0]) < 14)
+	{
+		i_k[0] == 4 || i_k[0] == 6 ? date[cou++] = '-' : 0;
+		i_k[0] == 8 ? date[cou++] = 'T' : 0;
+		i_k[0] == 10 || i_k[0] == 12 ? date[cou++] = ':' : 0;
+		date[cou++] = iso / i_k[1] + '0';
+		iso %= i_k[1];
+		i_k[1] /= 10;
 	}
 	print_usual_string(date, flags, wid, pre);
-}
-
-void	date_nprint(va_list *list, size_t *flags, int *wid, int *pre)
-{
-	if (SPEC == 'k')
-		print_date(va_arg(*list, long long), flags, wid, pre);
-	else
-		print_non_printable(va_arg(*list, char *), flags, wid, pre);
 }

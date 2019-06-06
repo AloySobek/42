@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 12:26:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 16:23:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 20:32:20 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,12 @@ void	string_handler(va_list *list, size_t *flags, int *wid, int *pre)
 		print_uni_string(va_arg(*list, wchar_t *), flags, wid, pre);
 	else
 		print_usual_string(va_arg(*list, char *), flags, wid, pre);
+}
+
+void	date_nprint(va_list *list, size_t *flags, int *wid, int *pre)
+{
+	if (SPEC == 'k')
+		print_date(va_arg(*list, long long), flags, wid, pre);
+	else
+		print_non_printable(va_arg(*list, char *), flags, wid, pre);
 }
