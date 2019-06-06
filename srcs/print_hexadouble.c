@@ -6,53 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 21:32:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 21:42:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-
-void			my_roundd(char **med, t_bits *tally, int sta)
-{
-	int			i;
-
-	i = sta - 1;
-	if ((*med)[i] != '.')
-	{
-		++(*med)[i];
-		while ((*med)[i] >= 16)
-		{
-			(*med)[i - 1] != '.' ? ++(*med)[i - 1] : ++(*med)[i - 2] && i--;
-			(*med)[i] -= 16;
-			i--;
-		}
-	}
-	else
-	{
-		++(*med)[i - 1];
-		if ((*med)[i - 1] >= 16)
-		{
-			(*tally).exhibi += 4;
-			(*med)[i - 1] -= 16;
-		}
-	}
-}
-
-int				compute_nbr(long double nbr)
-{
-	nbr *= 16;
-	nbr -= (int)nbr;
-	if ((int)(nbr * 16) % 2)
-		return (1);
-	else
-		return (0);
-}
-
-void			transfer(char **med, size_t *flags, t_bits *tally)
-{
-	if (!(*flags & BL))
-		(*med)[0] >= 2 ? (*med)[0] = 1 && ((*tally).exhibi += 1) : 0;
-}
 
 int				calc_expo(char **str, long double *nbr, size_t *flags,
 				int *count)
@@ -140,7 +98,8 @@ int				puthex(char **str, t_bits *tally, size_t *flags, int *pre)
 		(*str)[count++] = (int)nbr;
 		nbr -= (int)nbr;
 	}
-	transfer(str, flags, tally);
+	if (!(*flags & BL))
+		(*str)[0] >= 2 ? (*str)[0] = 1 && ((*tally).exhibi += 1) : 0;
 	if ((int)(nbr * 16) > 8 || ((int)(nbr * 16) == 8 && compute_nbr(nbr)))
 		my_roundd(str, tally, count);
 	puthex2(str, tally, flags, &count);

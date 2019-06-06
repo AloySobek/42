@@ -6,11 +6,21 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 19:09:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 20:24:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 21:42:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
+
+int					compute_nbr(long double nbr)
+{
+	nbr *= 16;
+	nbr -= (int)nbr;
+	if ((int)(nbr * 16) % 2)
+		return (1);
+	else
+		return (0);
+}
 
 void				normalize(t_long *a)
 {

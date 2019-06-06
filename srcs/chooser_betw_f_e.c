@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 17:39:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 20:33:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 21:43:56 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,32 @@ void		pass_zero(char **med, size_t *flags, int *pre, int sta)
 		while ((*med)[n--] == '0')
 			(*pre)--;
 		(*med)[n + 1] == '.' ? (*pre)-- : 0;
+	}
+}
+
+void		my_roundd(char **med, t_bits *tally, int sta)
+{
+	int		i;
+
+	i = sta - 1;
+	if ((*med)[i] != '.')
+	{
+		++(*med)[i];
+		while ((*med)[i] >= 16)
+		{
+			(*med)[i - 1] != '.' ? ++(*med)[i - 1] : ++(*med)[i - 2] && i--;
+			(*med)[i] -= 16;
+			i--;
+		}
+	}
+	else
+	{
+		++(*med)[i - 1];
+		if ((*med)[i - 1] >= 16)
+		{
+			(*tally).exhibi += 4;
+			(*med)[i - 1] -= 16;
+		}
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 20:50:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/06 21:41:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,14 +173,20 @@ void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
-void					print_non_printable(char *str, size_t *flags, int *wid, int *pre);
-int						choose_betw_f_e(char **med, t_bits *tally, size_t *flags, int *pre);
+void					print_non_printable(char *str, size_t *flags, int *wid,
+						int *pre);
+int						choose_betw_f_e(char **med, t_bits *tally,
+						size_t *flags, int *pre);
 int						swimming_dot(char **str, int *pre, int sta, int end);
-int						scientific_record(char **med, t_bits *tally, size_t *flags, int *pre);
-void					print_date(long long iso, size_t *flags, int *wid, int *pre);
-int						add_expo(char **str, size_t *flags, t_bits *tally, int *pre);
+int						scientific_record(char **med, t_bits *tally,
+						size_t *flags, int *pre);
+void					print_date(long long iso, size_t *flags, int *wid,
+						int *pre);
+int						add_expo(char **str, size_t *flags, t_bits *tally,
+						int *pre);
 void					add_power(char **med, int pwr, int cou);
-void					print_hexadouble(long double nbr, size_t *flags, int *wid, int *pre);
+void					print_hexadouble(long double nbr, size_t *flags,
+						int *wid, int *pre);
 void					add_power_neg(char **a, int pwr);
 int						ft_atoi(const char *str);
 void					ft_bzero(void *s, size_t n);
@@ -199,5 +205,7 @@ void					tidy_up(t_karatsuba_var *var);
 t_long					*sub(t_long *a, t_long b);
 void					init_var(t_long *a, t_karatsuba_var *var, int flag);
 void					restore_parity(t_long *a, int len);
+void					my_roundd(char **med, t_bits *tally, int sta);
+int						compute_nbr(long double nbr);
 
 #endif
