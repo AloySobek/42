@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:36:35 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 16:36:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:04:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,29 @@ void	fill_width(size_t *flags, int *wid)
 	}
 	else
 		constructor(flags);
+}
+
+void	zeroing_buff(int *wid_pre)
+{
+	BUFF.g_count = 0;
+	BUFF.g_bytes = 0;
+	BUFF.g_fd = 1;
+	BUFF.g_error = 0;
+	wid_pre[0] = 0;
+	wid_pre[1] = 0;
+}
+
+int		shift(size_t *flags, int howmuch, char direction)
+{
+	if (direction == 'l')
+	{
+		*flags <<= howmuch;
+		*flags >>= howmuch;
+	}
+	else if (direction == 'r')
+	{
+		*flags >>= howmuch;
+		*flags <<= howmuch;
+	}
+	return (1);
 }

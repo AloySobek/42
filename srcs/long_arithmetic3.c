@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 19:09:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 21:42:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:19:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ t_long				sum(t_long a, t_long b)
 	int				i;
 
 	s.len = a.len > b.len ? a.len + 1 : b.len + 1;
-	s.nbr = (long long *)malloc(sizeof(long long) * s.len);
+	if (!(s.nbr = (long long *)malloc(sizeof(long long) * s.len)))
+		exit(1);
 	ft_bzero(s.nbr, sizeof(long long) * s.len);
 	i = -1;
 	while (++i < s.len)
@@ -68,7 +69,8 @@ void				restore_parity(t_long *a, int len)
 	int				y;
 	int				z;
 
-	new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len + len));
+	if (!(new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len + len))))
+		exit(1);
 	ft_bzero(new_nbr, sizeof(long long) * ((*a).len + len));
 	x = 0;
 	y = len;

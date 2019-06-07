@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 16:47:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:03:59 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,10 @@ void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 		g_buff__.g_buff[g_buff__.g_count++] = tra[j];
 	while ((*wid)-- > 0 && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = SIGN;
+}
+
+void		rec_to_n(int *n)
+{
+	EJECT(BUFF_SIZE);
+	*n = BUFF.g_bytes;
 }

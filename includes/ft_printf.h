@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 21:41:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:57:03 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,6 @@ void					hexadecimal_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					unsigned_decimal_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
-void					print_expo_double(long double nbr, size_t *flags,
-						int *wid, int *pre);
 void					print_double_g_f(long double nbr, size_t *flags,
 						int *wid, int *pre);
 void					date_nprint(va_list *list, size_t *flags, int *wid,
@@ -173,8 +171,7 @@ void					hexadouble_handler(va_list *list, size_t *flags,
 						int *wid, int *pre);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
-void					print_non_printable(char *str, size_t *flags, int *wid,
-						int *pre);
+void					print_non_printable(char *str);
 int						choose_betw_f_e(char **med, t_bits *tally,
 						size_t *flags, int *pre);
 int						swimming_dot(char **str, int *pre, int sta, int end);
@@ -184,10 +181,8 @@ void					print_date(long long iso, size_t *flags, int *wid,
 						int *pre);
 int						add_expo(char **str, size_t *flags, t_bits *tally,
 						int *pre);
-void					add_power(char **med, int pwr, int cou);
 void					print_hexadouble(long double nbr, size_t *flags,
 						int *wid, int *pre);
-void					add_power_neg(char **a, int pwr);
 int						ft_atoi(const char *str);
 void					ft_bzero(void *s, size_t n);
 int						ft_isspace(int c);

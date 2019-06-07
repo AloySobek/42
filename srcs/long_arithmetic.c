@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/26 15:10:22 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 20:32:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:21:59 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int					compensation(t_long *a, int zero)
 	int				y;
 	int				z;
 
-	new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len - zero));
+	if (!(new_nbr = (long long *)malloc(sizeof(long long) * ((*a).len - zero))))
+		exit(1);
 	ft_bzero(new_nbr, sizeof(long long) * ((*a).len - zero));
 	x = 0;
 	y = 0;
@@ -54,7 +55,7 @@ t_long				karatsuba(t_long a, t_long b)
 	t_karatsuba_var	var;
 
 	var.res.len = a.len + b.len;
-	var.res.nbr = (long long *)malloc(sizeof(long long) * var.res.len);
+	!(var.res.nbr = (long long *)malloc(8 * var.res.len)) ? exit(1) : 0;
 	if (a.len < KARATSUBA_MIN || b.len < KARATSUBA_MIN)
 		multi(a, b, &var.res);
 	else

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:26:30 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 20:33:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:20:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ void		print_double(long double nbr, size_t *flags, int *wid, int *pre)
 	j = 0;
 	i = 1;
 	bits_handler(&tally, &nbr, flags, pre);
-	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 4) : 0;
+	if (!(*flags & (INF | NAN)))
+		!(med = (char *)malloc(tally.size * 4)) ? exit(1) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
 	!(*flags & (INF | NAN)) ? j = putfloat(&med, &tally, flags, pre) : 0;
 	!(*flags & (INF | NAN)) && med[0] >= '0' ? i = 0 : 0;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 19:07:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/05 20:30:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:18:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void				init_long(t_long *a, int nbr)
 {
-	(*a).nbr = (long long *)malloc(sizeof(long long));
+	if (!((*a).nbr = (long long *)malloc(sizeof(long long))))
+		exit(1);
 	(*a).len = 1;
 	(*a).nbr[0] = nbr;
 	(*a).power = 0;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 17:39:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 21:43:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:57:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void		choose_betw_f_g2(char **str, t_bits *tally, size_t *flags, int *pre)
 int			choose_betw_f_e(char **str, t_bits *tally, size_t *flags, int *pre)
 {
 	int		i;
-	int		flag;
 	int		cou;
 
 	cou = (*tally).tmp_ex;

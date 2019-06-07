@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 21:42:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:20:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ void			print_hexadouble(long double nbr, size_t *flags, int *wid,
 	j = 0;
 	i = 0;
 	bits_handler(&tally, &nbr, flags, pre);
-	!(*flags & (INF | NAN)) ? med = (char *)malloc(tally.size * 4) : 0;
+	if (!(*flags & (INF | NAN)))
+		!(med = (char *)malloc(tally.size * 4)) ? exit(1) : 0;
 	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
 	!(*flags & (INF | NAN)) ? j = puthex(&med, &tally, flags, pre) : 0;
 	adjustment_wid_pre(flags, wid, pre, j);

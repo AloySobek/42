@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 18:47:44 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 20:14:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:57:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int		swimming_dot(char **str, int *pre, int sta, int end)
 {
 	int swim;
 	int expo;
-	int i;
 
 	expo = 0;
 	if ((*str)[1] != '0')

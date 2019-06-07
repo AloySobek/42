@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 20:31:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 20:32:09 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/07 12:57:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ void			print_ten(char c)
 		write(BUFF.g_fd, "[LF]", 4);
 }
 
-void			print_non_printable(char *str, size_t *flags, int *wid,
-				int *pre)
+void			print_non_printable(char *str)
 {
 	while (*str != 0)
 	{
@@ -112,10 +111,7 @@ void			print_date(long long iso, size_t *flags, int *wid, int *pre)
 	int			cou;
 
 	if (!(date = (char *)malloc(sizeof(char) * 32)))
-	{
-		BUFF.g_error = -1;
-		return ;
-	}
+		exit(1);
 	i_k[1] = 1;
 	i_k[0] = iso;
 	while ((i_k[0] /= 10))
@@ -131,5 +127,6 @@ void			print_date(long long iso, size_t *flags, int *wid, int *pre)
 		iso %= i_k[1];
 		i_k[1] /= 10;
 	}
+	date[cou++] = 0;
 	print_usual_string(date, flags, wid, pre);
 }
