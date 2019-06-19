@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/09 13:06:00 by plettie           #+#    #+#              #
-#    Updated: 2019/06/19 17:20:00 by vrichese         ###   ########.fr        #
+#    Updated: 2019/06/19 18:45:27 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC		= $(addprefix $(SRCDIR)/, ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft
 		ft_strlen.c ft_strmap.c ft_strmapi.c ft_strncat.c ft_strncmp.c ft_strncpy.c \
 		ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c ft_strstr.c \
 		ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_lstadd.c \
-		ft_lstdel.c ft_lstdelone.c ft_lstiter.c ft_lstnew.c ft_lstmap.c)
+		ft_lstdel.c ft_lstdelone.c ft_lstiter.c ft_lstnew.c ft_lstmap.c ft_strcrop.c ft_strcut.c)
 
 OBJ		= $(SRC:.c=.o)
 
