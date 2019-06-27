@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/07 12:57:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/27 16:37:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@
 # define Z		4611686018427387904
 # define T		9223372036854775808U
 
-# define BUFF_SIZE		256
-# define EJECT(x)		((g_buff__.g_count + x) >= BUFF_SIZE ? eject() : 1)
+# define __BUFF_SIZE__		256
+# define EJECT(x)		((g_buff__.g_count + x) >= __BUFF_SIZE__ ? eject() : 1)
 # define BUFF			g_buff__
 
 # define SPEC			(*flags << 40) >> 56
@@ -104,7 +104,7 @@ typedef struct			s_karatsuba_var
 
 typedef struct			s_buff
 {
-	char				g_buff[BUFF_SIZE];
+	char				g_buff[__BUFF_SIZE__];
 	int					g_count;
 	int					g_bytes;
 	int					g_fd;

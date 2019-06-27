@@ -6,13 +6,13 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 15:20:13 by vrichese          #+#    #+#              #
-#    Updated: 2019/06/21 17:55:39 by vrichese         ###   ########.fr        #
+#    Updated: 2019/06/27 16:38:01 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= libftprintf.a
 
-SRCDIR	= srcs
+SRCDIR	= source
 
 LIBDIR	= lib_func
 

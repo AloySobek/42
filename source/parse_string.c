@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/07 11:59:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/27 16:37:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	set_colour(char *col)
 		BUFF.g_bytes += write(1, "\033[0;36m", 7);
 	else if (ft_strcmp(col, "bold cyan") == 0)
 		BUFF.g_bytes += write(1, "\033[1;36m", 7);
-	else if (ft_strcmp(col, "eoc") == 0 && EJECT(BUFF_SIZE))
+	else if (ft_strcmp(col, "eoc") == 0 && EJECT(__BUFF_SIZE__))
 		BUFF.g_bytes += write(1, "\033[0m", 4);
 }
 

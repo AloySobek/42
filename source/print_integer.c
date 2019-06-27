@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:11:48 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/07 12:03:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/27 16:38:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ void		print_uns_dig(uintmax_t nbr, size_t *flags, int *wid, int *pre)
 
 void		rec_to_n(int *n)
 {
-	EJECT(BUFF_SIZE);
+	EJECT(__BUFF_SIZE__);
 	*n = BUFF.g_bytes;
 }
