@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:11:36 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/27 16:37:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/28 13:55:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,5 @@ void	colour_chooser(const char **str)
 		return ;
 	*tmp = 0;
 	set_colour(colour);
+	free(colour);
 }
