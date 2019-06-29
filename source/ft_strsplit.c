@@ -6,7 +6,7 @@
 /*   By: cormund <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/16 16:51:01 by cormund           #+#    #+#             */
-/*   Updated: 2019/04/18 20:01:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/06/29 14:42:33 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,9 @@ static size_t	size_str(const char *str, char c)
 static int		alloc_memory(char **mas, char const *s, char c, size_t count)
 {
 	size_t		i;
-	size_t		j;
 	size_t		len;
 
 	i = 0;
-	j = 0;
 	while (count--)
 	{
 		while (*s == c)
