@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 18:44:23 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/07 11:56:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/07/04 14:49:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	hexadouble_handler(va_list *list, size_t *flags, int *wid, int *pre)
 
 void	inf_handler(size_t *flags)
 {
-	if (*flags & NAN)
+	if (*flags & NNN)
 	{
 		if (!(*flags & BIG) && EJECT(3) && (BUFF.g_buff[BUFF.g_count++] = 'n')
 			&& (BUFF.g_buff[BUFF.g_count++] = 'a'))

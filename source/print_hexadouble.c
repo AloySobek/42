@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 16:53:07 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/07 12:20:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/07/04 14:51:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,16 @@ void			print_hexadouble(long double nbr, size_t *flags, int *wid,
 	j = 0;
 	i = 0;
 	bits_handler(&tally, &nbr, flags, pre);
-	if (!(*flags & (INF | NAN)))
+	if (!(*flags & (INF | NNN)))
 		!(med = (char *)malloc(tally.size * 4)) ? exit(1) : 0;
-	!(*flags & (INF | NAN)) ? ft_bzero(med, tally.size) : 0;
-	!(*flags & (INF | NAN)) ? j = puthex(&med, &tally, flags, pre) : 0;
+	!(*flags & (INF | NNN)) ? ft_bzero(med, tally.size) : 0;
+	!(*flags & (INF | NNN)) ? j = puthex(&med, &tally, flags, pre) : 0;
 	adjustment_wid_pre(flags, wid, pre, j);
 	fill_width(flags, wid);
-	(*flags & (INF | NAN)) && EJECT(3) ? inf_handler(flags) : 0;
-	while (i < j && EJECT(1) && !(*flags & (INF | NAN)))
+	(*flags & (INF | NNN)) && EJECT(3) ? inf_handler(flags) : 0;
+	while (i < j && EJECT(1) && !(*flags & (INF | NNN)))
 		g_buff__.g_buff[g_buff__.g_count++] = med[i++];
 	while ((*wid)-- > 0 && EJECT(1))
 		g_buff__.g_buff[g_buff__.g_count++] = (*flags << 56) >> 56;
-	!(*flags & (INF | NAN)) ? free(med) : 0;
+	!(*flags & (INF | NNN)) ? free(med) : 0;
 }
