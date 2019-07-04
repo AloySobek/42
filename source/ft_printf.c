@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 13:33:18 by vrichese          #+#    #+#             */
-/*   Updated: 2019/06/06 19:17:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/07/04 20:16:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,19 @@ void		ever_handler(va_list *list, size_t *flags, int wid, int pre)
 int			length_modifier_collector(const char **str, size_t *flags)
 {
 	if (**str == 'h' && *(*str + 1) == 'h')
-		!(*flags & (J | Z)) && shift(flags, 8, 'l') ? *flags |= HH : 0;
+		!(*flags & (J | ZZZ)) && shift(flags, 8, 'l') ? *flags |= HH : 0;
 	else if (**str == 'l' && *(*str + 1) == 'l')
-		!(*flags & (J | Z)) && shift(flags, 8, 'l') ? *flags |= LL : 0;
+		!(*flags & (J | ZZZ)) && shift(flags, 8, 'l') ? *flags |= LL : 0;
 	else if (**str == 'h' && *(*str - 1) != 'h' && *(*str + 1) != 'h')
-		!(*flags & (J | Z)) && shift(flags, 8, 'l') ? *flags |= H : 0;
+		!(*flags & (J | ZZZ)) && shift(flags, 8, 'l') ? *flags |= H : 0;
 	else if (**str == 'l' && *(*str - 1) != 'l' && *(*str + 1) != 'l')
-		!(*flags & (J | Z)) && shift(flags, 8, 'l') ? *flags |= L : 0;
+		!(*flags & (J | ZZZ)) && shift(flags, 8, 'l') ? *flags |= L : 0;
 	else if (**str == 'L' && shift(flags, 8, 'l'))
 		*flags |= BL;
 	else if (**str == 'j' && shift(flags, 8, 'l'))
 		*flags |= J;
 	else if (**str == 'z' && shift(flags, 8, 'l'))
-		*flags |= Z;
+		*flags |= ZZZ;
 	else if (**str == 't' && shift(flags, 8, 'l'))
 		*flags |= T;
 	else
