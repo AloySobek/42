@@ -1,3 +1,0 @@
-[submodule "srcs/libft"]
-	path = srcs/libft
-	url = https://github.com/hauh/libft.git
