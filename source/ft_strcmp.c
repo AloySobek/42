@@ -6,7 +6,7 @@
 /*   By: vrichese <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:38:24 by vrichese          #+#    #+#             */
-/*   Updated: 2019/04/15 17:02:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/07/25 17:24:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,5 @@ int	ft_strcmp(const char *s1, const char *s2)
 		s1++;
 		s2++;
 	}
-	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+	return (*s1 - *s2);
 }
