@@ -6,11 +6,18 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 19:48:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/03 21:25:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/04 20:36:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "classes.cpp"
+
+const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+#ifdef NDEBUG
+	const bool enableValidationLayers = false;
+#else
+	const bool eanbleValidationLayers = true;
+#endif
 
 class	VulkanTriangle
 {
@@ -38,7 +45,7 @@ class	VulkanTriangle
 			appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 0);
 			appInfo.pEngineName = "No engine";
 			appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-			appInfo.apiVersion = VK_API_VERSION_1_1;
+			appInfo.apiVersion = VK_API_VERSION_1_0;
 			appInfo.pNext = nullptr;
 
 			VkInstanceCreateInfo instanceInfo = {};
@@ -47,18 +54,23 @@ class	VulkanTriangle
 			unsigned int glfwExtensionsCount;
 			const char **glfwExtensions;
 			glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
+			for (int j = 0; j < glfwExtensionsCount; ++j)
+				std::cout << glfwExtensions[j] << std::endl;
 			instanceInfo.enabledExtensionCount = glfwExtensionsCount;
 			instanceInfo.ppEnabledExtensionNames = glfwExtensions;
 			instanceInfo.enabledLayerCount = 0;
 			if (vkCreateInstance(&instanceInfo, nullptr, &m_instance) != VK_SUCCESS)
+			{
 				std::cout << "An error occured\n";
+				exit(-1);
+			}
 			unsigned int extensionsCount;
 			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr);
 			std::vector<VkExtensionProperties>extensions(extensionsCount);
 			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, extensions.data());
 			std::cout << "Available extensions:";
 			for (int i = 0; i < extensions.size(); ++i)
-				std::cout << "\n* " << extensions[i].extensionName << std::endl;
+				std::cout << "\n* " << extensions[i].extensionName << std::endl << extensions[i].specVersion << std::endl;
 		}
 		void initWindow()
 		{
@@ -71,6 +83,14 @@ class	VulkanTriangle
 		{
 			createInstance();
 		}
+		void checkValidationLayerSupport()
+		{
+			unsigned int layerCount;
+			vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+			std::vector<VkLayerProperties> availableLayers(layerCount);
+			vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+		}
 		void mainLoop()
 		{
 			while (!glfwWindowShouldClose(m_window))
@@ -78,6 +98,7 @@ class	VulkanTriangle
 		}
 		void clenUp()
 		{
+			vkDestroyInstance(m_instance, nullptr);
 			glfwDestroyWindow(m_window);
 			glfwTerminate();
 		}
