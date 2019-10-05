@@ -6,13 +6,12 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 19:48:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/04 20:36:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/05 20:27:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "classes.cpp"
 
-const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 #ifdef NDEBUG
 	const bool enableValidationLayers = false;
 #else
@@ -22,6 +21,7 @@ const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation
 class	VulkanTriangle
 {
 	public:
+		const char *m_layer = "VK_LAYER_KHRONOS_validation";
 		int		m_width;
 		int		m_height;
 
@@ -37,6 +37,40 @@ class	VulkanTriangle
 	private:
 		VkInstance	m_instance;
 		GLFWwindow	*m_window;
+
+		const char **checkValidationLayerSupport(u_int32_t layerCount)
+		{
+			std::vector<VkLayerProperties>availableLayers(layerCount);
+			vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+			for (int i = 0; i < availableLayers.size(); ++i)
+			{
+				std::cout << availableLayers[i].layerName << std::endl;
+				if (strcmp(m_layer, availableLayers[i].layerName) == 0)
+					return (const char **)&availableLayers[i].layerName;
+			}
+			std::cout << "Requesting layer hasn't been found\n";
+			return &m_layer;
+		}
+
+		int	enumareteLayers()
+		{
+			u_int32_t	layerCount = 0;
+
+			vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+			return (layerCount);
+		}
+
+		void enumerateExtensions()
+		{
+			unsigned int extensionsCount;
+			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr);
+			std::vector<VkExtensionProperties>extensions(extensionsCount);
+			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, extensions.data());
+			std::cout << "Available extensions:";
+			for (int i = 0; i < extensions.size(); ++i)
+				std::cout << "\n* " << extensions[i].extensionName << std::endl << extensions[i].specVersion << std::endl;
+		}
+
 		void createInstance()
 		{
 			VkApplicationInfo appInfo = {};
@@ -54,24 +88,20 @@ class	VulkanTriangle
 			unsigned int glfwExtensionsCount;
 			const char **glfwExtensions;
 			glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
-			for (int j = 0; j < glfwExtensionsCount; ++j)
-				std::cout << glfwExtensions[j] << std::endl;
-			instanceInfo.enabledExtensionCount = glfwExtensionsCount;
-			instanceInfo.ppEnabledExtensionNames = glfwExtensions;
-			instanceInfo.enabledLayerCount = 0;
+			instanceInfo.enabledExtensionCount		= glfwExtensionsCount;
+			instanceInfo.enabledLayerCount			= enumareteLayers();
+			instanceInfo.ppEnabledExtensionNames 	= glfwExtensions;
+			if ((instanceInfo.ppEnabledLayerNames = checkValidationLayerSupport(instanceInfo.enabledLayerCount)))
+				;
+			else
+				instanceInfo.enabledLayerCount = 0;
 			if (vkCreateInstance(&instanceInfo, nullptr, &m_instance) != VK_SUCCESS)
 			{
 				std::cout << "An error occured\n";
 				exit(-1);
 			}
-			unsigned int extensionsCount;
-			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr);
-			std::vector<VkExtensionProperties>extensions(extensionsCount);
-			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, extensions.data());
-			std::cout << "Available extensions:";
-			for (int i = 0; i < extensions.size(); ++i)
-				std::cout << "\n* " << extensions[i].extensionName << std::endl << extensions[i].specVersion << std::endl;
 		}
+
 		void initWindow()
 		{
 			glfwInit();
@@ -79,23 +109,18 @@ class	VulkanTriangle
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 			m_window = glfwCreateWindow(m_width, m_height, "Vulkan", nullptr, nullptr);
 		}
+
 		void initVulkan()
 		{
 			createInstance();
 		}
-		void checkValidationLayerSupport()
-		{
-			unsigned int layerCount;
-			vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-			std::vector<VkLayerProperties> availableLayers(layerCount);
-			vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-		}
 		void mainLoop()
 		{
 			while (!glfwWindowShouldClose(m_window))
 				glfwPollEvents();
 		}
+
 		void clenUp()
 		{
 			vkDestroyInstance(m_instance, nullptr);
