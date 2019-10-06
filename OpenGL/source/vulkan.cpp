@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 19:48:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 20:27:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 18:47:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 class	VulkanTriangle
 {
 	public:
-		const char *m_layer = "VK_LAYER_KHRONOS_validation";
+		const char *m_layer[10];
 		int		m_width;
 		int		m_height;
 
@@ -40,16 +40,17 @@ class	VulkanTriangle
 
 		const char **checkValidationLayerSupport(u_int32_t layerCount)
 		{
+			m_layer[0] = "VK_LAYER_KHRONOS_validation";
 			std::vector<VkLayerProperties>availableLayers(layerCount);
 			vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 			for (int i = 0; i < availableLayers.size(); ++i)
 			{
 				std::cout << availableLayers[i].layerName << std::endl;
-				if (strcmp(m_layer, availableLayers[i].layerName) == 0)
-					return (const char **)&availableLayers[i].layerName;
+				if (strcmp(m_layer[0], availableLayers[i].layerName) == 0)
+					return &m_layer[0];
 			}
 			std::cout << "Requesting layer hasn't been found\n";
-			return &m_layer;
+			return nullptr;
 		}
 
 		int	enumareteLayers()
@@ -66,9 +67,9 @@ class	VulkanTriangle
 			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr);
 			std::vector<VkExtensionProperties>extensions(extensionsCount);
 			vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, extensions.data());
-			std::cout << "Available extensions:";
+			std::cout << "Available extensions:\n";
 			for (int i = 0; i < extensions.size(); ++i)
-				std::cout << "\n* " << extensions[i].extensionName << std::endl << extensions[i].specVersion << std::endl;
+				std::cout << extensions[i].extensionName << " * " << extensions[i].specVersion << std::endl;
 		}
 
 		void createInstance()
@@ -79,7 +80,7 @@ class	VulkanTriangle
 			appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 0);
 			appInfo.pEngineName = "No engine";
 			appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-			appInfo.apiVersion = VK_API_VERSION_1_0;
+			appInfo.apiVersion = VK_API_VERSION_1_1;
 			appInfo.pNext = nullptr;
 
 			VkInstanceCreateInfo instanceInfo = {};
@@ -95,9 +96,11 @@ class	VulkanTriangle
 				;
 			else
 				instanceInfo.enabledLayerCount = 0;
-			if (vkCreateInstance(&instanceInfo, nullptr, &m_instance) != VK_SUCCESS)
+			int result;
+			if ((result = vkCreateInstance(&instanceInfo, nullptr, &m_instance)) != VK_SUCCESS)
 			{
 				std::cout << "An error occured\n";
+				std::cout << result << std::endl;
 				exit(-1);
 			}
 		}
