@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 19:48:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/11 19:48:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 19:59:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,26 @@ class Vulkan
 		VkInstanceCreateInfo					msCreateInstanceInfo				= {};
 
 		VkPhysicalDevice						moPhysicalDevice					= VK_NULL_HANDLE;
-		u_int32_t								mPhysicalDeviceCount				= 0;
-		std::vector<VkPhysicalDevice>			mPhysicalDevicesList;
 		VkPhysicalDeviceFeatures				msPhysicalDeviceFeatures			= {};
 		VkPhysicalDeviceProperties				msPhysicalDeviceProperties			= {};
 
-		u_int32_t								mPhysicalQueueNeeded				= 0;
+		VkQueue									moGraphicQueue						= VK_NULL_HANDLE;
+		VkQueue									moPresentQueue						= VK_NULL_HANDLE;
+		u_int32_t								mGraphicQueueIndex					= 0;
+		u_int32_t								mPresentQueueIndex					= 0;
 		std::vector<VkQueueFamilyProperties>	mPhysicalQueueFamiliesList;
 		u_int32_t								mPhysicalQueueFamilesCount			= 0;
 
 		VkDevice								moDevice							= VK_NULL_HANDLE;
 		VkDeviceCreateInfo						msCreateDeviceInfo					= {};
 		VkDeviceQueueCreateInfo 				msDeviceQueueCreateInfo				= {};
-
-		VkQueue									moGraphicQueue						= VK_NULL_HANDLE;
+		VkDeviceQueueCreateInfo					msPresentQueueCreateInfo			= {};
 
 		VkSurfaceKHR							moSurface							= VK_NULL_HANDLE;
 
-		unsigned int							mGlfwExtensionsCount				= 0;
-		const char								**mppGlfwExtensions					= NULL;
 		char									*mpName								= (char *)"Vulkan";
 		char									*mpEngine							= (char *)"No engine";
+		int										mError;
 
 		Vulkan(){}
 
@@ -108,35 +107,52 @@ class Vulkan
 			msAppInfo.apiVersion		= VK_MAKE_VERSION(1, 0, 0);
 			msAppInfo.pEngineName		= mpEngine;
 			msAppInfo.engineVersion		= VK_MAKE_VERSION(1, 0, 0);
-			msAppInfo.apiVersion		= VK_API_VERSION_1_0;
+			msAppInfo.apiVersion		= VK_API_VERSION_1_1;
 			msAppInfo.pNext				= nullptr;
 		}
 
 		void fillInstanceInfo()
 		{
-			msCreateInstanceInfo.sType						= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-			msCreateInstanceInfo.pApplicationInfo			= &msAppInfo;
-			mppGlfwExtensions								= glfwGetRequiredInstanceExtensions(&mGlfwExtensionsCount);
-			for (int i = 0; i < mGlfwExtensionsCount; ++i)
-				printf("%s\n", mppGlfwExtensions[i]);
-			msCreateInstanceInfo.enabledExtensionCount		= mGlfwExtensionsCount;
-			msCreateInstanceInfo.ppEnabledExtensionNames	= mppGlfwExtensions;
+			VkLayerProperties	*pLayersProperties;
+			const char			**ppGlfwExtensions;
+			const char			**ppLayersNames;
+			u_int32_t			glfwExtensionsCount;
+			u_int32_t			layersCount;
+
+			msCreateInstanceInfo.sType				= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+			msCreateInstanceInfo.pApplicationInfo	= &msAppInfo;
+			ppGlfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
+			vkEnumerateInstanceLayerProperties(&layersCount, nullptr);
+			pLayersProperties	= (VkLayerProperties *)malloc(sizeof(VkLayerProperties) * layersCount);
+			ppLayersNames		= (const char **)malloc(sizeof(const char *) * layersCount);
+			vkEnumerateInstanceLayerProperties(&layersCount, pLayersProperties);
+			for (int i = 0; i < layersCount; ++i)
+				ppLayersNames[i] = pLayersProperties[i].layerName;
+
+			msCreateInstanceInfo.enabledExtensionCount		= glfwExtensionsCount;
+			msCreateInstanceInfo.ppEnabledExtensionNames	= ppGlfwExtensions;
+			msCreateInstanceInfo.enabledLayerCount			= layersCount;
+			msCreateInstanceInfo.ppEnabledLayerNames		= ppLayersNames;
 		}
 
 		void createInstance()
 		{
-			if (vkCreateInstance(&msCreateInstanceInfo, nullptr, &moInstance) != VK_SUCCESS)
-				throw std::runtime_error("Failed to create vulkan object");
+			if ((mError = vkCreateInstance(&msCreateInstanceInfo, nullptr, &moInstance)) != VK_SUCCESS)
+			{
+				std::cout << mError << std::endl;
+				throw std::runtime_error("Failed to create instance object");
+			}
 		}
 
 		void createPhysicalDevice()
 		{
-			vkEnumeratePhysicalDevices(moInstance, &mPhysicalDeviceCount, nullptr);
-			if (mPhysicalDeviceCount < 1)
-				throw std::runtime_error("Failed to find GPU device, exit...");
-			mPhysicalDevicesList.resize(mPhysicalDeviceCount + 1);
-			vkEnumeratePhysicalDevices(moInstance, &mPhysicalDeviceCount, mPhysicalDevicesList.data());
-			for (const auto &device : mPhysicalDevicesList)
+			std::vector<VkPhysicalDevice>	physicalDevicesList;
+			u_int32_t						physicalDeviceCount;
+
+			vkEnumeratePhysicalDevices(moInstance, &physicalDeviceCount, nullptr);
+			physicalDevicesList.resize(physicalDeviceCount);
+			vkEnumeratePhysicalDevices(moInstance, &physicalDeviceCount, physicalDevicesList.data());
+			for (const auto &device : physicalDevicesList)
 			{
 				if (isDeviceSuitable(device))
 				{
@@ -166,7 +182,7 @@ class Vulkan
 			{
 				if (mPhysicalQueueFamiliesList[i].queueCount > 0 && mPhysicalQueueFamiliesList[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 				{
-					mPhysicalQueueNeeded = i;
+					mGraphicQueueIndex = i;
 					found = true;
 					break;
 				}
@@ -178,32 +194,71 @@ class Vulkan
 		void createDeviceQueue(float queuePriority)
 		{
 			msDeviceQueueCreateInfo.sType				= VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-			msDeviceQueueCreateInfo.queueFamilyIndex	= mPhysicalQueueNeeded;
+			msPresentQueueCreateInfo.sType				= VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			msDeviceQueueCreateInfo.queueFamilyIndex	= mGraphicQueueIndex;
+			msPresentQueueCreateInfo.queueFamilyIndex	= mPresentQueueIndex;
 			msDeviceQueueCreateInfo.queueCount			= 1;
+			msPresentQueueCreateInfo.queueCount			= 1;
+			msDeviceQueueCreateInfo.pQueuePriorities	= &queuePriority;
 			msDeviceQueueCreateInfo.pQueuePriorities	= &queuePriority;
 		}
 
 		void createDevice()
 		{
+			VkDeviceQueueCreateInfo	*createList;
+			const char 				**extensions;
+			unsigned int			extCount;
+
+			vkEnumerateDeviceExtensionProperties(moPhysicalDevice, nullptr, &extCount, nullptr);
+			std::vector <VkExtensionProperties> properties(extCount);
+			vkEnumerateDeviceExtensionProperties(moPhysicalDevice, nullptr, &extCount, properties.data());
+
+			extensions = (const char **)malloc(sizeof(char *) * 1);
+			extensions[0] = "VK_KHR_swapchain";
+			createList								= (VkDeviceQueueCreateInfo *)malloc(sizeof(VkDeviceQueueCreateInfo) * 2);
+			createList[0]							= msDeviceQueueCreateInfo;
+			createList[1]							= msPresentQueueCreateInfo;
 			msCreateDeviceInfo.sType				= VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-			msCreateDeviceInfo.pQueueCreateInfos	= &msDeviceQueueCreateInfo;
+			msCreateDeviceInfo.enabledExtensionCount = 1;
+			msCreateDeviceInfo.ppEnabledExtensionNames = extensions;
+			msCreateDeviceInfo.pQueueCreateInfos	= createList;
 			msCreateDeviceInfo.queueCreateInfoCount	= 1;
 			msCreateDeviceInfo.pEnabledFeatures		= &msPhysicalDeviceFeatures;
 			if (vkCreateDevice(moPhysicalDevice, &msCreateDeviceInfo, nullptr, &moDevice) != VK_SUCCESS)
 				throw std::runtime_error("failed to create logical device");
-			vkGetDeviceQueue(moDevice, mPhysicalQueueNeeded, 0, &moGraphicQueue);
+			vkGetDeviceQueue(moDevice, mGraphicQueueIndex, 0, &moGraphicQueue);
+			vkGetDeviceQueue(moDevice, mPresentQueueIndex, 0, &moPresentQueue);
 		}
 
 		void createSurface(GLFWwindow *window)
 		{
-			int error;
+			VkBool32 presentQueueFound = false;
 
-			if ((error = glfwCreateWindowSurface(moInstance, window, nullptr, &moSurface)) != VK_SUCCESS)
-			{
-				if (error == VK_ERROR_EXTENSION_NOT_PRESENT)
-					printf("Fuck off\n");
+			if ((mError = glfwCreateWindowSurface(moInstance, window, nullptr, &moSurface)) != VK_SUCCESS)
 				throw std::runtime_error("Surface creation error");
+			for (int i = 0; i < mPhysicalQueueFamiliesList.size(); ++i)
+			{
+				if (mPhysicalQueueFamiliesList[i].queueCount > 0 && mPhysicalQueueFamiliesList[i].queueFlags & VK_QUEUE_COMPUTE_BIT)
+				{
+					vkGetPhysicalDeviceSurfaceSupportKHR(moPhysicalDevice, i, moSurface, &presentQueueFound);
+					mPresentQueueIndex = i;
+				}
 			}
+			VkSurfaceCapabilitiesKHR cap;
+			vkGetPhysicalDeviceSurfaceCapabilitiesKHR(moPhysicalDevice, moSurface, &cap);
+			unsigned int count;
+			vkGetPhysicalDeviceSurfaceFormatsKHR(moPhysicalDevice, moSurface, &count, nullptr);
+			std::vector <VkSurfaceFormatKHR> formats(count);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(moPhysicalDevice, moSurface, &count, formats.data());
+			for (int i = 0; i < formats.size(); ++i)
+				std::cout << formats[i].format  << "   " << formats[i].colorSpace << std::endl;
+			unsigned int count2;
+			vkGetPhysicalDeviceSurfacePresentModesKHR(moPhysicalDevice, moSurface, &count2, nullptr);
+			std::vector <VkPresentModeKHR> present(count2);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(moPhysicalDevice, moSurface, &count2 , present.data());
+			for (int i = 0; i < present.size(); ++i)
+				std::cout << present[i] << std::endl;
+			exit(1);
 		}
 };
 

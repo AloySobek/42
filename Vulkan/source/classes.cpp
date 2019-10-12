@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 17:28:03 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 18:51:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 13:07:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <cstdlib>
 #include <vector>
 #include <cstring>
-#include "/usr/local/include/vulkan/vulkan.h"
 #include "../include/ilu.h"
 #include "../shader_source/shaders.h"
 #include "../VertexData/vertex.h"
