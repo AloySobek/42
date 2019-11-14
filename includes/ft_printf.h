@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:49:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/07/04 20:14:40 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/14 20:45:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define ZZZ	4611686018427387904
 # define T		9223372036854775808U
 
-# define __BUFF_SIZE__		256
+# define __BUFF_SIZE__	256
 # define EJECT(x)		((g_buff__.g_count + x) >= __BUFF_SIZE__ ? eject() : 1)
 # define BUFF			g_buff__
 
