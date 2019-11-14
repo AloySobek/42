@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 15:20:13 by vrichese          #+#    #+#              #
-#    Updated: 2019/06/27 16:38:01 by vrichese         ###   ########.fr        #
+#    Updated: 2019/11/14 15:35:50 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJ		= ${SRC:.c=.o} ${LIB:.c=.o}
 
 CC		= gcc
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -O3 -Wall -Werror -Wextra
 
 all: $(NAME)
 
