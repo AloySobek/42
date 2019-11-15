@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 15:20:13 by vrichese          #+#    #+#              #
-#    Updated: 2019/11/14 15:35:50 by vrichese         ###   ########.fr        #
+#    Updated: 2019/11/15 19:56:32 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,12 +34,15 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@ar rc $@ $(OBJ)
 	@ranlib $@
+	@printf "\r\e[J\e[33mlibftprintf \e[0mdone\e[?25h\n"
 
 $(SRCDIR)/%.o: $(SRCDIR)/%.c
 	@$(CC) $(CFLAGS) -I./includes -c -o $@ $<
+	@printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
 
 $(LIBDIR)/%.o: $(LIBDIR)/%.c
 	@$(CC) $(CFLAGS) -I./includes -c -o $@ $<
+	@printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
 
 clean:
 	@rm -f $(OBJ)
