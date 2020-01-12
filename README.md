@@ -17,3 +17,12 @@ Libft contains the next functions:
 | putnbr_fd    | putstr       | strchr       | striteri     | strncpy      | strtrim      | lstnew       |
 | strcat       | putstr_fd    | strclr       | strjoin      | strnequ      | tolower      | lstmap       |
 | strcut       | isalnum      | isalpha      | isascii      | isdigit      | isprint      | isspace      |
+
+# Installation
+This library building with Cmake hence you need to install Cmake on your machine.
+
+1) Go to the build folder in the root
+2) Put in terminal next command - "cmake .."
+3) After cmake finishes bulild files will be ready to use in you env.
+4) On Linux system enter "make" command in build folder
+5) Done! The library ready to include in your project. Don't forget add this shared library to gcc.
