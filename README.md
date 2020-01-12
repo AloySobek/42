@@ -2,7 +2,7 @@
 
 This library is my implementation of standarts functions in <stdlib.h> written on C language
 
-![](https://github.com/AloySobek/libft/raw/master/resources/libft.jpg)
+![](https://github.com/AloySobek/libft/raw/master/resources/img.jpg)
 
 # Contains
 Libft contains the next functions:
