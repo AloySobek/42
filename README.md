@@ -7,43 +7,12 @@ This library is my implementation of standarts functions in <stdlib.h> written o
 # Contains
 Libft contains the next functions:
 
-| atoi        | memchr       | nbrlen       | strcmp     |
-| --- | ---| --- | --- |
-| itoa        | memcmp       | putchar      | strcpy     |
-| bzero       | memcpy       | putchar_fd   | strdel     |
-| memalloc    | memdel       | putendl      | strdup     |
-| memccpy     | memmove      | putendl_fd   | strequ     |
-| strclen     | memset       | putnbr       | striter    |
-| putnbr_fd   | putstr       | strchr       | striteri   |
-| strcat      | putstr_fd    | strclr       | strjoin    |
-| strlcat
-| strlen
-| strmap
-| strmapi
-| strncat
-| strncmp
-| strncpy
-| strnequ
-| strnew
-| strnstr
-| strrchr
-| strsplit
-| strstr
-| strsub
-| strtrim
-| tolower
-| toupper
-| lstadd
-| strcrop
-| lstdel
-| lstdelone
-| lstiter
-| lstnew
-| lstmap
-| strcut
-| isalnum
-| isalpha
-| isascii
-| isdigit
-| isprint
-| isspace
+| atoi         | memchr       | nbrlen       | strcmp       | strlcat      | strnew       | toupper      |
+| itoa         | memcmp       | putchar      | strcpy       | strlen       | strnstr      | lstadd       |
+| bzero        | memcpy       | putchar_fd   | strdel       | strmap       | strrchr      | strcrop      |
+| memalloc     | memdel       | putendl      | strdup       | strmapi      | strsplit     | lstdel       |
+| memccpy      | memmove      | putendl_fd   | strequ       | strncat      | strstr       | lstdelone    |
+| strclen      | memset       | putnbr       | striter      | strncmp      | strsub       | lstiter      |
+| putnbr_fd    | putstr       | strchr       | striteri     | strncpy      | strtrim      | lstnew       |
+| strcat       | putstr_fd    | strclr       | strjoin      | strnequ      | tolower      | lstmap       |
+| strcut       | isalnum      | isalpha      | isascii      | isdigit      | isprint      | isspace      |
