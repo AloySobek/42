@@ -1,9 +1,12 @@
 # libft
+
+This library is my implementation of standarts functions in <stdlib.h>
+
 ![](https://github.com/AloySobek/libft/raw/master/resources/libft.jpg)
-This library is my implementation of standarts functions in <stdlib.h> (or <cstdlib>)
 
 All functions written on C language
 
+# Contains
 Libft contains the next functions:
 * atoi
 * itoa
