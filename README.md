@@ -1,31 +1,17 @@
 # libft
 
-This library is my implementation of standarts functions in <stdlib.h>
+This library is my implementation of standarts functions in <stdlib.h> written on C language
 
 ![](https://github.com/AloySobek/libft/raw/master/resources/libft.jpg)
 
-All functions written on C language
-
 # Contains
 Libft contains the next functions:
-* atoi
-* itoa
-* bzero
-* memalloc
-* memccpy
-* strclen
-* memchr
-* memcmp
-* memcpy
-* memdel
-* memmove
-* memset
-* nbrlen
-* putchar
-* putchar_fd
-* putendl
-* putendl_fd
-* putnbr
+* atoi        * memchr       * nbrlen
+* itoa        * memcmp       * putchar
+* bzero       * memcpy       * putchar_fd
+* memalloc    * memdel       * putendl
+* memccpy     * memmove      * putendl_fd
+* strclen     * memset       * putnbr
 * putnbr_fd
 * putstr
 * putstr_fd
