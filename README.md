@@ -7,6 +7,7 @@ This library is my implementation of standarts functions in <stdlib.h> written o
 # Contains
 Libft contains the next functions:
 | atoi        | memchr       | nbrlen       | strcmp     |
+| --- | ---| --- | --- |
 | itoa        | memcmp       | putchar      | strcpy     |
 | bzero       | memcpy       | putchar_fd   | strdel     |
 | memalloc    | memdel       | putendl      | strdup     |
