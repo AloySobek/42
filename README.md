@@ -19,10 +19,7 @@ Libft contains the next functions:
 | strcut       | isalnum      | isalpha      | isascii      | isdigit      | isprint      | isspace      |
 
 # Installation
-This library building with Cmake hence you need to install Cmake on your machine.
+Dependency: cmake
 
-1) Go to the build folder in the root
-2) Put in terminal next command - "cmake .."
-3) After cmake finishes - files will be ready to use depending on your dev env.
-4) On Linux system enter "make" command in build folder
-5) Done! The library ready to include in your project. Don't forget add this shared library to gcc.
+On linux Systems: run via bash install.sh script ... Done!
+The library will be in "build/lib"
