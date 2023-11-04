@@ -1,11 +1,8 @@
 # libft
 
-This library is my implementation of standarts functions in <stdlib.h> written on C language
-
-![](https://github.com/AloySobek/libft/raw/master/resources/img.jpg)
+Implementation of some useful function from standard C library
 
 # Contains
-Libft contains the next functions:
 
 | atoi         | memchr       | nbrlen       | strcmp       | strlcat      | strnew       | toupper      |
 | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
@@ -18,8 +15,3 @@ Libft contains the next functions:
 | strcat       | putstr_fd    | strclr       | strjoin      | strnequ      | tolower      | lstmap       |
 | strcut       | isalnum      | isalpha      | isascii      | isdigit      | isprint      | isspace      |
 
-# Installation
-Dependency: cmake
-
-On linux Systems: run via bash install.sh script ... Done!
-The library will be in "build/lib"
